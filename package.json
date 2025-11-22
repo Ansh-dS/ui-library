@@ -1,0 +1,36 @@
+{
+  "name": "my-ui-lib",
+  "version": "1.0.0",
+  "description": "use CLI and enjoy pre-built components.",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsBuild": "tsc -p tsconfig.json ",
+    "checkFormat": "pnpm prettier . --check",
+    "correctFormat": "pnpm exec prettier . --write",
+    "lint": "pnpm eslint .",
+    "build": "turbo check-types build",
+    "dev": "turbo dev",
+    "checkTypes": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.20.0",
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@tailwindcss/postcss": "^4.1.17",
+    "@types/node": "^24.10.1",
+    "autoprefixer": "^10.4.22",
+    "eslint": "^9.39.1",
+    "postcss": "^8.5.6",
+    "prettier": "3.6.2",
+    "tailwindcss": "^4.1.17",
+    "turbo": "^2.6.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.47.0"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.17"
+  }
+}

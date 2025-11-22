@@ -1,0 +1,30 @@
+hoistPattern:
+  - '*'
+hoistedDependencies:
+  turbo-linux-64@2.6.1:
+    turbo-linux-64: private
+  undici-types@7.16.0:
+    undici-types: private
+included:
+  dependencies: true
+  devDependencies: true
+  optionalDependencies: true
+injectedDeps: {}
+layoutVersion: 5
+nodeLinker: isolated
+packageManager: pnpm@10.20.0
+pendingBuilds: []
+prunedAt: Sat, 15 Nov 2025 19:09:15 GMT
+publicHoistPattern: []
+registries:
+  '@jsr': https://npm.jsr.io/
+  default: https://registry.npmjs.org/
+skipped:
+  - turbo-darwin-64@2.6.1
+  - turbo-darwin-arm64@2.6.1
+  - turbo-linux-arm64@2.6.1
+  - turbo-windows-64@2.6.1
+  - turbo-windows-arm64@2.6.1
+storeDir: /home/ansh/.local/share/pnpm/store/v10
+virtualStoreDir: .pnpm
+virtualStoreDirMaxLength: 120

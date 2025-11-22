@@ -1,0 +1,31 @@
+{
+  "name": "ui",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/ui.umd.cjs",
+  "module": "./dist/ui.js",
+  "scripts": {
+    "serve": "pnpm vite build && pnpm vite preview ",
+    "build": "vite build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.20.0",
+  "devDependencies": {
+    "@types/react": "^19.2.6",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "vite": "^7.2.2"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/ui.js",
+      "require": "./dist/ui.umd.cjs"
+    }
+  }
+}
