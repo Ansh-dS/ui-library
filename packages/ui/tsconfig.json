@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "jsx": "react-jsx"
+  },
+  // i mentioned declaration file so typescript don't produce type error for tailwindcss.
+  // the reason it was producing type error:
+  // typescript doesn't recognize .css files as modules by default so we declare it as module in index.d.ts
+  "files": ["./src/index.d.ts"],
+  "include": ["./src"],
+  "exclude": ["./src/**/*.stories.ts"]
+}

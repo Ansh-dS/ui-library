@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Design System Showcase</title>
+    <link rel="stylesheet" href="./preview.css" />
+    <style>
+      /* --- GLOBAL LAYOUT & TYPOGRAPHY MAPPING --- */
+      :root {
+        --page-max-width: 1200px;
+        --gutter: 24px;
+      }
+
+      html,
+      body {
+        min-height: 100vh;
+        margin: 0;
+        font-family: var(--font-base, sans-serif);
+        font-size: var(--text-body, 16px);
+        line-height: var(--leading-body, 1.5);
+        background: var(--color-surface-base, #fff);
+        color: var(--color-fg-primary, #000);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transition:
+          background-color var(--animate-duration-normal, 0.2s),
+          color var(--animate-duration-normal, 0.2s);
+      }
+
+      /* Headings */
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin-top: 0;
+        color: var(--color-fg-primary);
+        line-height: var(--leading-heading, 1.2);
+      }
+
+      h1 {
+        font-size: var(--text-h1);
+        font-weight: var(--font-weight-bold);
+        margin-bottom: var(--spacing-l);
+      }
+      h2 {
+        font-size: var(--text-h2);
+        font-weight: var(--font-weight-semibold);
+        margin-bottom: var(--spacing-m);
+      }
+      h3 {
+        font-size: var(--text-h3);
+        font-weight: var(--font-weight-medium);
+        margin-bottom: var(--spacing-s);
+        opacity: 0.8;
+      }
+
+      p {
+        margin-bottom: var(--spacing-m);
+        max-width: 65ch;
+      }
+      small,
+      .meta {
+        font-size: var(--text-caption);
+        color: var(--color-fg-secondary);
+      }
+
+      /* Layout */
+      .container {
+        max-width: var(--page-max-width);
+        margin: 0 auto;
+        padding: var(--spacing-2xl) var(--gutter);
+      }
+
+      header {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-l);
+        margin-bottom: var(--spacing-3xl);
+        border-bottom: 1px solid var(--color-border-default);
+        padding-bottom: var(--spacing-xl);
+      }
+
+      @media (min-width: 768px) {
+        header {
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+        }
+      }
+
+      /* Controls */
+      .controls {
+        display: flex;
+        gap: var(--spacing-m);
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .theme-switcher {
+        display: inline-flex;
+        gap: 2px;
+        background: var(--color-surface-raised);
+        padding: 4px;
+        border-radius: var(--radius-medium);
+        border: 1px solid var(--color-border-default);
+      }
+
+      .theme-switcher button {
+        background: transparent;
+        border: 0;
+        padding: 6px 12px;
+        border-radius: var(--radius-small);
+        font-weight: var(--font-weight-medium);
+        font-family: inherit;
+        font-size: var(--text-label);
+        cursor: pointer;
+        color: var(--color-fg-secondary);
+        transition: all var(--animate-duration-fast);
+      }
+
+      .theme-switcher button:hover {
+        color: var(--color-fg-primary);
+        background: var(--color-surface-overlay);
+      }
+      .theme-switcher button.active {
+        background: var(--color-surface-base);
+        box-shadow: var(--shadow-raised);
+        color: var(--color-fg-brand);
+        font-weight: var(--font-weight-semibold);
+      }
+
+      /* Grid Layout */
+      main {
+        display: grid;
+        gap: var(--spacing-3xl);
+      }
+
+      section {
+        scroll-margin-top: var(--spacing-2xl);
+      }
+
+      section.card {
+        background: var(--color-surface-base);
+        border-radius: var(--radius-large);
+        padding: var(--spacing-xl);
+        box-shadow: var(--shadow-raised);
+        border: 1px solid var(--color-border-default);
+      }
+
+      /* Grids */
+      .tokens-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: var(--spacing-l);
+        margin-top: var(--spacing-l);
+      }
+
+      /* --- SWATCHES --- */
+      .swatch {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-s);
+        cursor: pointer;
+        transition: transform var(--animate-duration-fast);
+      }
+      .swatch:active {
+        transform: scale(0.98);
+      }
+
+      .color-box {
+        height: 64px;
+        border-radius: var(--radius-medium);
+        border: 1px solid var(--color-border-default);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+      }
+
+      .token-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .token-name {
+        font-size: var(--text-label);
+        font-weight: var(--font-weight-medium);
+        color: var(--color-fg-primary);
+        word-break: break-all;
+      }
+      .token-value {
+        font-size: 10px;
+        font-family: var(--font-mono);
+        color: var(--color-fg-secondary);
+        opacity: 0.7;
+      }
+
+      /* --- SPACING BARS --- */
+      .spacing-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-m);
+        margin-top: var(--spacing-l);
+      }
+      .spacing-item {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-l);
+        cursor: pointer;
+      }
+      .spacing-bar {
+        height: 24px;
+        background-color: var(--color-action-primary-hover);
+        opacity: 0.2;
+        border-radius: 2px;
+        border: 1px solid var(--color-action-primary);
+        position: relative;
+      }
+
+      /* --- RADIUS --- */
+      .radius-box {
+        width: 80px;
+        height: 80px;
+        background: var(--color-surface-raised);
+        border: 2px solid var(--color-action-primary);
+        display: grid;
+        place-items: center;
+        font-size: 10px;
+      }
+
+      /* --- SHADOW --- */
+      .shadow-box {
+        height: 80px;
+        background: var(--color-surface-base);
+        border-radius: var(--radius-medium);
+        border: 1px solid var(--color-border-default);
+        display: grid;
+        place-items: center;
+      }
+
+      /* --- ANIMATION --- */
+      .anim-track {
+        background: var(--color-surface-sunken);
+        border-radius: var(--radius-pill);
+        padding: var(--spacing-xs);
+        cursor: pointer;
+        border: 1px solid var(--color-border-default);
+      }
+      .anim-ball {
+        width: 32px;
+        height: 32px;
+        background: var(--color-action-primary);
+        border-radius: var(--radius-pill);
+      }
+      .anim-track:hover .anim-ball {
+        transform: translateX(200px);
+      }
+
+      /* --- TYPOGRAPHY TABLE --- */
+      .type-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: var(--spacing-l);
+      }
+      .type-table td {
+        padding: var(--spacing-m) 0;
+        border-bottom: 1px solid var(--color-border-default);
+        vertical-align: baseline;
+      }
+      .type-meta {
+        width: 30%;
+        font-family: var(--font-mono);
+        font-size: var(--text-caption);
+        color: var(--color-fg-secondary);
+      }
+
+      /* Utility */
+      .copied {
+        color: var(--color-status-success) !important;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div>
+          <h1 id="brand-title">🍎 Design System Showcase</h1>
+          <p class="meta">
+            Live preview of all decision tokens defined in
+            <code>global.css</code>. Click any token to copy its CSS variable
+            name.
+          </p>
+        </div>
+
+        <div class="controls">
+          <div class="theme-switcher" id="brand-switcher">
+            <button type="button" data-theme-name="tally" aria-pressed="true">
+              Tally
+            </button>
+            <button
+              type="button"
+              data-theme-name="microsoft"
+              aria-pressed="false"
+            >
+              Microsoft
+            </button>
+          </div>
+
+          <div class="theme-switcher" id="mode-switcher">
+            <button type="button" data-mode="light" aria-pressed="true">
+              Light
+            </button>
+            <button type="button" data-mode="dark" aria-pressed="false">
+              Dark
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="card">
+          <h2>1. Colors</h2>
+          <p class="meta">
+            Semantic color mapping for Surfaces, Actions, Text, and Borders.
+          </p>
+
+          <h3>Surfaces</h3>
+          <div class="tokens-grid" id="color-surfaces"></div>
+
+          <h3 style="margin-top: var(--spacing-xl)">Actions (Primary)</h3>
+          <div class="tokens-grid" id="color-actions"></div>
+
+          <h3 style="margin-top: var(--spacing-xl)">Text (Foregrounds)</h3>
+          <div class="tokens-grid" id="color-text"></div>
+
+          <h3 style="margin-top: var(--spacing-xl)">Borders & Status</h3>
+          <div class="tokens-grid" id="color-borders"></div>
+        </section>
+
+        <section class="card">
+          <h2>2. Typography</h2>
+          <p class="meta">Font families, weights, and the type scale.</p>
+
+          <h3>Font Families</h3>
+          <div class="tokens-grid" id="type-families"></div>
+
+          <h3 style="margin-top: var(--spacing-xl)">Type Scale</h3>
+          <table class="type-table" id="type-scale"></table>
+        </section>
+
+        <section class="card">
+          <h2>3. Spacing</h2>
+          <p class="meta">The spatial rhythm (margin, padding, gap).</p>
+          <div class="spacing-list" id="spacing-list"></div>
+        </section>
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-xl);
+          "
+        >
+          <section class="card">
+            <h2>4. Radius</h2>
+            <div class="tokens-grid" id="radius-list"></div>
+          </section>
+
+          <section class="card">
+            <h2>5. Shadows</h2>
+            <div class="tokens-grid" id="shadow-list"></div>
+          </section>
+        </div>
+
+        <section class="card">
+          <h2>6. Animation</h2>
+          <p class="meta">Hover over the tracks to verify timing and easing.</p>
+          <div
+            class="tokens-grid"
+            style="grid-template-columns: 1fr"
+            id="animation-list"
+          ></div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      ;(function () {
+        const root = document.documentElement
+
+        // --- DATA SOURCE: Matches global.css ---
+        const TOKENS = {
+          surfaces: [
+            '--color-surface-base',
+            '--color-surface-sunken',
+            '--color-surface-raised',
+            '--color-surface-overlay',
+          ],
+          actions: [
+            '--color-action-primary',
+            '--color-action-primary-hover',
+            '--color-action-primary-pressed',
+            '--color-action-secondary',
+            '--color-action-secondary-pressed',
+          ],
+          text: [
+            '--color-fg-primary',
+            '--color-fg-secondary',
+            '--color-fg-brand',
+            '--color-fg-inverted',
+            '--color-fg-disabled',
+          ],
+          borders: [
+            '--color-border-default',
+            '--color-border-focused',
+            '--color-status-success',
+            '--color-status-warning',
+            '--color-status-danger',
+          ],
+          fonts: ['--font-base', '--font-document', '--font-mono'],
+          textSizes: [
+            '--text-display',
+            '--text-h1',
+            '--text-h2',
+            '--text-h3',
+            '--text-subheader',
+            '--text-body',
+            '--text-label',
+            '--text-caption',
+          ],
+          spacing: [
+            '--spacing-xs',
+            '--spacing-s',
+            '--spacing-m',
+            '--spacing-l',
+            '--spacing-xl',
+            '--spacing-2xl',
+            '--spacing-3xl',
+          ],
+          radius: [
+            '--radius-none',
+            '--radius-small',
+            '--radius-medium',
+            '--radius-large',
+            '--radius-pill',
+          ],
+          shadows: ['--shadow-raised', '--shadow-overlay', '--shadow-modal'],
+          animation: [
+            '--animate-duration-fast',
+            '--animate-duration-normal',
+            '--animate-duration-slow',
+          ],
+        }
+
+        // --- RENDERERS ---
+
+        function createSwatch(name, type = 'color') {
+          const el = document.createElement('div')
+          el.className = 'swatch'
+
+          const value = getComputedStyle(root).getPropertyValue(name).trim()
+
+          let visual = ''
+          if (type === 'color') {
+            visual = `<div class="color-box" style="background: var(${name})"></div>`
+          } else if (type === 'font') {
+            visual = `<div style="font-family: var(${name}); font-size: 24px; border:1px solid #ddd; padding:12px; border-radius:8px">Ag</div>`
+          } else if (type === 'radius') {
+            visual = `<div class="radius-box" style="border-radius: var(${name})"></div>`
+          } else if (type === 'shadow') {
+            visual = `<div class="shadow-box" style="box-shadow: var(${name})"></div>`
+          }
+
+          el.innerHTML = `
+            ${visual}
+            <div class="token-info">
+              <span class="token-name">${name.replace('--color-', '').replace('--', '')}</span>
+              <span class="token-value">${value}</span>
+            </div>
+          `
+
+          el.onclick = () =>
+            copyToClipboard(name, el.querySelector('.token-name'))
+          return el
+        }
+
+        function renderColors() {
+          ;['surfaces', 'actions', 'text', 'borders'].forEach((group) => {
+            const container = document.getElementById(`color-${group}`)
+            container.innerHTML = ''
+            TOKENS[group].forEach((t) =>
+              container.appendChild(createSwatch(t, 'color'))
+            )
+          })
+        }
+
+        function renderTypography() {
+          // Families
+          const famContainer = document.getElementById('type-families')
+          famContainer.innerHTML = ''
+          TOKENS.fonts.forEach((t) =>
+            famContainer.appendChild(createSwatch(t, 'font'))
+          )
+
+          // Scale Table
+          const table = document.getElementById('type-scale')
+          table.innerHTML = ''
+          TOKENS.textSizes.forEach((t) => {
+            const tr = document.createElement('tr')
+            const val = getComputedStyle(root).getPropertyValue(t).trim()
+            tr.innerHTML = `
+              <td class="type-meta">
+                <div style="cursor:pointer" onclick="copyToClipboard('${t}', this)">${t}</div>
+                <div style="opacity:0.5">${val}</div>
+              </td>
+              <td>
+                <div style="font-size: var(${t}); white-space: nowrap; overflow:hidden; text-overflow:ellipsis;">
+                  The quick brown fox jumps over the lazy dog.
+                </div>
+              </td>
+            `
+            table.appendChild(tr)
+          })
+        }
+
+        function renderSpacing() {
+          const container = document.getElementById('spacing-list')
+          container.innerHTML = ''
+          TOKENS.spacing.forEach((t) => {
+            const div = document.createElement('div')
+            div.className = 'spacing-item'
+            const val = getComputedStyle(root).getPropertyValue(t).trim()
+
+            div.innerHTML = `
+              <div style="width: 120px; font-family:var(--font-mono); font-size:12px; color:var(--color-fg-secondary)">${t.replace('--spacing-', '')}</div>
+              <div class="spacing-bar" style="width: var(${t})"></div>
+              <div style="margin-left:auto; font-size:10px; color:var(--color-fg-secondary)">${val}</div>
+            `
+            div.onclick = () => copyToClipboard(t, div.firstElementChild)
+            container.appendChild(div)
+          })
+        }
+
+        function renderShapes() {
+          const rContainer = document.getElementById('radius-list')
+          rContainer.innerHTML = ''
+          TOKENS.radius.forEach((t) =>
+            rContainer.appendChild(createSwatch(t, 'radius'))
+          )
+
+          const sContainer = document.getElementById('shadow-list')
+          sContainer.innerHTML = ''
+          TOKENS.shadows.forEach((t) =>
+            sContainer.appendChild(createSwatch(t, 'shadow'))
+          )
+        }
+
+        function renderAnimation() {
+          const container = document.getElementById('animation-list')
+          container.innerHTML = ''
+          TOKENS.animation.forEach((t) => {
+            const div = document.createElement('div')
+            div.className = 'anim-track'
+            div.style.transition = `background-color var(${t})`
+
+            const val = getComputedStyle(root).getPropertyValue(t).trim()
+
+            div.innerHTML = `
+              <div class="anim-ball" style="transition: transform var(${t}) cubic-bezier(0.4, 0, 0.2, 1)"></div>
+              <div style="margin-top:8px; display:flex; justify-content:space-between; font-size:12px; color:var(--color-fg-secondary)">
+                <span>${t.replace('--animate-duration-', '')}</span>
+                <span>${val}</span>
+              </div>
+            `
+            div.onclick = () => copyToClipboard(t, div.querySelector('span'))
+            container.appendChild(div)
+          })
+        }
+
+        function renderAll() {
+          renderColors()
+          renderTypography()
+          renderSpacing()
+          renderShapes()
+          renderAnimation()
+        }
+
+        // --- UTILS & INIT ---
+        async function copyToClipboard(text, el) {
+          try {
+            await navigator.clipboard.writeText(text)
+            const original = el.textContent
+            el.textContent = 'Copied!'
+            el.classList.add('copied')
+            setTimeout(() => {
+              el.textContent = original
+              el.classList.remove('copied')
+            }, 1000)
+          } catch (e) {}
+        }
+
+        // Theme Switching Logic
+        const btns = document.querySelectorAll(
+          'button[data-theme-name], button[data-mode]'
+        )
+
+        function updateTheme() {
+          const brand = localStorage.getItem('design-theme-brand') || 'tally'
+          const mode = localStorage.getItem('design-theme-mode') || 'light'
+
+          root.setAttribute('data-theme-name', brand)
+          root.setAttribute('data-mode', mode)
+
+          btns.forEach((b) => {
+            const bBrand = b.getAttribute('data-theme-name')
+            const bMode = b.getAttribute('data-mode')
+
+            if (bBrand) b.classList.toggle('active', bBrand === brand)
+            if (bMode) b.classList.toggle('active', bMode === mode)
+          })
+
+          document.getElementById('brand-title').innerText =
+            `${brand === 'tally' ? '🍎' : '🪟'} ${brand.charAt(0).toUpperCase() + brand.slice(1)} Design System`
+
+          // Small delay to allow CSS var recalculation before JS reads computed values
+          setTimeout(renderAll, 50)
+        }
+
+        btns.forEach((b) => {
+          b.addEventListener('click', () => {
+            if (b.hasAttribute('data-theme-name'))
+              localStorage.setItem(
+                'design-theme-brand',
+                b.getAttribute('data-theme-name')
+              )
+            if (b.hasAttribute('data-mode'))
+              localStorage.setItem(
+                'design-theme-mode',
+                b.getAttribute('data-mode')
+              )
+            updateTheme()
+          })
+        })
+
+        // Initialize
+        updateTheme()
+      })()
+    </script>
+  </body>
+</html>

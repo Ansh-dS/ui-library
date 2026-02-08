@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Design System Showcase</title>
+    <link rel="stylesheet" href="./token.css" />
+    <style>
+      /* --- GLOBAL LAYOUT & TYPOGRAPHY MAPPING --- */
+      :root {
+        --page-max-width: 1100px;
+        --gutter: 20px;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        font-family: var(--typography-fontFamily);
+        font-size: var(--typography-fontSize-base);
+        line-height: var(--typography-lineHeight-relaxed);
+        background: var(--colors-background-primary);
+        color: var(--colors-text-primary);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transition: var(--animation-slow);
+      }
+
+      /* Typography Utilities */
+      .font-serif {
+        font-family: var(--typography-fontFamilySerif);
+      }
+      .font-mono {
+        font-family: var(--typography-fontFamilyMono);
+      }
+
+      /* Headings */
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin-top: 0;
+        color: var(--colors-text-primary);
+        line-height: var(--typography-lineHeight-tight);
+        letter-spacing: var(--typography-letterSpacing-tight);
+      }
+
+      h1 {
+        font-size: var(--typography-fontSize-5xl);
+        font-weight: var(--typography-fontWeight-bold);
+        letter-spacing: var(--typography-letterSpacing-tighter);
+        margin-bottom: var(--spacing-lg);
+      }
+
+      h2 {
+        font-size: var(--typography-fontSize-2xl);
+        font-weight: var(--typography-fontWeight-semibold);
+        margin-bottom: var(--spacing-lg);
+      }
+
+      p {
+        margin-bottom: var(--spacing-lg);
+      }
+
+      small,
+      .meta {
+        font-size: var(--typography-fontSize-sm);
+        color: var(--colors-text-secondary);
+        line-height: var(--typography-lineHeight-normal);
+      }
+
+      /* Layout Containers */
+      .container {
+        max-width: var(--page-max-width);
+        margin: var(--spacing-2xl) auto;
+        padding: 0 var(--gutter);
+      }
+
+      header {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-2xl);
+      }
+
+      @media (min-width: 768px) {
+        header {
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+        }
+      }
+
+      /* Controls & Switchers */
+      .controls {
+        display: flex;
+        gap: var(--spacing-md);
+        align-items: center;
+      }
+
+      .theme-switcher {
+        display: inline-flex;
+        gap: 4px;
+        background: var(--colors-background-tertiary);
+        padding: 4px;
+        border-radius: var(--borderRadius-md);
+        border: 1px solid var(--colors-border-default);
+      }
+
+      .theme-switcher button {
+        background: transparent;
+        border: 0;
+        padding: 6px 12px;
+        border-radius: var(--borderRadius-base);
+        font-weight: var(--typography-fontWeight-medium);
+        font-family: inherit;
+        font-size: var(--typography-fontSize-sm);
+        cursor: pointer;
+        color: var(--colors-text-secondary);
+        transition: var(--animation-slow);
+      }
+
+      .theme-switcher button:hover {
+        color: var(--colors-text-primary);
+        background: var(--colors-background-secondary);
+      }
+
+      .theme-switcher button.active {
+        background: var(--colors-background-primary);
+        box-shadow: var(--shadows-sm);
+        color: var(--colors-text-primary);
+        font-weight: var(--typography-fontWeight-semibold);
+      }
+
+      /* Main Grid Layout */
+      main {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--spacing-2xl);
+        align-items: start;
+      }
+
+      @media (min-width: 920px) {
+        main {
+          grid-template-columns: 1fr 320px;
+        }
+      }
+
+      /* Cards */
+      section.card {
+        background: var(--colors-background-primary);
+        border-radius: var(--borderRadius-lg);
+        padding: var(--spacing-xl);
+        box-shadow: var(--shadows-sm);
+        border: 1px solid var(--colors-border-default);
+      }
+
+      /* Generic Token Grid */
+      .tokens-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: var(--spacing-lg);
+        margin-top: var(--spacing-lg);
+      }
+
+      /* --- SWATCH STYLES (Colors) --- */
+      .swatch {
+        border-radius: var(--borderRadius-md);
+        padding: var(--spacing-sm);
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        user-select: none;
+        background: var(--colors-background-secondary);
+        transition: transform 0.1s;
+        border: 1px solid var(--colors-border-default);
+      }
+      .swatch:active {
+        transform: scale(0.96);
+      }
+      .swatch .color {
+        width: 100%;
+        height: 48px;
+        border-radius: var(--borderRadius-sm);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+      }
+      .token-label {
+        font-size: var(--typography-fontSize-xs);
+        color: var(--colors-text-secondary);
+        text-align: center;
+        font-family: var(--typography-fontFamilyMono);
+      }
+      .token-value {
+        font-size: 10px;
+        margin-top: 4px;
+        color: var(--colors-text-tertiary);
+      }
+
+      /* --- SPACING VISUALIZATION --- */
+      .spacing-item {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
+        cursor: pointer;
+      }
+      .spacing-bar {
+        height: 24px;
+        background-color: var(--colors-primary-100);
+        border: 1px solid var(--colors-primary-500);
+        border-radius: 2px;
+        position: relative;
+      }
+      /* Lines pattern to look like a ruler */
+      .spacing-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 3px,
+          rgba(0, 0, 0, 0.1) 4px
+        );
+      }
+
+      /* --- RADIUS VISUALIZATION --- */
+      .radius-box {
+        width: 64px;
+        height: 64px;
+        background: var(--colors-primary-500);
+        border: 2px solid var(--colors-primary-700);
+        margin: 0 auto;
+      }
+
+      /* --- SHADOW VISUALIZATION --- */
+      .shadow-box {
+        width: 100%;
+        height: 64px;
+        background: var(--colors-background-primary);
+        border-radius: var(--borderRadius-md);
+        margin-bottom: var(--spacing-xs);
+        border: 1px solid var(--colors-border-default); /* To see it against bg */
+      }
+
+      /* --- ANIMATION VISUALIZATION --- */
+      .anim-track {
+        background: var(--colors-background-secondary);
+        border-radius: var(--borderRadius-full);
+        padding: var(--spacing-xs);
+        overflow: hidden;
+      }
+      .anim-ball {
+        width: 32px;
+        height: 32px;
+        background: var(--colors-primary-500);
+        border-radius: var(--borderRadius-full);
+        /* The transition property is injected by JS */
+      }
+      .anim-trigger:hover .anim-ball {
+        transform: translateX(120px);
+      }
+
+      /* Utilities */
+      .copied {
+        color: var(--colors-state-success) !important;
+        font-weight: var(--typography-fontWeight-bold);
+      }
+      code {
+        font-family: var(--typography-fontFamilyMono);
+        background: var(--colors-gray-100);
+        padding: 2px 4px;
+        border-radius: var(--borderRadius-sm);
+        font-size: var(--typography-fontSize-xs);
+        color: var(--colors-primary-600);
+      }
+
+      /* Typography Samples */
+      .typography-samples > * {
+        margin: var(--spacing-lg) 0;
+        border-bottom: 1px solid var(--colors-border-default);
+        padding-bottom: var(--spacing-lg);
+      }
+      .typography-samples > *:last-child {
+        border-bottom: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div>
+          <h1 id="brand-title">🍎 Tally Design System</h1>
+          <p class="meta">
+            A showcase of all style units defined in token.css.
+          </p>
+        </div>
+
+        <div class="controls">
+          <div class="theme-switcher" id="brand-switcher">
+            <button type="button" data-theme-name="tally" aria-pressed="false">
+              Tally
+            </button>
+            <button
+              type="button"
+              data-theme-name="microsoft"
+              aria-pressed="false"
+            >
+              Microsoft
+            </button>
+          </div>
+
+          <div class="theme-switcher" id="mode-switcher">
+            <button type="button" data-mode="light" aria-pressed="false">
+              Light
+            </button>
+            <button type="button" data-mode="dark" aria-pressed="false">
+              Dark
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <div>
+          <section class="card">
+            <h2>Colors</h2>
+            <p class="meta">Primary, Neutral, and Semantic palettes.</p>
+            <h3>Primary</h3>
+            <div class="tokens-grid" id="primary-swatches"></div>
+            <h3 style="margin-top: 24px">Neutrals</h3>
+            <div class="tokens-grid" id="neutral-swatches"></div>
+            <h3 style="margin-top: 24px">State</h3>
+            <div class="tokens-grid" id="state-swatches"></div>
+          </section>
+
+          <section class="card" style="margin-top: var(--spacing-xl)">
+            <h2>Spacing</h2>
+            <p class="meta">The spatial rhythm of the interface (8pt grid).</p>
+            <div id="spacing-list"></div>
+          </section>
+
+          <section class="card" style="margin-top: var(--spacing-xl)">
+            <h2>Shape (Border Radius)</h2>
+            <p class="meta">Corner roundness for components.</p>
+            <div class="tokens-grid" id="radius-swatches"></div>
+          </section>
+
+          <section class="card" style="margin-top: var(--spacing-xl)">
+            <h2>Depth (Shadows)</h2>
+            <p class="meta">Elevation levels using ambient light model.</p>
+            <div class="tokens-grid" id="shadow-swatches"></div>
+          </section>
+
+          <section class="card" style="margin-top: var(--spacing-xl)">
+            <h2>Motion</h2>
+            <p class="meta">
+              Hover over the tracks to see the duration and easing.
+            </p>
+            <div class="tokens-grid" id="animation-swatches"></div>
+          </section>
+
+          <section class="card" style="margin-top: var(--spacing-xl)">
+            <h2>Typography</h2>
+            <p class="meta">Font families and scale.</p>
+            <div class="typography-samples">
+              <div>
+                <span
+                  style="
+                    font-size: var(--typography-fontSize-5xl);
+                    font-weight: var(--typography-fontWeight-bold);
+                    line-height: var(--typography-lineHeight-tight);
+                    display: block;
+                    margin-bottom: 8px;
+                  "
+                  >Title 5xl</span
+                >
+                <span class="token-label">--typography-fontSize-5xl</span>
+              </div>
+              <div>
+                <span
+                  style="
+                    font-size: var(--typography-fontSize-2xl);
+                    font-weight: var(--typography-fontWeight-semibold);
+                    display: block;
+                    margin-bottom: 8px;
+                  "
+                  >Heading 2xl</span
+                >
+                <span class="token-label">--typography-fontSize-2xl</span>
+              </div>
+              <div>
+                <h4
+                  style="
+                    font-size: var(--typography-fontSize-lg);
+                    margin-bottom: 8px;
+                  "
+                >
+                  Document Body (Serif)
+                </h4>
+                <p
+                  class="font-serif"
+                  style="
+                    font-size: var(--typography-fontSize-md);
+                    line-height: var(--typography-lineHeight-relaxed);
+                  "
+                >
+                  The goal of the interface is "Calm Focus." By using a serif
+                  font like Charter with relaxed line-height (1.75 or 1.85), we
+                  create an editorial environment.
+                </p>
+                <span class="token-label">--typography-fontFamilySerif</span>
+              </div>
+              <div
+                style="
+                  font-family: var(--typography-fontFamilyMono);
+                  font-size: var(--typography-fontSize-sm);
+                "
+              >
+                console.log("Mono Font for code");
+                <br />
+                <span class="token-label">--typography-fontFamilyMono</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="sidebar">
+          <section class="card">
+            <h3>Active System</h3>
+            <ul
+              style="
+                margin: var(--spacing-md) 0 0 var(--spacing-lg);
+                padding: 0;
+                color: var(--colors-text-secondary);
+                font-family: var(--typography-fontFamilyMono);
+                font-size: var(--typography-fontSize-xs);
+                line-height: 1.8;
+              "
+            >
+              <li>--colors-primary-500</li>
+              <li>--fontFamilySerif</li>
+              <li>--spacing-xl</li>
+              <li>--shadows-md</li>
+              <li>--animation-normal</li>
+            </ul>
+          </section>
+          <section class="card" style="margin-top: var(--spacing-lg)">
+            <h3>Info</h3>
+            <p class="meta">
+              Click any visualization to copy the variable name.
+            </p>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <script>
+      ;(function () {
+        const root = document.documentElement
+        const STORAGE_KEY_BRAND = 'design-theme-brand'
+        const STORAGE_KEY_MODE = 'design-theme-mode'
+
+        // Switcher Logic
+        const brandSwitcher = document.getElementById('brand-switcher')
+        const modeSwitcher = document.getElementById('mode-switcher')
+        const brandButtons = Array.from(
+          brandSwitcher.querySelectorAll('button')
+        )
+        const modeButtons = Array.from(modeSwitcher.querySelectorAll('button'))
+        const brandTitle = document.getElementById('brand-title')
+
+        // --- 1. DEFINING TOKEN LISTS ---
+
+        const primaryVars = [
+          '--colors-primary-50',
+          '--colors-primary-100',
+          '--colors-primary-500',
+          '--colors-primary-600',
+          '--colors-primary-700',
+        ]
+        const stateVars = [
+          '--colors-state-success',
+          '--colors-state-warning',
+          '--colors-state-error',
+          '--colors-state-info',
+        ]
+        const neutralVars = [
+          '--colors-background-primary',
+          '--colors-text-primary',
+          '--colors-gray-100',
+          '--colors-gray-500',
+          '--colors-gray-900',
+          '--colors-border-default',
+        ]
+
+        const spacingVars = [
+          '--spacing-xs',
+          '--spacing-sm',
+          '--spacing-md',
+          '--spacing-lg',
+          '--spacing-xl',
+          '--spacing-2xl',
+          '--spacing-3xl',
+        ]
+        const radiusVars = [
+          '--borderRadius-sm',
+          '--borderRadius-base',
+          '--borderRadius-md',
+          '--borderRadius-lg',
+          '--borderRadius-full',
+        ]
+        const shadowVars = ['--shadows-sm', '--shadows-md', '--shadows-lg']
+        const animationVars = [
+          '--animation-fast',
+          '--animation-normal',
+          '--animation-slow',
+        ]
+
+        // Containers
+        const primaryContainer = document.getElementById('primary-swatches')
+        const stateContainer = document.getElementById('state-swatches')
+        const neutralContainer = document.getElementById('neutral-swatches')
+        const spacingContainer = document.getElementById('spacing-list')
+        const radiusContainer = document.getElementById('radius-swatches')
+        const shadowContainer = document.getElementById('shadow-swatches')
+        const animationContainer = document.getElementById('animation-swatches')
+
+        // --- 2. SWITCHER HANDLERS ---
+        function setBrand(brand) {
+          root.setAttribute('data-theme-name', brand)
+          localStorage.setItem(STORAGE_KEY_BRAND, brand)
+          updateButtons(brandButtons, 'data-theme-name', brand)
+          updateTitle(brand)
+          setTimeout(renderAll, 60)
+        }
+        function setMode(mode) {
+          root.setAttribute('data-mode', mode)
+          localStorage.setItem(STORAGE_KEY_MODE, mode)
+          updateButtons(modeButtons, 'data-mode', mode)
+          setTimeout(renderAll, 60)
+        }
+        function updateButtons(btns, attr, val) {
+          btns.forEach((btn) => {
+            const isActive = btn.getAttribute(attr) === val
+            btn.classList.toggle('active', isActive)
+            btn.setAttribute('aria-pressed', String(isActive))
+          })
+        }
+        function updateTitle(brand) {
+          const name = brand.charAt(0).toUpperCase() + brand.slice(1)
+          const icon = brand === 'tally' ? '🍎' : '🪟'
+          brandTitle.textContent = `${icon} ${name} Design System`
+        }
+
+        brandButtons.forEach((btn) =>
+          btn.addEventListener('click', () =>
+            setBrand(btn.getAttribute('data-theme-name'))
+          )
+        )
+        modeButtons.forEach((btn) =>
+          btn.addEventListener('click', () =>
+            setMode(btn.getAttribute('data-mode'))
+          )
+        )
+
+        // --- 3. RENDERING FUNCTIONS ---
+
+        // Helper: Copy logic
+        async function copyToClipboard(text, el) {
+          try {
+            await navigator.clipboard.writeText(text)
+            const original = el.textContent
+            el.textContent = 'Copied!'
+            el.classList.add('copied')
+            setTimeout(() => {
+              el.textContent = original
+              el.classList.remove('copied')
+            }, 1000)
+          } catch (e) {}
+        }
+
+        // A. Colors Render
+        function renderColors(container, vars) {
+          container.innerHTML = ''
+          vars.forEach((name) => {
+            const sw = document.createElement('div')
+            sw.className = 'swatch'
+
+            const colorBox = document.createElement('div')
+            colorBox.className = 'color'
+            const computed = getComputedStyle(root)
+              .getPropertyValue(name)
+              .trim()
+            colorBox.style.background = computed || 'transparent'
+
+            const label = document.createElement('div')
+            label.className = 'token-label'
+            label.textContent = name.replace('--colors-', '')
+
+            const val = document.createElement('div')
+            val.className = 'token-value'
+            val.textContent = computed
+
+            sw.appendChild(colorBox)
+            sw.appendChild(label)
+            sw.appendChild(val)
+            sw.onclick = () => copyToClipboard(name, val)
+            container.appendChild(sw)
+          })
+        }
+
+        // B. Spacing Render (Bars)
+        function renderSpacing(container, vars) {
+          container.innerHTML = ''
+          vars.forEach((name) => {
+            const item = document.createElement('div')
+            item.className = 'spacing-item'
+
+            const label = document.createElement('div')
+            label.className = 'token-label'
+            label.style.width = '120px'
+            label.style.textAlign = 'left'
+            label.textContent = name.replace('--spacing-', '')
+
+            const bar = document.createElement('div')
+            bar.className = 'spacing-bar'
+            // Apply the variable directly to width
+            bar.style.width = `var(${name})`
+
+            const computed = getComputedStyle(root)
+              .getPropertyValue(name)
+              .trim()
+            const val = document.createElement('div')
+            val.className = 'token-value'
+            val.style.marginLeft = 'auto'
+            val.textContent = computed
+
+            item.appendChild(label)
+            item.appendChild(bar)
+            item.appendChild(val)
+            item.onclick = () => copyToClipboard(name, val)
+            container.appendChild(item)
+          })
+        }
+
+        // C. Radius Render (Boxes)
+        function renderRadius(container, vars) {
+          container.innerHTML = ''
+          vars.forEach((name) => {
+            const sw = document.createElement('div')
+            sw.className = 'swatch'
+
+            const box = document.createElement('div')
+            box.className = 'radius-box'
+            // Apply radius
+            box.style.borderRadius = `var(${name})`
+
+            const label = document.createElement('div')
+            label.className = 'token-label'
+            label.textContent = name.replace('--borderRadius-', '')
+
+            sw.appendChild(box)
+            sw.appendChild(label)
+            sw.onclick = () => copyToClipboard(name, label)
+            container.appendChild(sw)
+          })
+        }
+
+        // D. Shadows Render (Elevated Cards)
+        function renderShadows(container, vars) {
+          container.innerHTML = ''
+          vars.forEach((name) => {
+            const sw = document.createElement('div')
+            sw.className = 'swatch'
+
+            const box = document.createElement('div')
+            box.className = 'shadow-box'
+            // Apply shadow
+            box.style.boxShadow = `var(${name})`
+
+            const label = document.createElement('div')
+            label.className = 'token-label'
+            label.textContent = name.replace('--shadows-', '')
+
+            sw.appendChild(box)
+            sw.appendChild(label)
+            sw.onclick = () => copyToClipboard(name, label)
+            container.appendChild(sw)
+          })
+        }
+
+        // E. Animation Render (Moving Ball)
+        function renderAnimations(container, vars) {
+          container.innerHTML = ''
+          vars.forEach((name) => {
+            const sw = document.createElement('div')
+            sw.className = 'swatch anim-trigger'
+
+            const track = document.createElement('div')
+            track.className = 'anim-track'
+            track.style.width = '100%'
+
+            const ball = document.createElement('div')
+            ball.className = 'anim-ball'
+            // Apply specific animation variable to the transition property
+            // We animate transform, so we apply the var to that.
+            ball.style.transition = `transform var(${name})`
+
+            track.appendChild(ball)
+
+            const label = document.createElement('div')
+            label.className = 'token-label'
+            label.textContent = name.replace('--animation-', '')
+
+            sw.appendChild(track)
+            sw.appendChild(label)
+            sw.onclick = () => copyToClipboard(name, label)
+            container.appendChild(sw)
+          })
+        }
+
+        function renderAll() {
+          renderColors(primaryContainer, primaryVars)
+          renderColors(stateContainer, stateVars)
+          renderColors(neutralContainer, neutralVars)
+          renderSpacing(spacingContainer, spacingVars)
+          renderRadius(radiusContainer, radiusVars)
+          renderShadows(shadowContainer, shadowVars)
+          renderAnimations(animationContainer, animationVars)
+        }
+
+        // Init
+        const savedBrand = localStorage.getItem(STORAGE_KEY_BRAND) || 'tally'
+        const savedMode = localStorage.getItem(STORAGE_KEY_MODE) || 'light'
+
+        root.setAttribute('data-theme-name', savedBrand)
+        root.setAttribute('data-mode', savedMode)
+        updateButtons(brandButtons, 'data-theme-name', savedBrand)
+        updateButtons(modeButtons, 'data-mode', savedMode)
+        updateTitle(savedBrand)
+
+        renderAll()
+
+        // Mutation Observer to re-render computed values on theme change
+        const observer = new MutationObserver(() => setTimeout(renderAll, 50))
+        observer.observe(root, {
+          attributes: true,
+          attributeFilter: ['data-theme-name', 'data-mode'],
+        })
+      })()
+    </script>
+  </body>
+</html>

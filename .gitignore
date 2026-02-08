@@ -129,3 +129,7 @@ temp/
 
 # Pnpm local cache. 
 .pnpm-store/ 
+
+#storybook
+*storybook.log
+apps/**/storybook-static

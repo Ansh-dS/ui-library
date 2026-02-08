@@ -3,28 +3,26 @@ import eslint from '@eslint/js'
 import { defineConfig, globalIgnores } from 'eslint/config'
 import tseslint from 'typescript-eslint'
 
-export default defineConfig([
-  eslint.configs.recommended,
-  tseslint.configs.recommended,
-
+export default defineConfig(
+  // Global ignores (MUST be first, NOT in array)
   globalIgnores([
+    // Node & Build
+    '**/node_modules/**',
     '**/dist/**',
     '**/build/**',
     '**/.next/**',
     '**/.turbo/**',
+    '**/*.stories.*',
 
-    // Dependencies
-    '**/node_modules/**',
+    // Storybook (ADD THESE)
+    '**/.storybook/**',
+    '**/storybook-static/**',
 
-    // Test coverage
-    '**/coverage/**',
-
-    // Generated/minified files
-    '**/*.min.js',
-    '**/*.map',
-
-    // Cache
+    // Cache & Temp
     '**/.cache/**',
     '**/.tmp/**',
   ]),
-])
+
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended
+)
