@@ -1,0 +1,102 @@
+/* =================================================================
+   1. VARIABLE DEFINITIONS (The "Theme Engine")
+   ================================================================= */
+
+/* DARK MODE VARIABLES */
+html[data-mode='dark'] {
+  --sb-bg-main: var(--colors-background-primary); /* #0c0a09 */
+  --sb-text-main: var(--colors-text-primary); /* #fafaf9 */
+  --sb-border: var(--colors-border-default); /* #292524 */
+  --sb-toolbar-bg: var(--colors-background-tertiary); /* #292524 */
+  --sb-element-bg: var(--colors-background-secondary); /* #1c1917 */
+
+  /* Polish */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* LIGHT MODE VARIABLES (New!) */
+html[data-mode='light'] {
+  --sb-bg-main: var(--colors-background-primary); /* #fafaf9 */
+  --sb-text-main: var(--colors-text-primary); /* #1c1917 */
+  --sb-border: var(--colors-border-default); /* #e7e5e4 */
+  --sb-toolbar-bg: var(--colors-background-tertiary); /* #e7e5e4 */
+  --sb-element-bg: var(--colors-background-secondary); /* #f5f5f4 */
+
+  /* Standard smoothing for light mode */
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
+/* =================================================================
+   2. SHARED RULES (Applies to BOTH Light & Dark)
+   ================================================================= */
+/* We use 'html[data-mode]' as the selector so it overrides Storybook 
+   defaults regardless of which mode is active. */
+
+/* --- MAIN WRAPPERS --- */
+html[data-mode] body,
+html[data-mode] .sbdocs-wrapper,
+html[data-mode] .sbdocs-content,
+html[data-mode] .sb-show-main {
+  background-color: var(--sb-bg-main) !important;
+  color: var(--sb-text-main) !important;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* --- TOOLBAR STRIP --- */
+html[data-mode] .sbdocs-preview {
+  background-color: var(--sb-toolbar-bg) !important;
+  border-color: var(--sb-border) !important;
+}
+
+html[data-mode] .sbdocs-preview > div:first-child {
+  background-color: var(--sb-toolbar-bg) !important;
+  border-bottom-color: var(--sb-border) !important;
+}
+
+/* Icons in the toolbar */
+html[data-mode] .sbdocs-preview > div:first-child button svg {
+  color: var(--sb-text-main) !important;
+  fill: var(--sb-text-main) !important;
+}
+
+/* --- "SHOW CODE" BUTTON (Strictly Scoped) --- */
+html[data-mode] .docblock-code-toggle {
+  background-color: var(--sb-element-bg) !important;
+  color: var(--sb-text-main) !important;
+  border: 1px solid var(--sb-border) !important;
+}
+
+/* --- PROPS TABLE & INPUTS --- */
+/* The Table Container */
+html[data-mode] .docblock-argstable,
+html[data-mode] .docblock-argstable tr,
+html[data-mode] .docblock-argstable td,
+html[data-mode] .docblock-argstable th {
+  background-color: transparent !important;
+  color: var(--sb-text-main) !important;
+  border-color: var(--sb-border) !important;
+}
+
+/* Inputs/Buttons inside the table */
+html[data-mode] .docblock-argstable button,
+html[data-mode] .docblock-argstable input,
+html[data-mode] .docblock-argstable select,
+html[data-mode] .docblock-argstable textarea {
+  background-color: var(--sb-element-bg) !important;
+  color: var(--sb-text-main) !important;
+  border: 1px solid var(--sb-border) !important;
+  box-shadow: none !important;
+}
+
+/* --- TITLES & HEADINGS --- */
+html[data-mode] .sbdocs-title,
+html[data-mode] .sbdocs-subtitle,
+html[data-mode] .sbdocs h1,
+html[data-mode] .sbdocs h2,
+html[data-mode] .sbdocs h3 {
+  color: var(--sb-text-main) !important;
+}

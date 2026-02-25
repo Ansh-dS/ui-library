@@ -8,9 +8,9 @@ export const buttonVariants = cva(
     'font-medium',
     'rounded-medium',
     'transition-all animate-duration-fast',
-    'font-base', // Correct: Matches --font-base
+    'font-base', //  Matches --font-base
     'disabled:opacity-50 disabled:cursor-not-allowed',
-    'border-primary', // ADDED: Common border width (1px) to prevent layout shifts
+    'border-primary', //  Common border width (1px) to prevent layout shifts
   ],
   {
     variants: {
@@ -21,24 +21,24 @@ export const buttonVariants = cva(
           'hover:bg-action-primary-hover',
           'hover:shadow-raised',
           'active:bg-action-primary-pressed',
-          'text-fg-inverted', // Correct: White text (from --color-fg-inverted)
-          'border-transparent', // ADDED: Maintains size consistency with Outline
+          'text-fg-inverted', //  White text (from --color-fg-inverted)
+          'border-transparent', // Maintains size consistency with Outline
         ],
         secondary: [
           'bg-action-secondary',
           'hover:bg-action-secondary-hover',
           'active:bg-action-secondary-pressed',
-          'text-fg-brand', // Correct: Brand color text (from --color-fg-brand)
-          'border-transparent', // ADDED: Maintains size consistency with Outline
+          'text-fg-brand', //  Brand color text (from --color-fg-brand)
+          'border-transparent', //  Maintains size consistency with Outline
         ],
         outline: [
           'bg-transparent',
-          'border-border-default', // Correct: Uses your Stone-200 border
+          'border-border-default', //  Uses your Stone-200 border
           'hover:bg-surface-overlay',
-          'text-fg-primary', // UPDATED: Outline usually pairs better with Primary text (Dark Grey)
+          'text-fg-primary', //  Outline usually pairs better with Primary text (Dark Grey)
         ],
         destructive: [
-          // NEW: Uses your new 'status-danger' tokens
+          // Uses your new 'status-danger' tokens
           'bg-status-danger',
           'hover:bg-red-600', // Fallback or define a 'status-danger-hover' token later
           'text-fg-inverted',
@@ -50,17 +50,17 @@ export const buttonVariants = cva(
       size: {
         sm: [
           'py-xs px-s',
-          'text-label', // Correct: Matches --text-label
+          'text-label', //  Matches --text-label
           'gap-xs',
         ],
         md: [
           'py-s px-l',
-          'text-body', // Correct: Matches --text-body
+          'text-body', //  Matches --text-body
           'gap-s',
         ],
         lg: [
           'py-m px-xl',
-          'text-subheader', // Correct: Matches --text-subheader
+          'text-subheader', //  Matches --text-subheader
           'gap-m',
         ],
         icon: [

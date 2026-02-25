@@ -73,7 +73,7 @@ Desktop.ini
 
 # Package manager files (keep lock files for consistency)
 # Uncomment if you want to ignore them:
-# pnpm-lock.yaml
+pnpm-lock.yaml
 # package-lock.json
 # yarn.lock
 

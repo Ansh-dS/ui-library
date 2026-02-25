@@ -20,7 +20,6 @@ export interface ButtonProps extends ButtonVariantsType {
 // learn how to use the above props inside this function.
 export function Button(buttonInputs: ButtonProps): React.ReactElement {
   const { variant, size, className, text } = buttonInputs
-  console.log(cn(buttonVariants({ variant, size }), className))
   return (
     <button className={cn(buttonVariants({ variant, size }), className)}>
       {text}

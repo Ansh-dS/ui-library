@@ -35,7 +35,6 @@
     "eslint-plugin-react-refresh": "^0.4.26",
     "eslint-plugin-storybook": "^10.2.0",
     "globals": "^17.1.0",
-    "playwright": "^1.58.0",
-    "storybook": "^10.2.0"
+    "playwright": "^1.58.0"
   }
 }

@@ -1,4 +1,3 @@
-/* theme-decision-tokens.css */
 @import './token.css';
 @import 'tailwindcss';
 @config "./tailwind.config.ts";
