@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { buttonVariants, ButtonVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 

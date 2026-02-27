@@ -94,7 +94,7 @@ const customTwMerge = extendTailwindMerge({
       'font-family': [{ font: fontFamilyTokens }],
 
       // Animations & Transitions
-      // @ts-ignore
+      // @ts-expect-error: this was creating type errors
       'animate-duration': [{ animate: animationTokens }], // animate-*
     },
   },

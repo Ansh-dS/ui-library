@@ -13,13 +13,13 @@
      2. COLOR MAPPING
      ============================================== */
 
-  /* SURFACES */
+  /* SURFACES: 'bg' prefix */
   --color-surface-base: var(--colors-background-primary);
   --color-surface-sunken: var(--colors-background-secondary);
   --color-surface-raised: var(--colors-background-tertiary);
   --color-surface-overlay: var(--colors-background-muted);
 
-  /* ACTION */
+  /* ACTION: 'bg', 'text' */
   --color-action-primary: var(--colors-primary-500);
   --color-action-primary-hover: var(--colors-primary-600);
   --color-action-primary-pressed: var(--colors-primary-700);
@@ -28,7 +28,7 @@
   --color-action-secondary-hover: var(--colors-background-secondary);
   --color-action-secondary-pressed: var(--colors-gray-200);
 
-  /* STATUS (Verify these names match your preview.css variables) */
+  /* STATUS: 'text', 'bg' ) */
   --color-status-success: var(--colors-state-success);
   --color-status-warning: var(--colors-state-warning);
   --color-status-danger: var(
@@ -36,7 +36,7 @@
   ); /* Note: your token uses --colors-state-error */
   --color-status-info: var(--colors-state-info);
 
-  /* BORDERS */
+  /* BORDERS: 'border' */
   --color-border-default: var(--colors-border-default);
   --color-border-focused: var(--colors-primary-500);
 
