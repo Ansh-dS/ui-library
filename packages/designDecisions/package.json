@@ -4,7 +4,8 @@
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
-    "build": " tsc -b && node ./dist/src/styles/themeToString.js"
+    "build": " tsc -b && node ./dist/src/styles/themeToString.js",
+    "lint": "eslint ."
   },
   "exports": {
     ".": {
@@ -19,5 +20,8 @@
   "packageManager": "pnpm@10.20.0",
   "devDependencies": {
     "@types/node": "^24.10.1"
+  },
+  "peerDependencies": {
+    "eslint": "^9.39.2"
   }
 }
