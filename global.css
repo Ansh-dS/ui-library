@@ -13,13 +13,13 @@
      2. COLOR MAPPING
      ============================================== */
 
-  /* Surfaces */
+  /* SURFACES: 'bg' prefix  */
   --color-surface-base: var(--colors-background-primary);
   --color-surface-sunken: var(--colors-background-secondary);
   --color-surface-raised: var(--colors-background-tertiary);
   --color-surface-overlay: var(--colors-background-muted);
 
-  /* Action Elements */
+  /* ACTION: 'bg', 'text'*/
   --color-action-primary: var(--colors-primary-500);
   --color-action-primary-hover: var(--colors-primary-600);
   --color-action-primary-pressed: var(--colors-primary-700);
@@ -32,13 +32,13 @@
 
   --color-action-accent: var(--colors-accent-500); /* Newly added accent */
 
-  /* Status */
+  /*  STATUS: 'text', 'bg' ) */
   --color-status-success: var(--colors-state-success);
   --color-status-warning: var(--colors-state-warning);
   --color-status-danger: var(--colors-state-error); /* Maps to state-error */
   --color-status-info: var(--colors-state-info);
 
-  /* Borders */
+  /* BORDERS: 'border'  */
   --color-border-default: var(--colors-border-default);
   --color-border-focused: var(
     --colors-border-focus
@@ -67,12 +67,12 @@
      3. TYPOGRAPHY
      ============================================== */
 
-  /* Font Families */
+  /* Font Families: --font-* creates font-*  */
   --font-base: var(--typography-fontFamily);
   --font-document: var(--typography-fontFamilySerif);
   --font-mono: var(--typography-fontFamilyMono);
 
-  /* Font Sizes */
+  /* Font Sizes: --text-* creates text-* */
   --text-caption: var(--typography-fontSize-xs);
   --text-label: var(--typography-fontSize-sm);
   --text-body: var(--typography-fontSize-md);
@@ -82,12 +82,12 @@
   --text-h1: var(--typography-fontSize-4xl);
   --text-display: var(--typography-fontSize-5xl);
 
-  /* Line Heights */
+  /* Line Heights: --leading-* creates leading-* */
   --leading-heading: var(--typography-lineHeight-tight);
   --leading-ui: var(--typography-lineHeight-normal);
   --leading-body: var(--typography-lineHeight-relaxed);
 
-  /* Font Weights */
+  /* Font Weights: --font-weight-* creates font-* */
   --font-weight-normal: var(--typography-fontWeight-normal);
   --font-weight-medium: var(--typography-fontWeight-medium);
   --font-weight-semibold: var(--typography-fontWeight-semibold);
@@ -104,7 +104,7 @@
      4. SPACING & LAYOUT
      ============================================== */
 
-  /* Spacing Scale */
+  /* Spacing Scale:  --spacing-* creates p-*, m-*, w-*, h-*, gap-* */
   --spacing-xs: var(--spacing-xs);
   --spacing-s: var(--spacing-sm);
   --spacing-m: var(--spacing-md);
@@ -113,19 +113,19 @@
   --spacing-2xl: var(--spacing-2xl);
   --spacing-3xl: var(--spacing-3xl);
 
-  /* Border Radii */
+  /* Border Radii: --radius-* creates rounded-* */
   --radius-none: 0;
   --radius-small: var(--borderRadius-sm);
   --radius-medium: var(--borderRadius-base);
   --radius-large: var(--borderRadius-lg);
   --radius-pill: var(--borderRadius-full);
 
-  /* Animations */
+  /* Animations: --animate-* creates animate-* */
   --animate-duration-fast: var(--animation-fast);
   --animate-duration-normal: var(--animation-normal);
   --animate-duration-slow: var(--animation-slow);
 
-  /* Shadows (Depth) */
+  /* Shadows (Depth): --shadow-* creates shadow-* */
   --shadow-raised: var(--shadows-sm);
   --shadow-overlay: var(--shadows-md);
   --shadow-modal: var(--shadows-lg);
