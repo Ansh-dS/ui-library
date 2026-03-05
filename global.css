@@ -3,9 +3,9 @@
 @config "./tailwind.config.ts";
 
 /* 1. DEFINE PRIMITIVES (Raw Values) */
-/* We use a unique name here to avoid the Circular Loop */
+/* Unique name to avoid circular loops */
 :root {
-  --color-base-white: #ffffff !important ;
+  --color-base-white: #ffffff !important;
 }
 
 @theme {
@@ -13,67 +13,66 @@
      2. COLOR MAPPING
      ============================================== */
 
-  /* SURFACES: 'bg' prefix */
+  /* Surfaces */
   --color-surface-base: var(--colors-background-primary);
   --color-surface-sunken: var(--colors-background-secondary);
   --color-surface-raised: var(--colors-background-tertiary);
   --color-surface-overlay: var(--colors-background-muted);
 
-  /* ACTION: 'bg', 'text' */
+  /* Action Elements */
   --color-action-primary: var(--colors-primary-500);
   --color-action-primary-hover: var(--colors-primary-600);
   --color-action-primary-pressed: var(--colors-primary-700);
 
   --color-action-secondary: var(--colors-background-primary);
   --color-action-secondary-hover: var(--colors-background-secondary);
-  --color-action-secondary-pressed: var(--colors-gray-200);
+  --color-action-secondary-pressed: var(
+    --colors-neutral-200
+  ); /* Updated to neutral */
 
-  /* STATUS: 'text', 'bg' ) */
+  --color-action-accent: var(--colors-accent-500); /* Newly added accent */
+
+  /* Status */
   --color-status-success: var(--colors-state-success);
   --color-status-warning: var(--colors-state-warning);
-  --color-status-danger: var(
-    --colors-state-error
-  ); /* Note: your token uses --colors-state-error */
+  --color-status-danger: var(--colors-state-error); /* Maps to state-error */
   --color-status-info: var(--colors-state-info);
 
-  /* BORDERS: 'border' */
+  /* Borders */
   --color-border-default: var(--colors-border-default);
-  --color-border-focused: var(--colors-primary-500);
+  --color-border-focused: var(
+    --colors-border-focus
+  ); /* Updated to use new focus token */
 
-  /* TEXT (Foregrounds) */
-  /* --color-fg-* creates utilities like text-fg-primary */
-
+  /* Text (Foregrounds) */
   --color-fg-primary: var(--colors-text-primary);
   --color-fg-secondary: var(--colors-text-secondary);
   --color-fg-brand: var(--colors-primary-500);
-
-  /* FIX: Map to the distinct primitive we defined above */
-  --color-fg-inverted: var(--color-base-white);
-
+  --color-fg-accent: var(--colors-accent-500); /* Newly added accent text */
+  --color-fg-inverted: var(--color-base-white); /* Map to primitive white */
   --color-fg-disabled: var(--colors-text-muted);
 
-  /* RAW PALETTES */
-  /* UPDATED: Added missing steps (50, 400, 600) to match token.css */
-  --color-gray-50: var(--colors-gray-50); /* Added */
-  --color-gray-100: var(--colors-gray-100);
-  --color-gray-200: var(--colors-gray-200);
-  --color-gray-300: var(--colors-gray-300);
-  --color-gray-400: var(--colors-gray-400); /* Added */
-  --color-gray-500: var(--colors-gray-500);
-  --color-gray-600: var(--colors-gray-600); /* Added */
-  --color-gray-700: var(--colors-gray-700);
-  --color-gray-900: var(--colors-gray-900);
+  /* Raw Palettes (Updated to Neutral) */
+  --color-neutral-50: var(--colors-neutral-50);
+  --color-neutral-100: var(--colors-neutral-100);
+  --color-neutral-200: var(--colors-neutral-200);
+  --color-neutral-300: var(--colors-neutral-300);
+  --color-neutral-400: var(--colors-neutral-400);
+  --color-neutral-500: var(--colors-neutral-500);
+  --color-neutral-600: var(--colors-neutral-600);
+  --color-neutral-700: var(--colors-neutral-700);
+  --color-neutral-900: var(--colors-neutral-900);
 
   /* ==============================================
      3. TYPOGRAPHY
      ============================================== */
 
-  /* --font-* creates font-* utilities */
+  /* Font Families */
   --font-base: var(--typography-fontFamily);
   --font-document: var(--typography-fontFamilySerif);
   --font-mono: var(--typography-fontFamilyMono);
 
-  /* --text-* creates text-* utilities (Sizes) */
+  /* Font Sizes */
   --text-caption: var(--typography-fontSize-xs);
   --text-label: var(--typography-fontSize-sm);
   --text-body: var(--typography-fontSize-md);
@@ -83,22 +82,29 @@
   --text-h1: var(--typography-fontSize-4xl);
   --text-display: var(--typography-fontSize-5xl);
 
-  /* --leading-* creates leading-* utilities */
+  /* Line Heights */
   --leading-heading: var(--typography-lineHeight-tight);
   --leading-ui: var(--typography-lineHeight-normal);
   --leading-body: var(--typography-lineHeight-relaxed);
 
-  /* --font-weight-* creates font-* utilities */
+  /* Font Weights */
   --font-weight-normal: var(--typography-fontWeight-normal);
   --font-weight-medium: var(--typography-fontWeight-medium);
   --font-weight-semibold: var(--typography-fontWeight-semibold);
   --font-weight-bold: var(--typography-fontWeight-bold);
 
+  /* Letter Spacing (Tracking) - Newly Added */
+  --tracking-tighter: var(--typography-letterSpacing-tighter);
+  --tracking-tight: var(--typography-letterSpacing-tight);
+  --tracking-normal: var(--typography-letterSpacing-normal);
+  --tracking-wide: var(--typography-letterSpacing-wide);
+  --tracking-widest: var(--typography-letterSpacing-widest);
+
   /* ==============================================
      4. SPACING & LAYOUT
      ============================================== */
 
-  /* --spacing-* creates p-*, m-*, w-*, h-*, gap-* */
+  /* Spacing Scale */
   --spacing-xs: var(--spacing-xs);
   --spacing-s: var(--spacing-sm);
   --spacing-m: var(--spacing-md);
@@ -107,20 +113,22 @@
   --spacing-2xl: var(--spacing-2xl);
   --spacing-3xl: var(--spacing-3xl);
 
-  /* --radius-* creates rounded-* */
+  /* Border Radii */
   --radius-none: 0;
   --radius-small: var(--borderRadius-sm);
   --radius-medium: var(--borderRadius-base);
   --radius-large: var(--borderRadius-lg);
   --radius-pill: var(--borderRadius-full);
 
-  /* --animate-* creates animate-* */
+  /* Animations */
   --animate-duration-fast: var(--animation-fast);
   --animate-duration-normal: var(--animation-normal);
   --animate-duration-slow: var(--animation-slow);
 
-  /* --shadow-* creates shadow-* */
+  /* Shadows (Depth) */
   --shadow-raised: var(--shadows-sm);
   --shadow-overlay: var(--shadows-md);
   --shadow-modal: var(--shadows-lg);
+  --shadow-popout: var(--shadows-xl); /* Newly added */
+  --shadow-inset: var(--shadows-inner); /* Newly added */
 }

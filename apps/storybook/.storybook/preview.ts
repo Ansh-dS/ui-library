@@ -12,7 +12,7 @@ export const globalTypes = {
       icon: 'paintbrush',
       items: [
         { value: 'tally', title: 'Tally' },
-        { value: 'microsoft', title: 'Microsoft' },
+        { value: 'riverside', title: 'Riverside' },
       ],
     },
   },

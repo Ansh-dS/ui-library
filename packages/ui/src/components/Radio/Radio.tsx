@@ -3,12 +3,15 @@ import { radioVariants, RadioVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 export interface RadioProps
   extends
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'color'>,
+    Omit<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      'size' | 'type' | 'color'
+    >,
     RadioVariantsType {
   label?: string
 }
 export function Radio(props: RadioProps): React.ReactElement {
-  const { color, className, label, ...rest } = props
+  const { color, className, label, size, ...rest } = props
   return (
     <label className="flex items-center gap-s cursor-pointer">
       <input

@@ -6,7 +6,7 @@ interface configTemplate {
   version: string
 }
 export function configGenerator(ans: string[]): configTemplate {
-  let themeRecord: Record<string, boolean> = {}
+  const themeRecord: Record<string, boolean> = {}
   ans.map((theme) => {
     themeRecord[theme] = true
   })

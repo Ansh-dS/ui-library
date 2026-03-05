@@ -1,14 +1,14 @@
 import path from 'path'
 import fs from 'fs'
 //default themes.
-import TallyTheme from '../tokens/appleTheme.js'
+import TallyTheme from '../tokens/tallyTheme.js'
 import cssGenerator from '../generators/cssStringGenerator.js'
-import MicrosoftTheme from '../tokens/microsoftTheme.js'
+import RiversideTheme from '../tokens/riversideTheme.js'
 
 async function generateAllThemes(): Promise<void> {
   const themeData =
     cssGenerator(TallyTheme, 'tally') +
-    cssGenerator(MicrosoftTheme, 'microsoft')
+    cssGenerator(RiversideTheme, 'riverside')
 
   // generating a path using "path" and "join".
   const outputPath = path.join('../../', 'token.css')

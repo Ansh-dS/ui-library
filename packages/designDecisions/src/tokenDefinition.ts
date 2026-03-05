@@ -1,69 +1,73 @@
-// shouldn't change even if we change the mode of a theme.
+// 1. Global Tokens (Mode-Agnostic: These NEVER change between light/dark mode)
 export type GlobalTokens = {
   spacing: Record<'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl', string>
   borderRadius: Record<'sm' | 'base' | 'md' | 'lg' | 'full', string>
-  //DONE.
+
+  // Consolidated Typography: Only the unchangeable geometry lives here.
   typography: {
-    fontFamily: string
+    fontFamily: string // Maps to Manrope (UI Scribe)
     fontFamilyMono: string
-    fontFamilySerif: string
+    fontFamilySerif: string // Maps to Cormorant Garamond (Royal Decree)
     fontSize: Record<
       'xs' | 'sm' | 'base' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl',
       string
     >
-    fontWeight: Record<'normal' | 'medium' | 'semibold' | 'bold', number>
     lineHeight: Record<'tight' | 'normal' | 'relaxed', number | string>
-    letterSpacing: Record<'tighter' | 'tight' | 'normal' | 'wide', string>
+    letterSpacing: Record<
+      'tighter' | 'tight' | 'normal' | 'wide' | 'widest',
+      string
+    >
   }
-  // New standardized layers
-  // DONE
+
   breakpoints: Record<'sm' | 'md' | 'lg' | 'xl' | '2xl', string>
   zIndices: Record<
     'base' | 'nav' | 'overlay' | 'modal' | 'toast' | 'popover',
     number
   >
-
   animation: Record<'fast' | 'normal' | 'slow', string>
 }
 
-// change based on the mode of the theme.
+// 2. Theme Tokens (Mode-Specific: These swap out on Light/Dark toggle)
 export type ThemeTokens = {
-  // DONE
   colors: {
     primary: Record<50 | 100 | 500 | 600 | 700, string>
-    gray: Record<50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 900, string>
+    accent: Record<500, string> // Zari Gold
+    neutral: Record<50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 900, string> // Replaced 'gray'
+
     background: {
       primary: string
       secondary: string
       tertiary: string
-      muted: string // Added
+      muted: string
     }
     text: {
       primary: string
       secondary: string
       tertiary: string
-      muted: string // Added
+      muted: string
     }
     border: {
-      // Added
       default: string
+      focus: string
     }
     state: {
-      // Grouped for cleaner access
       success: string
       error: string
       warning: string
       info: string
     }
   }
-  typography?: {
+
+  // ✅ ADDED: Theme-specific typography overrides to handle dark mode optical adjustments
+  typography: {
     lineHeight: { relaxed: number | string }
-    letterSpacing: { normal: string }
-    fontWeight: Record<'normal' | 'medium', number>
-    fontSmoothing?: boolean
+    letterSpacing: { normal: string } // Allows slightly wider tracking in dark mode
+    fontWeight: Record<'normal' | 'medium' | 'semibold' | 'bold', number> // Thinner in dark mode
+    fontSmoothing: boolean // Auto in Light, Antialiased in Dark
   }
 
-  shadows: Record<'sm' | 'md' | 'lg', string>
+  // Shadows are strictly mode-dependent
+  shadows: Record<'sm' | 'md' | 'lg' | 'xl' | 'inner', string> // Expanded to include xl and inner
 }
 
 // 3. The Master Definition

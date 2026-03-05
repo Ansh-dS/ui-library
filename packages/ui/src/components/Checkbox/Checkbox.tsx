@@ -4,13 +4,16 @@ import { cn } from '../../common.js'
 
 export interface CheckboxProps
   extends
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'color'>,
+    Omit<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      'type' | 'color' | 'size'
+    >,
     CheckboxVariantsType {
   label?: string
 }
 
 export function Checkbox(props: CheckboxProps): React.ReactElement {
-  const { color, className, label, ...rest } = props
+  const { color, size, className, label, ...rest } = props
   return (
     <label className="flex items-center gap-s cursor-pointer">
       <input

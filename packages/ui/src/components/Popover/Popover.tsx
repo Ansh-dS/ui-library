@@ -3,7 +3,9 @@ import { popoverVariants, PopoverVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
 export interface PopoverProps
-  extends React.HTMLAttributes<HTMLDivElement>, PopoverVariantsType {
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'content'>,
+    PopoverVariantsType {
   content: React.ReactNode
   open?: boolean
   defaultOpen?: boolean

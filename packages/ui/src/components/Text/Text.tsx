@@ -3,7 +3,9 @@ import { textVariants, TextVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
 export interface TextProps
-  extends React.HTMLAttributes<HTMLSpanElement>, TextVariantsType {
+  extends
+    Omit<React.HTMLAttributes<HTMLSpanElement>, 'color'>,
+    TextVariantsType {
   as?: React.ElementType
 }
 
