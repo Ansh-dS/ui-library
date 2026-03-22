@@ -3,7 +3,7 @@ import { Input } from '@components'
 
 const meta: Meta<typeof Input> = {
   component: Input,
-  title: 'Components/Input',
+  title: 'Inputs/Input',
   argTypes: {
     variant: { control: 'select', options: ['outline', 'filled'] },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },

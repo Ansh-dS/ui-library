@@ -4,43 +4,51 @@ import { cn } from '../../common.js'
 interface BoxProps {
   children?: React.ReactNode
   className?: string
-  as?: React.ElementType // elementType: can be component or just a name
-  style?: React.CSSProperties
-  // as we didn't use CVA and not extending 'BoxProps' so we need to mention the below.
-  elevation?: 'none' | 'sm' | 'md' | 'lg'
-  interactive?: boolean
+  as?: React.ElementType
+  elevation?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
+  interactive?: boolean /** If true, adds hover lift and pointer cursor */
 }
 
-// the below is the way we can provide the default values even after interface is defined.
-// we are also renaming the old value:
-// 'as' to 'Component'.
 export function Box({
   as: Component = 'div',
-  style,
   className,
-  children, // Fixed typo
+  children,
   elevation = 'none',
   interactive = false,
 }: BoxProps) {
   return (
     <Component
-      style={style} // no need to add in 'cn' function driectly adding into html.
       className={cn(
         // 1. BASE RULES
-        'box-border min-w-0 transition-all',
+        // box-border ensures padding doesn't affect width
+        // min-w-0 prevents flex items from overflowing
+        'box-border min-w-0 transition-all duration-normal ease-out',
+        'bg-surface-base border border-border-default rounded-medium',
 
-        // 2. SHADOW RULES (since we didn't use CVA so we need to map the values)
+        // 2. ELEVATION RULES
+        // We map our props to the theme tokens we defined in global.css
+        // These tokens now use our "Layered" or "Heavy Anchor" logic
         {
           'shadow-none': elevation === 'none',
-          'shadow-raised': elevation === 'sm', // Maps to --shadows-sm
-          'shadow-overlay': elevation === 'md', // Maps to --shadows-md
-          'shadow-modal': elevation === 'lg', // Maps to --shadows-lg
+          'shadow-raised': elevation === 'sm', // Maps to sm
+          'shadow-overlay': elevation === 'md', // Maps to md
+          'shadow-modal': elevation === 'lg', // Maps to lg
+          'shadow-popout': elevation === 'xl', // Maps to xl
         },
 
         // 3. INTERACTIVE RULES
-        interactive &&
-          'hover:-translate-y-0.5 hover:shadow-overlay cursor-pointer',
+        // We use -translate-y to give the "Lift" effect.
+        // We also bump the shadow on hover to simulate physical distance from the surface.
+        interactive && [
+          'cursor-pointer',
+          'hover:-translate-y-1',
+          'active:translate-y-0 active:scale-[0.98]', // Add this for "tactile" feedback
+          // if initial elevation state is not 'none' then show the biggest shadow on hover.
+          // this helps in showing that box is moving.
+          elevation === 'none' ? 'hover:shadow-raised' : 'hover:shadow-popout',
+        ],
 
+        // 4. CUSTOM OVERRIDES
         className
       )}
     >

@@ -76,14 +76,6 @@ const TallyTheme: DesignSystem = {
       },
     },
 
-    breakpoints: {
-      sm: '40rem', // 640px
-      md: '48rem', // 768px
-      lg: '64rem', // 1024px
-      xl: '80rem', // 1280px
-      '2xl': '96rem', // 1536px
-    },
-
     zIndices: {
       base: 0,
       nav: 10,
@@ -110,9 +102,9 @@ const TallyTheme: DesignSystem = {
         primary: {
           50: '#F0F9FF', // Icy mist
           100: '#E0F2FE',
-          500: '#0284C7', // Dal Lake Blue (Main Brand)
-          600: '#0369A1',
-          700: '#075985', // Deep Water
+          500: '#0369A1',
+          600: '#075985', // Deep Water (Hover)
+          700: '#034666', // Midnight Depth (Pressed)
         },
         // Kashmiri Saffron: Warm, striking contrast
         accent: {
@@ -141,10 +133,14 @@ const TallyTheme: DesignSystem = {
           secondary: '#475569', // Maps to neutral-600
           tertiary: '#94A3B8', // Maps to neutral-400
           muted: '#94A3B8',
+          // In Light Mode: Pure White for text on Dal Lake Blue backgrounds
+          inverted: '#FFFFFF',
         },
         border: {
-          default: '#E2E8F0', // Maps to neutral-200
-          focus: '#0284C7', // Maps to primary-500
+          default: '#CBD5E1',
+          focus: '#0284C7', // Alpine Blue (Kept as is)
+          // Added a stronger border for inputs/interactive elements needing higher contrast accessibility.
+          strong: '#94A3B8', // Maps to neutral-400
         },
         state: {
           success: '#059669', // Pine Green
@@ -165,14 +161,13 @@ const TallyTheme: DesignSystem = {
         },
         fontSmoothing: false,
       },
-
-      // Shadows: Tinted with deep blue/slate (15, 23, 42) for crisp, cold air feel
+      // Layered Shadows: Uses negative spread to tuck the blur under the border for a crisp hairline edge.
       shadows: {
-        sm: '0 0.0625rem 0.125rem rgba(15, 23, 42, 0.04)',
-        md: '0 0.25rem 0.375rem -0.0625rem rgba(15, 23, 42, 0.08), 0 0.125rem 0.25rem -0.0625rem rgba(15, 23, 42, 0.03)',
-        lg: '0 0.625rem 0.9375rem -0.1875rem rgba(15, 23, 42, 0.1), 0 0.25rem 0.375rem -0.125rem rgba(15, 23, 42, 0.04)',
-        xl: '0 1.25rem 1.5625rem -0.3125rem rgba(15, 23, 42, 0.1), 0 0.625rem 0.625rem -0.3125rem rgba(15, 23, 42, 0.03)',
-        inner: 'inset 0 2px 4px 0 rgba(15, 23, 42, 0.05)',
+        sm: '0 1px 2px -1px rgba(15, 23, 42, 0.1), 0 1px 3px 0 rgba(15, 23, 42, 0.05)',
+        md: '0 4px 6px -2px rgba(15, 23, 42, 0.1), 0 2px 4px -2px rgba(15, 23, 42, 0.05)',
+        lg: '0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.05)',
+        xl: '0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05)',
+        inner: 'inset 0 2px 4px 0 rgba(15, 23, 42, 0.06)',
       },
     },
 
@@ -212,10 +207,16 @@ const TallyTheme: DesignSystem = {
           secondary: 'rgba(248, 250, 252, 0.7)', // Reduces glare on dark blue
           tertiary: 'rgba(248, 250, 252, 0.5)',
           muted: 'rgba(248, 250, 252, 0.4)',
+          // In Dark Mode: Deep Night Slate (#020617) for text on Ice Cyan backgrounds.
+          // This stops the "Halation" effect you are fighting.
+
+          inverted: '#020617',
         },
         border: {
-          default: '#1E293B',
-          focus: '#38BDF8',
+          default: '#334155',
+          focus: '#38BDF8', // Bright Ice Cyan (Kept as is)
+          // Added for higher contrast elements like form inputs so they don't get lost in the dark.
+          strong: '#475569', // Maps to neutral-600
         },
         state: {
           success: '#34D399',
@@ -242,12 +243,12 @@ const TallyTheme: DesignSystem = {
         fontSmoothing: true,
       },
 
-      // Dark Mode Shadows: Black tints for visibility against deep blue/slate
+      // Pure Umbra Chasm: Uses high-opacity black to create a sharp depth gap between the border and background.
       shadows: {
-        sm: '0 0.0625rem 0.125rem rgba(0, 0, 0, 0.5)',
-        md: '0 0.25rem 0.375rem rgba(0, 0, 0, 0.7)',
-        lg: '0 0.625rem 0.9375rem rgba(0, 0, 0, 0.9)',
-        xl: '0 1.25rem 1.5625rem rgba(0, 0, 0, 1)',
+        sm: '0 1px 2px -1px rgba(0, 0, 0, 0.5), 0 1px 3px 0 rgba(0, 0, 0, 0.4)',
+        md: '0 4px 6px -1px rgba(0, 0, 0, 0.6), 0 2px 4px -2px rgba(0, 0, 0, 0.5)',
+        lg: '0 10px 15px -3px rgba(0, 0, 0, 0.7), 0 4px 6px -4px rgba(0, 0, 0, 0.6)',
+        xl: '0 20px 25px -5px rgba(0, 0, 0, 0.8), 0 8px 10px -6px rgba(0, 0, 0, 0.7)',
         inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.6)',
       },
     },

@@ -1,27 +1,44 @@
 {
-  "name": "ui",
+  "name": "components",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "./dist/ui.cjs",
+  "module": "./dist/ui.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/ui.js",
+      "require": "./dist/ui.cjs"
+    },
+    "./global.css": "./dist/global.css",
+    "./token.css": "./dist/token.css"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && pnpm postbuild",
+    "postbuild": "cp ../../global.css dist/global.css && cp ../../token.css dist/token.css",
     "lint": "eslint ."
   },
   "peerDependencies": {
     "@vitejs/plugin-react": "^5.1.2",
+    "eslint": "^9.39.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
-    "eslint": "^9.39.2",
     "vitest": "^4.0.18"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.4.0"
+    "clsx": "^2.1.1"
   },
   "devDependencies": {
-    "@vitest/browser-playwright": "^4.0.18"
+    "@vitest/browser-playwright": "^4.0.18",
+    "tailwind-merge": "^3.4.0",
+    "vite-plugin-css-injected-by-js": "^4.0.1"
   }
 }

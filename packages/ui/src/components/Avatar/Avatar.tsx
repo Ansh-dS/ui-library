@@ -10,8 +10,9 @@ export interface AvatarProps
 export function Avatar(props: AvatarProps): React.ReactElement {
   const { size, src, alt, className, fallback, ...rest } = props
   return (
-    <div className={cn(avatarVariants({ size }), className)}>
+    <span className={cn(avatarVariants({ size }), className)}>
       {src ? (
+        /*object-cover: resize an element's content to cover its container*/
         <img
           src={src}
           alt={alt}
@@ -19,8 +20,10 @@ export function Avatar(props: AvatarProps): React.ReactElement {
           {...rest}
         />
       ) : (
-        <span className="text-fg-secondary">{fallback}</span>
+        <span className="font-medium uppercase tracking-tighter select-none">
+          {fallback}
+        </span>
       )}
-    </div>
+    </span>
   )
 }

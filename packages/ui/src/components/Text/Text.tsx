@@ -1,29 +1,33 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { textVariants, TextVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
 export interface TextProps
-  extends
-    Omit<React.HTMLAttributes<HTMLSpanElement>, 'color'>,
-    TextVariantsType {
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'color'>, TextVariantsType {
+  /** Allows you to change the underlying HTML element (e.g., 'span', 'h1', 'label') */
   as?: React.ElementType
 }
 
-export function Text(props: TextProps): React.ReactElement {
+export const Text = forwardRef<HTMLElement, TextProps>((props, ref) => {
   const {
-    size,
+    as: Component = 'p', // Defaults to a paragraph tag
+    variant,
     color,
-    as: Component = 'span',
+    weight,
+    align,
     className,
     children,
     ...rest
   } = props
+
   return (
     <Component
-      className={cn(textVariants({ size, color }), className)}
+      ref={ref}
+      className={cn(textVariants({ variant, color, weight, align }), className)}
       {...rest}
     >
       {children}
     </Component>
   )
-}
+})
+Text.displayName = 'Text'

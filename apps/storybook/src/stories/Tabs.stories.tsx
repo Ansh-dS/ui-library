@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Tabs } from '@components'
 
 const meta: Meta<typeof Tabs> = {
-  title: 'Components/Tabs',
+  title: 'Navigation/Tabs',
   component: Tabs,
   argTypes: {
     orientation: { control: 'select', options: ['horizontal', 'vertical'] },
@@ -19,17 +19,17 @@ export const Default: Story = {
     items: [
       {
         id: 'tab1',
-        title: 'Account',
+        title: 'Navigation/Tabs',
         panel: 'Account settings and preferences.',
       },
       {
         id: 'tab2',
-        title: 'Security',
+        title: 'Navigation/Tabs',
         panel: 'Password and authentication settings.',
       },
       {
         id: 'tab3',
-        title: 'Billing',
+        title: 'Navigation/Tabs',
         panel: 'Payment methods.',
         disabled: true,
       },

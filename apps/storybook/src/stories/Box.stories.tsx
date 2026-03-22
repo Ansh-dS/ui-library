@@ -1,12 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite' // Standard React Storybook type
 import { Box } from '@components'
 
-// we are sending the 'type' of function.
-// here it is JSX.Element(Box).
 const meta: Meta<typeof Box> = {
   component: Box,
-  title: 'Components/Box',
-  // we can only mention the props of Box component.
+  title: 'Foundation/Box',
+
   argTypes: {
     as: {
       control: 'select',

@@ -5,6 +5,8 @@ import { defineConfig } from 'vite'
 import path from 'node:path'
 // Added PluginOption type to help with the casting fix
 import type { PluginOption } from 'vite'
+// the below helps to inject css into ui.js.
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 
 import dts from 'vite-plugin-dts'
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -14,12 +16,16 @@ export default defineConfig({
     // Fix: Passing {} satisfies the requirement for 1 argument in some plugin versions
     // Fix: 'as PluginOption' bypasses the complex version mismatch error between Vite and Rollup types
     react({}) as PluginOption,
-
+    cssInjectedByJsPlugin() as PluginOption,
     //we are using dts to generate declaration file as vite can't create during the build.
     dts({
       include: ['src'],
       exclude: ['src/**/*.stories.*'],
       outDir: 'dist',
+      rollupTypes: true, // Flattens all types into dist/index.ts as typescirpt expects all files at the root.
+      insertTypesEntry: true,
+      // Clean up the dist folder before regenerating
+      cleanVueFileName: true,
     }) as PluginOption,
   ],
   // Note: Removed the explicit css.postcss path.
@@ -28,6 +34,7 @@ export default defineConfig({
     alias: {
       '@globalCss': path.resolve(__dirname, '../../global.css'),
       '@tokenCss': path.resolve(__dirname, '../../token.css'),
+      '@components': path.resolve(__dirname, './src/index.js'),
     },
   },
   // TypeScript paths only work for type checking.

@@ -1,6 +1,5 @@
 @import './token.css';
 @import 'tailwindcss';
-@config "./tailwind.config.ts";
 
 /* 1. DEFINE PRIMITIVES (Raw Values) */
 /* Unique name to avoid circular loops */
@@ -29,7 +28,6 @@
   --color-action-secondary-pressed: var(
     --colors-neutral-200
   ); /* Updated to neutral */
-
   --color-action-accent: var(--colors-accent-500); /* Newly added accent */
 
   /*  STATUS: 'text', 'bg' ) */
@@ -40,16 +38,16 @@
 
   /* BORDERS: 'border'  */
   --color-border-default: var(--colors-border-default);
-  --color-border-focused: var(
-    --colors-border-focus
-  ); /* Updated to use new focus token */
+  --color-border-focused: var(--colors-border-focus);
+  --color-border-strong: var(--colors-border-strong);
+  /* Updated to use new focus token */
 
   /* Text (Foregrounds) */
   --color-fg-primary: var(--colors-text-primary);
   --color-fg-secondary: var(--colors-text-secondary);
   --color-fg-brand: var(--colors-primary-500);
   --color-fg-accent: var(--colors-accent-500); /* Newly added accent text */
-  --color-fg-inverted: var(--color-base-white); /* Map to primitive white */
+  --color-fg-inverted: var(--colors-text-inverted);
   --color-fg-disabled: var(--colors-text-muted);
 
   /* Raw Palettes (Updated to Neutral) */
@@ -131,4 +129,24 @@
   --shadow-modal: var(--shadows-lg);
   --shadow-popout: var(--shadows-xl); /* Newly added */
   --shadow-inset: var(--shadows-inner); /* Newly added */
+
+  /* ==============================================
+     5. BREAKPOINTS & LAYOUT
+     ============================================== */
+
+  /* Breakpoints: --breakpoint-* creates sm:, md:, lg:, etc. */
+  /* we have to insert the below doesn't accept the variables - This fixes md:flex  */
+  --breakpoint-sm: 40rem; /* 640px */
+  --breakpoint-md: 48rem; /* 768px */
+  --breakpoint-lg: 64rem; /* 1024px */
+  --breakpoint-xl: 80rem; /* 1280px */
+  --breakpoint-2xl: 96rem; /* 1536px */
+
+  /* Z-Index: --z-* creates z-* */
+  --z-base: var(--zIndices-base);
+  --z-nav: var(--zIndices-nav);
+  --z-overlay: var(--zIndices-overlay);
+  --z-popover: var(--zIndices-popover);
+  --z-modal: var(--zIndices-modal);
+  --z-toast: var(--zIndices-toast);
 }

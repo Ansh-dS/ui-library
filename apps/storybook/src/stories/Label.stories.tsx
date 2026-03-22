@@ -3,7 +3,7 @@ import { Label } from '@components'
 
 const meta: Meta<typeof Label> = {
   component: Label,
-  title: 'Components/Label',
+  title: 'Foundation/Label',
   argTypes: {
     required: { control: 'boolean' },
   },
