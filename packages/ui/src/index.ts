@@ -5,7 +5,6 @@ import './styles.d.ts'
 import '@globalCss'
 import '@tokenCss'
 
-
 // ==========================================
 // LEVEL 0: HOOKS & CONFIG
 // ==========================================
@@ -19,7 +18,7 @@ export * from './hooks/useTheme.js'
 // ==========================================
 export * from './components/Box/Box.js'
 export * from './components/Stack/Stack.js'
-export * from './components/Text/Text.js' 
+export * from './components/Text/Text.js'
 
 // ==========================================
 // LEVEL 2: ATOMIC COMPONENTS (SINGLE ACTION)

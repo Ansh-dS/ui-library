@@ -2,12 +2,20 @@ import React, { forwardRef } from 'react'
 import { textVariants, TextVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface TextProps
-  extends Omit<React.HTMLAttributes<HTMLElement>, 'color'>, TextVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type TextCustomProps = {
   /** Allows you to change the underlying HTML element (e.g., 'span', 'h1', 'label') */
   as?: React.ElementType
   required?: boolean
 }
+
+type CleanProps = Prettify<TextCustomProps & TextVariantsType>
+
+export type TextProps = CleanProps &
+  Omit<React.HTMLAttributes<HTMLElement>, 'color'>
 
 export const Text = forwardRef<HTMLElement, TextProps>((props, ref) => {
   const {
@@ -17,7 +25,7 @@ export const Text = forwardRef<HTMLElement, TextProps>((props, ref) => {
     weight,
     align,
     className,
-    required= false,
+    required = false,
     children,
     ...rest
   } = props

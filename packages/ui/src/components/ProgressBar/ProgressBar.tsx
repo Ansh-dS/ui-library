@@ -6,12 +6,20 @@ import {
 } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface ProgressBarProps
-  extends React.HTMLAttributes<HTMLDivElement>, ProgressBarVariantsType {
-  value: number // 0 to 100
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type ProgressBarCustomProps = {
+  /** 0 to 100 */
+  value: number
   max?: number
   color?: 'primary' | 'success' | 'warning' | 'danger'
 }
+
+type CleanProps = Prettify<ProgressBarCustomProps & ProgressBarVariantsType>
+
+export type ProgressBarProps = CleanProps & React.HTMLAttributes<HTMLDivElement>
 
 export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
   (props, ref) => {

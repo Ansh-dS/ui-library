@@ -2,15 +2,21 @@ import React from 'react'
 import { alertVariants, AlertVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface AlertProps
-  extends
-    Omit<React.HTMLAttributes<HTMLDivElement>, 'color'>,
-    AlertVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type AlertCustomProps = {
   severity?: 'info' | 'success' | 'warning' | 'error'
   onClose?: () => void
   dismissible?: boolean
   icon?: React.ReactNode
 }
+
+type CleanProps = Prettify<AlertCustomProps & AlertVariantsType>
+
+export type AlertProps = CleanProps &
+  Omit<React.HTMLAttributes<HTMLDivElement>, 'color'>
 
 export function Alert(props: AlertProps): React.ReactElement {
   const { severity, onClose, dismissible, icon, className, children, ...rest } =

@@ -2,10 +2,18 @@ import React, { forwardRef } from 'react'
 import { previewWindowVariants, PreviewWindowVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface PreviewWindowProps
-  extends React.HTMLAttributes<HTMLDivElement>, PreviewWindowVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type PreviewWindowCustomProps = {
   url?: string
 }
+
+type CleanProps = Prettify<PreviewWindowCustomProps & PreviewWindowVariantsType>
+
+export type PreviewWindowProps = CleanProps &
+  React.HTMLAttributes<HTMLDivElement>
 
 export const PreviewWindow = forwardRef<HTMLDivElement, PreviewWindowProps>(
   (props, ref) => {

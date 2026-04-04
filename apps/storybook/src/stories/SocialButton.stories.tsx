@@ -15,7 +15,7 @@ const meta: Meta<typeof SocialButton> = {
     },
   },
   parameters: {
-    layout: 'centered'
+    layout: 'centered',
   },
   tags: ['autodocs'],
   decorators: [
@@ -38,7 +38,7 @@ type Story = StoryObj<typeof SocialButton>
 
 /**
  * THE DEFAULT STORY
- * This ensures that when you first click the component, it shows a valid 
+ * This ensures that when you first click the component, it shows a valid
  * state instead of a generic button that blends into the background.
  */
 export const Default: Story = {
@@ -52,7 +52,7 @@ export const Google: Story = {
   args: {
     provider: 'google',
     label: 'Continue with Google',
-  }
+  },
 }
 
 export const GitHub: Story = {
@@ -93,7 +93,6 @@ export const MagicLink: Story = {
 /* -------------------------------------------------------------------------- */
 /* GEOMETRIC SCALING DEMONSTRATION                                            */
 /* -------------------------------------------------------------------------- */
-
 
 export const Sizes: Story = {
   render: () => (

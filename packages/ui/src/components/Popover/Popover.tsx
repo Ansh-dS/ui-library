@@ -2,10 +2,11 @@ import React, { useState, useRef, useEffect } from 'react'
 import { popoverVariants, PopoverVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface PopoverProps
-  extends
-    Omit<React.HTMLAttributes<HTMLDivElement>, 'content'>,
-    PopoverVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type PopoverCustomProps = {
   content: React.ReactNode /** The content rendered inside the floating popover */
   open?: boolean /** Controlled state: Forces the popover to remain open or closed */
   initialState?: boolean /** Uncontrolled state: we aren't forcing to open or close but providing default value */
@@ -14,6 +15,11 @@ export interface PopoverProps
   ) => void /** the event emitted when closes or opens */
   closeOnOutsideClick?: boolean /** 'click-away' functionality to close the panel */
 }
+
+type CleanProps = Prettify<PopoverCustomProps & PopoverVariantsType>
+
+export type PopoverProps = CleanProps &
+  Omit<React.HTMLAttributes<HTMLDivElement>, 'content'>
 
 export function Popover(props: PopoverProps): React.ReactElement {
   const {

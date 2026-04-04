@@ -2,10 +2,20 @@ import React, { forwardRef } from 'react'
 import { videoGridVariants, VideoGridVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface ResponsiveVideoGridProps
-  extends React.HTMLAttributes<HTMLDivElement>, VideoGridVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type ResponsiveVideoGridCustomProps = {
   count: number
 }
+
+type CleanProps = Prettify<
+  ResponsiveVideoGridCustomProps & VideoGridVariantsType
+>
+
+export type ResponsiveVideoGridProps = CleanProps &
+  React.HTMLAttributes<HTMLDivElement>
 
 export const ResponsiveVideoGrid = forwardRef<
   HTMLDivElement,

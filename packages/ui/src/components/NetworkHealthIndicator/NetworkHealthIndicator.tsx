@@ -2,10 +2,21 @@ import React, { forwardRef } from 'react'
 import { networkHealthVariants, NetworkHealthVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface NetworkHealthIndicatorProps
-  extends React.HTMLAttributes<HTMLDivElement>, NetworkHealthVariantsType {
-  latency?: number // ms
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type NetworkHealthIndicatorCustomProps = {
+  /** ms */
+  latency?: number
 }
+
+type CleanProps = Prettify<
+  NetworkHealthIndicatorCustomProps & NetworkHealthVariantsType
+>
+
+export type NetworkHealthIndicatorProps = CleanProps &
+  React.HTMLAttributes<HTMLDivElement>
 
 export const NetworkHealthIndicator = forwardRef<
   HTMLDivElement,

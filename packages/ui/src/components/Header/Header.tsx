@@ -5,14 +5,13 @@ import { cn } from '../../common.js'
 import { Text } from '../Text/Text.js' // Adjust this import path to match your folder structure
 
 type Prettify<T> = {
-  [K in keyof T]: T[K];
+  [K in keyof T]: T[K]
 } & {}
-
 
 type HeaderCustomProps = {
   logo?: React.ReactNode
   /** STAFF UPDATE: Added a title prop specifically for the Text element */
-  title?: string 
+  title?: string
   actions?: React.ReactNode
   /** * 'left' = Tally Mode (Nav follows Logo)
    * 'center' = Riverside Mode (Nav is mathematically centered)
@@ -20,9 +19,7 @@ type HeaderCustomProps = {
   navPosition?: 'left' | 'center'
 }
 
-
-type CleanProps = Prettify<HeaderCustomProps & HeaderVariantsType>;
-
+type CleanProps = Prettify<HeaderCustomProps & HeaderVariantsType>
 
 // HTMLElement: it is a class in the Web/DOM API. which contains 'div', 'span'.
 // HTMLAttributes: using this we fetch the in-general attributes and their 'type'.

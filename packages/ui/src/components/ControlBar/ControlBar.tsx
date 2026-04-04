@@ -2,10 +2,18 @@ import React, { forwardRef } from 'react'
 import { controlBarVariants } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface ControlBarProps extends React.HTMLAttributes<HTMLElement> {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type ControlBarCustomProps = {
   centerActions?: React.ReactNode
   rightActions?: React.ReactNode
 }
+
+type CleanProps = Prettify<ControlBarCustomProps>
+
+export type ControlBarProps = CleanProps & React.HTMLAttributes<HTMLElement>
 
 export const ControlBar = forwardRef<HTMLElement, ControlBarProps>(
   (props, ref) => {

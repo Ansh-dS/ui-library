@@ -13,14 +13,14 @@ const meta: Meta<typeof Tooltip> = {
     },
     variant: {
       control: 'select',
-      options: ['dark', 'light', 'brand','glass'],
+      options: ['dark', 'light', 'brand', 'glass'],
     },
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],
     },
     children: {
-      table: { disable: true }
+      table: { disable: true },
     },
   },
   parameters: {

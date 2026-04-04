@@ -7,6 +7,10 @@ import { cardVariants, CardVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 import { Text } from '../Text/Text.js' // Assuming your Text component is here
 
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
 // To sync padding across sub-components
 const CardContext = createContext<{
   size?: 'none' | 'sm' | 'md' | 'lg' | null
@@ -35,10 +39,17 @@ const getSharedPadding = (
 }
 
 // No props we need to define for Card.
-export interface CardProps
-  extends React.HTMLAttributes<HTMLDivElement>, CardVariantsType {
+type CardCustomProps = {
   size?: 'none' | 'sm' | 'md' | 'lg' | null
 }
+
+type CleanProps = Prettify<CardCustomProps & CardVariantsType>
+
+type CardTextProps<T extends HTMLElement> = Prettify<
+  Omit<React.HTMLAttributes<T>, 'color'>
+>
+
+export type CardProps = CleanProps & React.HTMLAttributes<HTMLDivElement>
 
 /*
  * Main Card Wrapper
@@ -109,7 +120,7 @@ CardHeader.displayName = 'CardHeader'
  */
 export const CardTitle = forwardRef<
   HTMLHeadingElement,
- Omit< React.HTMLAttributes<HTMLHeadingElement>, 'color'>
+  CardTextProps<HTMLHeadingElement>
 >(({ className, ...props }, ref) => {
   const { size } = useContext(CardContext)
 
@@ -135,7 +146,7 @@ CardTitle.displayName = 'CardTitle'
  */
 export const CardDescription = forwardRef<
   HTMLParagraphElement,
-   Omit<React.HTMLAttributes<HTMLParagraphElement>, 'color'>
+  CardTextProps<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
   const { size } = useContext(CardContext)
 
@@ -177,7 +188,7 @@ CardContent.displayName = 'CardContent'
  */
 export const CardLabel = forwardRef<
   HTMLParagraphElement,
-  Omit<React.HTMLAttributes<HTMLParagraphElement>, 'color'>
+  CardTextProps<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
   const { size } = useContext(CardContext)
 

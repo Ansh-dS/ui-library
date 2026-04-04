@@ -3,14 +3,21 @@ import { statVariants, StatVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 import { Text } from '../Text/Text.js'
 
-export interface StatProps
-  extends React.HTMLAttributes<HTMLDivElement>, StatVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type StatCustomProps = {
   label: string
   value: string | number
   trend?: 'up' | 'down' | 'neutral'
   trendValue?: string
   helpText?: string
 }
+
+type CleanProps = Prettify<StatCustomProps & StatVariantsType>
+
+export type StatProps = CleanProps & React.HTMLAttributes<HTMLDivElement>
 
 export const Stat = forwardRef<HTMLDivElement, StatProps>((props, ref) => {
   const {

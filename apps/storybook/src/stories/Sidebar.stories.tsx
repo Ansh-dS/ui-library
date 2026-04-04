@@ -5,9 +5,9 @@ const meta: Meta<typeof Sidebar> = {
   title: 'Navigation/Sidebar',
   component: Sidebar,
   argTypes: {
-    variant: { 
-      control: 'select', 
-      options: ['default', 'sunken', 'inset', 'glass'] 
+    variant: {
+      control: 'select',
+      options: ['default', 'sunken', 'inset', 'glass'],
     },
     collapsed: { control: 'boolean' },
     layout: { control: 'select', options: ['docked', 'overlay'] },
@@ -37,14 +37,20 @@ export const TallyDashboard: Story = {
     header: (
       <div className="flex items-center gap-s">
         <span className="text-xl">📊</span>
-        <Text variant="h3" weight="bold">Tally Clone</Text>
+        <Text variant="h3" weight="bold">
+          Tally Clone
+        </Text>
       </div>
     ),
     footer: (
-       <div className="flex flex-col">
-         <Text variant="caption" weight="medium">Anshdeep Singh</Text>
-         <Text variant="caption" color="secondary">IIT Patna · v1.0.0</Text>
-       </div>
+      <div className="flex flex-col">
+        <Text variant="caption" weight="medium">
+          Anshdeep Singh
+        </Text>
+        <Text variant="caption" color="secondary">
+          IIT Patna · v1.0.0
+        </Text>
+      </div>
     ),
     children: (
       <>
@@ -66,7 +72,11 @@ export const LegalSahyak: Story = {
   args: {
     variant: 'sunken',
     collapsed: false,
-    header: <Text variant="h3" weight="bold" color="brand">LegalSahyak</Text>,
+    header: (
+      <Text variant="h3" weight="bold" color="brand">
+        LegalSahyak
+      </Text>
+    ),
     children: (
       <>
         <SidebarItem icon="📁" label="All Cases" active />

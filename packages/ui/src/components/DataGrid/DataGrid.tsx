@@ -2,14 +2,17 @@ import React, { forwardRef, createContext, useContext } from 'react'
 import { dataGridVariants, DataGridVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
 const DataGridContext = createContext<{
   size?: 'sm' | 'md' | 'lg' | null | undefined
 }>({
   size: 'md',
 })
 
-export interface DataGridProps
-  extends React.TableHTMLAttributes<HTMLTableElement>, DataGridVariantsType {}
+type DataGridCustomProps = Record<string, never>
 
 export const DataGrid = forwardRef<HTMLTableElement, DataGridProps>(
   (props, ref) => {
@@ -91,7 +94,8 @@ export const DataGridHead = forwardRef<
    */
 
   const sizeClasses = {
-    sm: 'h-10 px-m text-caption', // Gives enough room for the 8px cell padding
+    /** Gives enough room for the 8px cell padding */
+    sm: 'h-10 px-m text-caption',
     md: 'h-12 px-l text-label',
     lg: 'h-14 px-2xl text-body',
   }
@@ -108,6 +112,11 @@ export const DataGridHead = forwardRef<
     />
   )
 })
+
+type CleanProps = Prettify<DataGridCustomProps & DataGridVariantsType>
+
+export type DataGridProps = CleanProps &
+  React.TableHTMLAttributes<HTMLTableElement>
 DataGridHead.displayName = 'DataGridHead'
 
 // data-gird-cell: Each cell.

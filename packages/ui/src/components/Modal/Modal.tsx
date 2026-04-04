@@ -2,7 +2,11 @@ import React, { useEffect } from 'react'
 import { modalVariants, ModalVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface ModalProps extends ModalVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type ModalCustomProps = {
   isOpen: boolean
   onClose: () => void
   children: React.ReactNode
@@ -12,6 +16,10 @@ export interface ModalProps extends ModalVariantsType {
   initialFocusRef?: React.RefObject<HTMLElement>
   className?: string
 }
+
+type CleanProps = Prettify<ModalCustomProps & ModalVariantsType>
+
+export type ModalProps = CleanProps
 
 export function Modal(props: ModalProps): React.ReactElement | null {
   const {

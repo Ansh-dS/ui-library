@@ -2,12 +2,18 @@ import React from 'react'
 import { selectVariants, SelectVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface SelectProps
-  extends
-    Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size'>,
-    SelectVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type SelectCustomProps = {
   options: { label: string; value: string | number }[]
 }
+
+type CleanProps = Prettify<SelectCustomProps & SelectVariantsType>
+
+export type SelectProps = CleanProps &
+  Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size'>
 
 export function Select(props: SelectProps): React.ReactElement {
   const { size, className, options, ...rest } = props

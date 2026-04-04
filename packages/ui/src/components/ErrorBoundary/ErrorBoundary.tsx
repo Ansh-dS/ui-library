@@ -12,11 +12,19 @@ import { fallbackVariants, FallbackVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 import { Text, Button } from '@components'
 
-export interface ErrorBoundaryProps extends FallbackVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type ErrorBoundaryCustomProps = {
   children: ReactNode
   fallback?: ReactNode
   className?: string
 }
+
+type CleanProps = Prettify<ErrorBoundaryCustomProps & FallbackVariantsType>
+
+export type ErrorBoundaryProps = CleanProps
 
 interface ErrorBoundaryState {
   hasError: boolean

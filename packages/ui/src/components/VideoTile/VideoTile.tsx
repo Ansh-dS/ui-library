@@ -2,12 +2,20 @@ import React, { forwardRef, useEffect, useRef } from 'react'
 import { videoTileVariants, VideoTileVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface VideoTileProps
-  extends React.VideoHTMLAttributes<HTMLVideoElement>, VideoTileVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type VideoTileCustomProps = {
   stream?: MediaStream | null
   participantName?: string
   isSpeaking?: boolean
 }
+
+type CleanProps = Prettify<VideoTileCustomProps & VideoTileVariantsType>
+
+export type VideoTileProps = CleanProps &
+  React.VideoHTMLAttributes<HTMLVideoElement>
 
 export const VideoTile = forwardRef<HTMLVideoElement, VideoTileProps>(
   (props, externalRef) => {

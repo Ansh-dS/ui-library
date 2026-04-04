@@ -2,10 +2,17 @@ import React, { forwardRef } from 'react'
 import { sortableZoneVariants, SortableVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface SortableProps
-  extends React.HTMLAttributes<HTMLDivElement>, SortableVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type SortableCustomProps = {
   placeholder?: string
 }
+
+type CleanProps = Prettify<SortableCustomProps & SortableVariantsType>
+
+export type SortableProps = CleanProps & React.HTMLAttributes<HTMLDivElement>
 
 export const Sortable = forwardRef<HTMLDivElement, SortableProps>(
   (props, ref) => {

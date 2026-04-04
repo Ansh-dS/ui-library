@@ -148,8 +148,8 @@ const RiversideTheme: DesignSystem = {
           50: '#E6F0EB',
           100: '#CDE1D7',
           500: '#10B981',
-          600: '#34D399', /* Hover "Glow" (Lighter) */
-          700: '#6EE7B7', /* Pressed "Intense Glow" */
+          600: '#34D399' /* Hover "Glow" (Lighter) */,
+          700: '#6EE7B7' /* Pressed "Intense Glow" */,
         },
         accent: {
           500: '#D4B475', // Brighter Zari

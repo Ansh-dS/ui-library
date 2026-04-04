@@ -2,10 +2,21 @@ import React, { forwardRef, useState, useEffect } from 'react'
 import { pulsarVariants, RecordingPulsarVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface RecordingPulsarProps
-  extends React.HTMLAttributes<HTMLDivElement>, RecordingPulsarVariantsType {
-  startTime?: number // Date.now() timestamp
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type RecordingPulsarCustomProps = {
+  /** Date.now() timestamp */
+  startTime?: number
 }
+
+type CleanProps = Prettify<
+  RecordingPulsarCustomProps & RecordingPulsarVariantsType
+>
+
+export type RecordingPulsarProps = CleanProps &
+  React.HTMLAttributes<HTMLDivElement>
 
 export const RecordingPulsar = forwardRef<HTMLDivElement, RecordingPulsarProps>(
   (props, ref) => {

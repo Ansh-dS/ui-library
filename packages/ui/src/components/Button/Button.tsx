@@ -5,24 +5,45 @@ import { Spinner } from '../Spinner/Spinner.js'
 import { Text } from '../Text/Text.js'
 import { TextVariantsType } from '../Text/styles.js'
 
+/* Expands collapsed type information when hovering over a component,
+   specifically at the point where it is imported. */
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type ButtonVariantProps = {
+  variant?: ButtonVariantsType['variant']
+  size?: ButtonVariantsType['size']
+  fullWidth?: ButtonVariantsType['fullWidth']
+}
+
 /**
  * 1. Extending ButtonHTMLAttributes ensures we get all standard
  * button props like 'onClick', 'disabled', and 'type' for free.
  */
-export interface ButtonProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'color'>, ButtonVariantsType {
+type ButtonCustomProps = {
   children?: React.ReactNode
   startIcon?: React.ReactNode /** Icon to display before the text */
   endIcon?: React.ReactNode /** Icon to display after the text */
   isLoading?: boolean /** Shows a loading state and disables interaction */
   text?: string
-  color?: TextVariantsType['color']    // if want to overide the color of text inside button. 
+  /** if want to overide the color of text inside button. */
+  color?: TextVariantsType['color']
 }
+
+type CleanProps = Prettify<
+  ButtonCustomProps &
+    ButtonVariantProps &
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'color'> 
+>
+
+export type ButtonProps = CleanProps
 
 export function Button(props: ButtonProps): React.ReactElement {
   const {
     variant = 'primary', // Fallback to default to ensure our color logic works
     size,
+    fullWidth,
     className,
     startIcon,
     endIcon,
@@ -53,7 +74,7 @@ export function Button(props: ButtonProps): React.ReactElement {
     size === 'lg' ? 'body' : size === 'sm' ? 'caption' : 'label'
 
   // maping button variants with text color.
-  // inital value is primay as it also covers outline and ghost variants. 
+  // inital value is primay as it also covers outline and ghost variants.
   let textColor: TextVariantsType['color'] = textColorProp || 'primary'
   // don't check the variant if we have textColor provided by user.
   if (!textColorProp) {
@@ -71,7 +92,7 @@ export function Button(props: ButtonProps): React.ReactElement {
       // any one must be true to disable button
       disabled={disabled || isLoading}
       className={cn(
-        buttonVariants({ variant, size }),
+        buttonVariants({ variant, size, fullWidth }),
         isLoading && 'cursor-wait opacity-90',
         !isLoading && 'active:scale-[0.98]',
         className

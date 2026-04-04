@@ -22,23 +22,24 @@ export const tooltipVariants = cva(
       },
       // Visual Styles
       variant: {
-        dark: 'bg-fg-primary', // original design 
-        light: 'bg-surface-base border border-border-default shadow-sm', 
-        brand: 'bg-action-primary shadow-md', // Great for onboarding/tours 
+        dark: 'bg-fg-primary', // original design
+        light: 'bg-surface-base border border-border-default shadow-sm',
+        brand: 'bg-action-primary shadow-md', // Great for onboarding/tours
         // Perfect for Riverside's sleek media UI or Tally's clean aesthetic
-        glass: 'bg-surface-base/70 backdrop-blur-md border border-white/20 shadow-lg',
+        glass:
+          'bg-surface-base/70 backdrop-blur-md border border-white/20 shadow-lg',
       },
       // Sizing Scale
       size: {
-        sm: 'px-xs py-2xs', 
-        md: 'px-s py-xs', 
-        lg: 'px-m py-s', 
-      }
+        sm: 'px-xs py-2xs',
+        md: 'px-s py-xs',
+        lg: 'px-m py-s',
+      },
     },
     defaultVariants: {
       position: 'top',
       variant: 'dark',
-      size: 'md'
+      size: 'md',
     },
   }
 )

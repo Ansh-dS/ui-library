@@ -3,6 +3,10 @@ import { emptyStateVariants, EmptyStateVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 import { Text } from '@components'
 
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
 type TextVariant = NonNullable<React.ComponentProps<typeof Text>['variant']>
 
 type ActionElementProps = {
@@ -17,13 +21,16 @@ type EmptyStateSizeConfig = {
   btn: 'sm' | 'md' | 'lg'
 }
 
-export interface EmptyStateProps
-  extends React.HTMLAttributes<HTMLDivElement>, EmptyStateVariantsType {
+type EmptyStateCustomProps = {
   icon?: React.ReactNode
   title: string
   description?: string
   action?: React.ReactNode
 }
+
+type CleanProps = Prettify<EmptyStateCustomProps & EmptyStateVariantsType>
+
+export type EmptyStateProps = CleanProps & React.HTMLAttributes<HTMLDivElement>
 
 export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
   (props, ref) => {
@@ -61,14 +68,20 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
         iconBg: 'p-l',
         btn: 'lg',
       },
-    } satisfies Record<NonNullable<EmptyStateVariantsType['spacing']>, EmptyStateSizeConfig>
+    } satisfies Record<
+      NonNullable<EmptyStateVariantsType['spacing']>,
+      EmptyStateSizeConfig
+    >
 
     const sizeMap = sizeMapBySpacing[spacing ?? 'default']
 
     return (
       <div
         ref={ref}
-        className={cn(emptyStateVariants({ variant, spacing, fullWidth }), className)}
+        className={cn(
+          emptyStateVariants({ variant, spacing, fullWidth }),
+          className
+        )}
         {...rest}
       >
         {/* LAW 1 & 4 APPLIED: The Anchor scales perfectly using padding */}

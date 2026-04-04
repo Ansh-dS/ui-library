@@ -2,12 +2,19 @@ import React, { forwardRef } from 'react'
 import { chartContainerVariants, ChartVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface ChartProps
-  extends React.HTMLAttributes<HTMLDivElement>, ChartVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type ChartCustomProps = {
   title?: string
   description?: string
   action?: React.ReactNode
 }
+
+type CleanProps = Prettify<ChartCustomProps & ChartVariantsType>
+
+export type ChartProps = CleanProps & React.HTMLAttributes<HTMLDivElement>
 
 export const Chart = forwardRef<HTMLDivElement, ChartProps>((props, ref) => {
   const { className, variant, title, description, action, children, ...rest } =

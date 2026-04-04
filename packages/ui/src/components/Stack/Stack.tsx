@@ -5,13 +5,20 @@ import React, { forwardRef } from 'react'
 import { stackVariants, type StackVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
 //  Extend React.HTMLAttributes to allow standard props (id, onClick, aria-*, etc.)
-export interface StackProps
-  extends React.HTMLAttributes<HTMLDivElement>, StackVariantsType {
+type StackCustomProps = {
   children: React.ReactNode
   className?: string
   as?: React.ElementType
 }
+
+type CleanProps = Prettify<StackCustomProps & StackVariantsType>
+
+export type StackProps = CleanProps & React.HTMLAttributes<HTMLDivElement>
 
 // Wrap the component in forwardRef
 export const Stack = forwardRef<HTMLDivElement, StackProps>(

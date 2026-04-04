@@ -7,13 +7,20 @@ import {
 } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface SheetProps
-  extends React.HTMLAttributes<HTMLDivElement>, SheetVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type SheetCustomProps = {
   isOpen: boolean
   onClose: () => void
   title?: string
   description?: string
 }
+
+type CleanProps = Prettify<SheetCustomProps & SheetVariantsType>
+
+export type SheetProps = CleanProps & React.HTMLAttributes<HTMLDivElement>
 
 export const Sheet = forwardRef<HTMLDivElement, SheetProps>((props, ref) => {
   const {

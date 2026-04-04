@@ -2,13 +2,21 @@ import React, { forwardRef, useEffect, useRef } from 'react'
 import { visualizerVariants, AudioVisualizerVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface AudioVisualizerProps
-  extends
-    React.CanvasHTMLAttributes<HTMLCanvasElement>,
-    AudioVisualizerVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type AudioVisualizerCustomProps = {
   stream?: MediaStream | null
   barColor?: string
 }
+
+type CleanProps = Prettify<
+  AudioVisualizerCustomProps & AudioVisualizerVariantsType
+>
+
+export type AudioVisualizerProps = CleanProps &
+  React.CanvasHTMLAttributes<HTMLCanvasElement>
 
 export const AudioVisualizer = forwardRef<
   HTMLCanvasElement,
@@ -29,9 +37,11 @@ export const AudioVisualizer = forwardRef<
   useEffect(() => {
     if (!stream || !canvasRef.current) return
 
-    const webkitAudioContext = (window as Window & {
-      webkitAudioContext?: typeof AudioContext
-    }).webkitAudioContext
+    const webkitAudioContext = (
+      window as Window & {
+        webkitAudioContext?: typeof AudioContext
+      }
+    ).webkitAudioContext
     const AudioContextConstructor = window.AudioContext ?? webkitAudioContext
 
     if (!AudioContextConstructor) return

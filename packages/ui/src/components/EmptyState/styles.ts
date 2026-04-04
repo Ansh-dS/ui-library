@@ -11,14 +11,16 @@ export const emptyStateVariants = cva(
   [
     // LAW 1 APPLIED: Establishes the vertical 'Anchor' line.
     'flex flex-col items-center justify-center',
-    'text-center transition-all duration-normal'
+    'text-center transition-all duration-normal',
   ],
   {
     variants: {
       variant: {
-        default: 'bg-surface-base border border-border-default rounded-large shadow-sm',
+        default:
+          'bg-surface-base border border-border-default rounded-large shadow-sm',
         minimal: 'bg-transparent border-transparent p-0',
-        dashed: 'bg-surface-sunken border-2 border-dashed border-border-default rounded-large',
+        dashed:
+          'bg-surface-sunken border-2 border-dashed border-border-default rounded-large',
         // LAW 3 APPLIED: Glassmorphism (15/12/20 Physics)
         glass: [
           'bg-surface-base/15',

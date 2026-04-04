@@ -2,11 +2,18 @@ import React, { forwardRef } from 'react'
 import { inspectorVariants, InspectorVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface InspectorProps
-  extends React.HTMLAttributes<HTMLBaseElement>, InspectorVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type InspectorCustomProps = {
   title?: string
   onClose?: () => void
 }
+
+type CleanProps = Prettify<InspectorCustomProps & InspectorVariantsType>
+
+export type InspectorProps = CleanProps & React.HTMLAttributes<HTMLBaseElement>
 
 export const Inspector = forwardRef<HTMLBaseElement, InspectorProps>(
   (props, ref) => {

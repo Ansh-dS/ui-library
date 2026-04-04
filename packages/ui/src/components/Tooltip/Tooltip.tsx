@@ -4,12 +4,22 @@ import { cn } from '../../common.js'
 import { Text } from '@components'
 import { TextVariantsType } from '../Text/styles.js'
 
-export interface TooltipProps extends TooltipVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type TooltipCustomProps = {
   content: React.ReactNode
   children: React.ReactNode
-  className?: string // Added so developers can pass custom utility classes
-  forceVisible?: boolean // Allows the tooltip to stay open for validation errors
+  /** Added so developers can pass custom utility classes */
+  className?: string
+  /** Allows the tooltip to stay open for validation errors */
+  forceVisible?: boolean
 }
+
+type CleanProps = Prettify<TooltipCustomProps & TooltipVariantsType>
+
+export type TooltipProps = CleanProps
 
 /*
 invinsible: make the element invincible by default. 
@@ -17,10 +27,19 @@ group: enables state based styling of the child element when the parent is inter
 group-hover:visitble: these things applied to the child so it get visible when then state of parent changes.
 */
 export function Tooltip(props: TooltipProps): React.ReactElement {
-  const { position, variant = 'dark', size = 'md', className, content, children, forceVisible = false } = props
+  const {
+    position,
+    variant = 'dark',
+    size = 'md',
+    className,
+    content,
+    children,
+    forceVisible = false,
+  } = props
 
   // Map tooltip size to the exact Text component variant
-  const textVariant: TextVariantsType['variant'] = size === 'lg' ? 'label' : 'caption'
+  const textVariant: TextVariantsType['variant'] =
+    size === 'lg' ? 'label' : 'caption'
 
   // Map tooltip visual theme to the exact Text component color
   let textColor: TextVariantsType['color'] = 'primary'
@@ -52,7 +71,7 @@ export function Tooltip(props: TooltipProps): React.ReactElement {
         )}
       >
         {/* Delegating all font logic to the Foundation Text component */}
-        <Text as="div" variant={textVariant} color={textColor} weight="medium" >
+        <Text as="div" variant={textVariant} color={textColor} weight="medium">
           {content}
         </Text>
       </div>

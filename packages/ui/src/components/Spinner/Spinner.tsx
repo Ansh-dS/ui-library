@@ -2,11 +2,18 @@ import React, { forwardRef } from 'react'
 import { spinnerVariants, type SpinnerVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface SpinnerProps
-  extends React.HTMLAttributes<HTMLDivElement>, SpinnerVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type SpinnerCustomProps = {
   /** Optional text for screen readers. Defaults to 'Loading...' */
   ariaLabel?: string
 }
+
+type CleanProps = Prettify<SpinnerCustomProps & SpinnerVariantsType>
+
+export type SpinnerProps = CleanProps & React.HTMLAttributes<HTMLDivElement>
 
 export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
   (props, ref) => {

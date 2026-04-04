@@ -1,15 +1,20 @@
 import React from 'react'
 import { radioVariants, RadioVariantsType } from './styles.js'
 import { cn } from '../../common.js'
-export interface RadioProps
-  extends
-    Omit<
-      React.InputHTMLAttributes<HTMLInputElement>,
-      'size' | 'type' | 'color'
-    >,
-    RadioVariantsType {
+
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type RadioCustomProps = {
   label?: string
 }
+
+type CleanProps = Prettify<RadioCustomProps & RadioVariantsType>
+
+export type RadioProps = CleanProps &
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type' | 'color'>
+
 export function Radio(props: RadioProps): React.ReactElement {
   const { color, className, label, size, ...rest } = props
   return (

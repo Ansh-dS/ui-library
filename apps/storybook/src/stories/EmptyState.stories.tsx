@@ -35,7 +35,7 @@ export const Default: Story = {
     title: 'No forms found',
     description: 'Explore our templates and create your first form.',
     // STAFF FIX: Just pass the raw emoji/SVG. The component handles the circle and sizing!
-    icon: '📄', 
+    icon: '📄',
     action: (
       <Button variant="primary" size="md">
         Create Form

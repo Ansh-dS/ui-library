@@ -2,10 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { deviceSelectorVariants } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface DeviceSelectorProps extends React.HTMLAttributes<HTMLDivElement> {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type DeviceSelectorCustomProps = {
   onCameraChange?: (deviceId: string) => void
   onMicChange?: (deviceId: string) => void
 }
+
+type CleanProps = Prettify<DeviceSelectorCustomProps>
+
+export type DeviceSelectorProps = CleanProps &
+  React.HTMLAttributes<HTMLDivElement>
 
 export const DeviceSelector = React.forwardRef<
   HTMLDivElement,

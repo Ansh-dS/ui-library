@@ -3,6 +3,10 @@ import { sidebarVariants, SidebarVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 import { ErrorBoundary, Text } from '@components'
 
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
 /* why aren't we using Text, Header, Footer?
     1. because sidebar is structural component.
     2. it just structures the element
@@ -17,19 +21,31 @@ import { ErrorBoundary, Text } from '@components'
  * 4. Law 4 (Surface Depth): The sidebar must visually separate itself from the main dashboard canvas using Layer 2 tokens (e.g., surface-sunken or structural borders).
  */
 
-export interface SidebarProps
-  extends React.HTMLAttributes<HTMLElement>, SidebarVariantsType {
+type SidebarCustomProps = {
   header?: React.ReactNode
   footer?: React.ReactNode
 }
 
+type CleanProps = Prettify<SidebarCustomProps & SidebarVariantsType>
+
+export type SidebarProps = CleanProps & React.HTMLAttributes<HTMLElement>
+
 export const Sidebar = forwardRef<HTMLElement, SidebarProps>((props, ref) => {
-  const { className, variant, collapsed, layout, header, footer, children, ...rest } = props
+  const {
+    className,
+    variant,
+    collapsed,
+    layout,
+    header,
+    footer,
+    children,
+    ...rest
+  } = props
 
   return (
     <aside
       ref={ref}
-      // LAW 1 & 4 APPLIED: The variants inject the fixed positioning (Scaffolding) 
+      // LAW 1 & 4 APPLIED: The variants inject the fixed positioning (Scaffolding)
       // and the surface background/borders (Surface Depth).
       className={cn(sidebarVariants({ collapsed, variant, layout }), className)}
       {...rest}
@@ -47,9 +63,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>((props, ref) => {
           If a dynamic "Recent Cases" or "Live Studio" nav widget crashes, the 
           user doesn't lose the whole sidebar. They just see the 'minimal' fallback!
         */}
-        <ErrorBoundary variant="minimal">
-          {children}
-        </ErrorBoundary>
+        <ErrorBoundary variant="minimal">{children}</ErrorBoundary>
       </div>
 
       {/* LAW 2 APPLIED: 'shrink-0' pins the settings/logout actions to the bottom. */}
@@ -64,7 +78,6 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>((props, ref) => {
 
 Sidebar.displayName = 'Sidebar'
 
-
 /**
  * THE 4 LAWS OF SIDEBAR ITEMS:
  * 1. Law 1 (The Invisible Track): Icons must sit on a perfectly centered vertical axis to maintain stability when the labels disappear in collapsed mode.
@@ -77,7 +90,7 @@ Sidebar.displayName = 'Sidebar'
 /* SIDEBAR ITEM                                */
 /* -------------------------------------------------------------------------- */
 
-export interface SidebarItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+type SidebarItemCustomProps = {
   icon: React.ReactNode
   label: string
   active?: boolean
@@ -85,51 +98,62 @@ export interface SidebarItemProps extends React.ButtonHTMLAttributes<HTMLButtonE
   badge?: string | number
 }
 
-export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>((props, ref) => {
-  const { icon, label, active, collapsed, badge, className, ...rest } = props
+type CleanPropsItems = Prettify<SidebarItemCustomProps>
 
-  return (
-    <button
-      ref={ref}
-      // LAW 2 & 4 APPLIED: Full-width interactive hitbox with theme-aware active states.
-      className={cn(
-        'group flex items-center w-full gap-m p-s rounded-medium transition-all duration-fast border-none cursor-pointer',
-        'hover:bg-surface-raised active:scale-[0.98]',
-        active ? 'bg-action-primary-transparent text-fg-brand' : 'bg-transparent text-fg-secondary',
-        collapsed ? 'justify-center' : 'justify-start',
-        className
-      )}
-      {...rest}
-    >
-      {/* LAW 1 APPLIED: The Icon acts as the fixed 'Anchor' point. */}
-      <div className={cn(
-        'flex shrink-0 items-center justify-center transition-transform',
-        active ? 'scale-110' : 'group-hover:scale-110'
-      )}>
-        {icon}
-      </div>
+export type SidebarItemProps = CleanPropsItems &
+  React.ButtonHTMLAttributes<HTMLButtonElement>
 
-      {/* LAW 3 APPLIED: Using our 'Text' component with truncation for the label. */}
-      {!collapsed && (
-        <div className="flex flex-1 items-center justify-between overflow-hidden">
-          <Text
-            variant="label"
-            weight={active ? 'semibold' : 'medium'}
-            color={active ? 'brand' : 'secondary'}
-            className="truncate whitespace-nowrap"
-          >
-            {label}
-          </Text>
-          
-          {badge && (
-            <span className="bg-action-primary text-fg-inverted text-[10px] px-xs py-[2px] rounded-pill font-bold">
-              {badge}
-            </span>
+export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
+  (props, ref) => {
+    const { icon, label, active, collapsed, badge, className, ...rest } = props
+
+    return (
+      <button
+        ref={ref}
+        // LAW 2 & 4 APPLIED: Full-width interactive hitbox with theme-aware active states.
+        className={cn(
+          'group flex items-center w-full gap-m p-s rounded-medium transition-all duration-fast border-none cursor-pointer',
+          'hover:bg-surface-raised active:scale-[0.98]',
+          active
+            ? 'bg-action-primary-transparent text-fg-brand'
+            : 'bg-transparent text-fg-secondary',
+          collapsed ? 'justify-center' : 'justify-start',
+          className
+        )}
+        {...rest}
+      >
+        {/* LAW 1 APPLIED: The Icon acts as the fixed 'Anchor' point. */}
+        <div
+          className={cn(
+            'flex shrink-0 items-center justify-center transition-transform',
+            active ? 'scale-110' : 'group-hover:scale-110'
           )}
+        >
+          {icon}
         </div>
-      )}
-    </button>
-  )
-})
+
+        {/* LAW 3 APPLIED: Using our 'Text' component with truncation for the label. */}
+        {!collapsed && (
+          <div className="flex flex-1 items-center justify-between overflow-hidden">
+            <Text
+              variant="label"
+              weight={active ? 'semibold' : 'medium'}
+              color={active ? 'brand' : 'secondary'}
+              className="truncate whitespace-nowrap"
+            >
+              {label}
+            </Text>
+
+            {badge && (
+              <span className="bg-action-primary text-fg-inverted text-[10px] px-xs py-[2px] rounded-pill font-bold">
+                {badge}
+              </span>
+            )}
+          </div>
+        )}
+      </button>
+    )
+  }
+)
 
 SidebarItem.displayName = 'SidebarItem'

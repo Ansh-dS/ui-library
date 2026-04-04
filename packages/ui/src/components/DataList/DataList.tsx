@@ -2,8 +2,11 @@ import React, { forwardRef } from 'react'
 import { dataListVariants, DataListVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface DataListProps
-  extends React.HTMLAttributes<HTMLDivElement>, DataListVariantsType {}
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type DataListCustomProps = Record<string, never>
 
 export const DataList = forwardRef<HTMLDivElement, DataListProps>(
   (props, ref) => {
@@ -28,6 +31,10 @@ DataList.displayName = 'DataList'
 export interface DataListItemProps extends React.HTMLAttributes<HTMLDivElement> {
   interactive?: boolean
 }
+
+type CleanProps = Prettify<DataListCustomProps & DataListVariantsType>
+
+export type DataListProps = CleanProps & React.HTMLAttributes<HTMLDivElement>
 
 export const DataListItem = forwardRef<HTMLDivElement, DataListItemProps>(
   (props, ref) => {

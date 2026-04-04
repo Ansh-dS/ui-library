@@ -2,11 +2,18 @@ import React, { forwardRef } from 'react'
 import { footerVariants, FooterVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface FooterProps
-  extends React.HTMLAttributes<HTMLElement>, FooterVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type FooterCustomProps = {
   leftContent?: React.ReactNode
   rightContent?: React.ReactNode
 }
+
+type CleanProps = Prettify<FooterCustomProps & FooterVariantsType>
+
+export type FooterProps = CleanProps & React.HTMLAttributes<HTMLElement>
 
 // We are trying to expand mid element more than left and right.
 // left and right stays upto their content.
