@@ -12,7 +12,6 @@ const DataGridContext = createContext<{
   size: 'md',
 })
 
-type DataGridCustomProps = Record<string, never>
 
 export const DataGrid = forwardRef<HTMLTableElement, DataGridProps>(
   (props, ref) => {
@@ -113,7 +112,7 @@ export const DataGridHead = forwardRef<
   )
 })
 
-type CleanProps = Prettify<DataGridCustomProps & DataGridVariantsType>
+type CleanProps = Prettify<  DataGridVariantsType>
 
 export type DataGridProps = CleanProps &
   React.TableHTMLAttributes<HTMLTableElement>

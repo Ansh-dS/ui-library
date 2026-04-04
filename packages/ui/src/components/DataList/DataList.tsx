@@ -6,8 +6,30 @@ type Prettify<T> = {
   [K in keyof T]: T[K]
 } & {}
 
-type DataListCustomProps = Record<string, never>
 
+/* -------------------------------------------------------------------------- */
+/* TYPES                                                                      */
+/* -------------------------------------------------------------------------- */
+
+
+type CleanDataListProps = Prettify<  DataListVariantsType>
+export type DataListProps = CleanDataListProps & React.HTMLAttributes<HTMLDivElement>
+
+// DataListItem Types
+type DataListItemCustomProps = {
+  /** Enables hover states and cursor pointers for list items */
+  interactive?: boolean
+}
+type CleanDataListItemProps = Prettify<DataListItemCustomProps>
+export type DataListItemProps = CleanDataListItemProps & React.HTMLAttributes<HTMLDivElement>
+
+/* -------------------------------------------------------------------------- */
+/* COMPONENTS                                                                 */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * DataList: A layout container for list-based data displays in Tally or Riverside.
+ */
 export const DataList = forwardRef<HTMLDivElement, DataListProps>(
   (props, ref) => {
     const { className, spacing, children, ...rest } = props
@@ -27,15 +49,10 @@ export const DataList = forwardRef<HTMLDivElement, DataListProps>(
 
 DataList.displayName = 'DataList'
 
-// Sub-component for individual list items
-export interface DataListItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  interactive?: boolean
-}
-
-type CleanProps = Prettify<DataListCustomProps & DataListVariantsType>
-
-export type DataListProps = CleanProps & React.HTMLAttributes<HTMLDivElement>
-
+/**
+ * DataListItem: An individual row within a DataList.
+ * Supports interactive states for dashboard-style navigation.
+ */
 export const DataListItem = forwardRef<HTMLDivElement, DataListItemProps>(
   (props, ref) => {
     const { className, interactive = false, children, ...rest } = props

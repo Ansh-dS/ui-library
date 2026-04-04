@@ -12,8 +12,8 @@ type AvatarCustomProps = {
 
 type CleanProps = Prettify<AvatarCustomProps & AvatarVariantsType>
 
-export type AvatarProps = CleanProps &
-  Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'size'>
+export type AvatarProps = CleanProps & Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'size'>
+
 export function Avatar(props: AvatarProps): React.ReactElement {
   const { size, src, alt, className, fallback, ...rest } = props
   return (

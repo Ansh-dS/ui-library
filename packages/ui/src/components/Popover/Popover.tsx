@@ -18,8 +18,7 @@ type PopoverCustomProps = {
 
 type CleanProps = Prettify<PopoverCustomProps & PopoverVariantsType>
 
-export type PopoverProps = CleanProps &
-  Omit<React.HTMLAttributes<HTMLDivElement>, 'content'>
+export type PopoverProps = CleanProps & Omit<React.HTMLAttributes<HTMLDivElement>, 'content'>
 
 export function Popover(props: PopoverProps): React.ReactElement {
   const {
