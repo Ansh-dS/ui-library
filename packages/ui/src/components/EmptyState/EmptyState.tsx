@@ -3,6 +3,20 @@ import { emptyStateVariants, EmptyStateVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 import { Text } from '@components'
 
+type TextVariant = NonNullable<React.ComponentProps<typeof Text>['variant']>
+
+type ActionElementProps = {
+  size?: 'sm' | 'md' | 'lg'
+}
+
+type EmptyStateSizeConfig = {
+  title: TextVariant
+  body: TextVariant
+  iconText: string
+  iconBg: string
+  btn: 'sm' | 'md' | 'lg'
+}
+
 export interface EmptyStateProps
   extends React.HTMLAttributes<HTMLDivElement>, EmptyStateVariantsType {
   icon?: React.ReactNode
@@ -13,42 +27,43 @@ export interface EmptyStateProps
 
 export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
   (props, ref) => {
-    const { 
-      className, 
-      variant, 
-      spacing = 'default', 
-      fullWidth, 
-      icon, 
-      title, 
-      description, 
-      action, 
-      ...rest 
+    const {
+      className,
+      variant,
+      spacing = 'default',
+      fullWidth,
+      icon,
+      title,
+      description,
+      action,
+      ...rest
     } = props
 
-    //  Using your EXACT mapped tokens from global.css
-    const sizeMap = {
-      compact: { 
-        title: 'label', 
-        body: 'caption', 
-        iconText: 'text-subheader', // Uses your layer 2 typography token
-        iconBg: 'p-s',              // Padding instead of fixed width
-        btn: 'sm' 
+    const sizeMapBySpacing = {
+      compact: {
+        title: 'label',
+        body: 'caption',
+        iconText: 'text-subheader',
+        iconBg: 'p-s',
+        btn: 'sm',
       },
-      default: { 
-        title: 'h3', 
-        body: 'body', 
-        iconText: 'text-h2', 
-        iconBg: 'p-m', 
-        btn: 'md' 
+      default: {
+        title: 'h3',
+        body: 'body',
+        iconText: 'text-h2',
+        iconBg: 'p-m',
+        btn: 'md',
       },
-      spacious: { 
-        title: 'h2', 
-        body: 'subheader', 
-        iconText: 'text-display', 
-        iconBg: 'p-l', 
-        btn: 'lg' 
+      spacious: {
+        title: 'h2',
+        body: 'subheader',
+        iconText: 'text-display',
+        iconBg: 'p-l',
+        btn: 'lg',
       },
-    }[spacing as NonNullable<typeof spacing>]
+    } satisfies Record<NonNullable<EmptyStateVariantsType['spacing']>, EmptyStateSizeConfig>
+
+    const sizeMap = sizeMapBySpacing[spacing ?? 'default']
 
     return (
       <div
@@ -58,11 +73,13 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
       >
         {/* LAW 1 & 4 APPLIED: The Anchor scales perfectly using padding */}
         {icon && (
-          <div className={cn(
-            'bg-surface-sunken rounded-full flex items-center justify-center shrink-0 aspect-square ',
-            sizeMap.iconBg,   // Drives the outer breathing room
-            sizeMap.iconText  // Drives the inner icon size
-          )}>
+          <div
+            className={cn(
+              'bg-surface-sunken rounded-full flex items-center justify-center shrink-0 aspect-square ',
+              sizeMap.iconBg,
+              sizeMap.iconText
+            )}
+          >
             {icon}
           </div>
         )}
@@ -70,7 +87,7 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
         {/* LAW 2 & 3 APPLIED: Proximity grouping with a constrained 'Measure' */}
         <div className="flex flex-col gap-xs max-w-md items-center">
           <Text
-            variant={sizeMap.title as any}
+            variant={sizeMap.title}
             color="primary"
             className="font-semibold leading-heading"
           >
@@ -79,7 +96,7 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
 
           {description && (
             <Text
-              variant={sizeMap.body as any}
+              variant={sizeMap.body}
               color="secondary"
               className="leading-body"
             >
@@ -91,9 +108,9 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
         {/* LAW 4 APPLIED: Proportional action scaling */}
         {action && (
           <div className="mt-s">
-             {isValidElement(action) 
-               ? cloneElement(action as React.ReactElement<any>, { size: sizeMap.btn }) 
-               : action}
+            {isValidElement<ActionElementProps>(action)
+              ? cloneElement(action, { size: sizeMap.btn })
+              : action}
           </div>
         )}
       </div>

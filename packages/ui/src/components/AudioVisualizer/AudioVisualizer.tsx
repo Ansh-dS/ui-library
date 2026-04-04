@@ -29,9 +29,14 @@ export const AudioVisualizer = forwardRef<
   useEffect(() => {
     if (!stream || !canvasRef.current) return
 
-    const audioContext = new (
-      window.AudioContext || (window as any).webkitAudioContext
-    )()
+    const webkitAudioContext = (window as Window & {
+      webkitAudioContext?: typeof AudioContext
+    }).webkitAudioContext
+    const AudioContextConstructor = window.AudioContext ?? webkitAudioContext
+
+    if (!AudioContextConstructor) return
+
+    const audioContext = new AudioContextConstructor()
     const analyser = audioContext.createAnalyser()
     const source = audioContext.createMediaStreamSource(stream)
 

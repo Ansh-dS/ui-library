@@ -8,6 +8,7 @@ export const textVariants = cva(
       /* 1. SIZE & LINE-HEIGHT (The Semantic Role) */
       variant: {
         display: 'text-display leading-heading tracking-tighter',
+        // you can use these headings for according to the purpose as don't have defined work like body,label ....
         h1: 'text-h1 leading-heading tracking-tight',
         h2: 'text-h2 leading-heading tracking-tight',
         h3: 'text-h3 leading-heading',
@@ -22,7 +23,7 @@ export const textVariants = cva(
         secondary: 'text-fg-secondary',
         brand: 'text-fg-brand',
         accent: 'text-fg-accent',
-        inverted: 'text-fg-inverted',
+        inverted: 'text-fg-inverted', //
         disabled: 'text-fg-disabled',
         // Status colors for Alerts/Toasts
         success: 'text-status-success',

@@ -1,3 +1,7 @@
+/*
+1. Use: contains boundaries/borders along with shadow
+2. so if want a content to display above the other content, catch eye attention then go for it.
+*/
 import React, { forwardRef, createContext, useContext } from 'react'
 import { cardVariants, CardVariantsType } from './styles.js'
 import { cn } from '../../common.js'
@@ -105,8 +109,8 @@ CardHeader.displayName = 'CardHeader'
  */
 export const CardTitle = forwardRef<
   HTMLHeadingElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, color, ...props }, ref) => {
+ Omit< React.HTMLAttributes<HTMLHeadingElement>, 'color'>
+>(({ className, ...props }, ref) => {
   const { size } = useContext(CardContext)
 
   const titleVariant =
@@ -115,7 +119,7 @@ export const CardTitle = forwardRef<
   return (
     <Text
       as="h3"
-      ref={ref as any}
+      ref={ref as React.Ref<HTMLElement>}
       variant={titleVariant}
       weight="bold"
       className={cn('leading-heading', className)}
@@ -131,15 +135,15 @@ CardTitle.displayName = 'CardTitle'
  */
 export const CardDescription = forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, color, ...props }, ref) => {
+   Omit<React.HTMLAttributes<HTMLParagraphElement>, 'color'>
+>(({ className, ...props }, ref) => {
   const { size } = useContext(CardContext)
 
   const descVariant = size === 'lg' ? 'body' : 'caption'
 
   return (
     <Text
-      ref={ref as any}
+      ref={ref as React.Ref<HTMLElement>}
       variant={descVariant}
       color="primary"
       className={className}
@@ -173,15 +177,15 @@ CardContent.displayName = 'CardContent'
  */
 export const CardLabel = forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, color, ...props }, ref) => {
+  Omit<React.HTMLAttributes<HTMLParagraphElement>, 'color'>
+>(({ className, ...props }, ref) => {
   const { size } = useContext(CardContext)
 
   const labelVariant = size === 'lg' ? 'body' : 'label'
 
   return (
     <Text
-      ref={ref as any}
+      ref={ref as React.Ref<HTMLElement>}
       variant={labelVariant}
       weight="semibold"
       className={className}

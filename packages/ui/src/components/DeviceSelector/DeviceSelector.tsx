@@ -28,7 +28,7 @@ export const DeviceSelector = React.forwardRef<
 
         setCameras(devices.filter((device) => device.kind === 'videoinput'))
         setMics(devices.filter((device) => device.kind === 'audioinput'))
-      } catch (err) {
+      } catch {
         setError(
           'Permissions denied. Please allow camera and microphone access.'
         )

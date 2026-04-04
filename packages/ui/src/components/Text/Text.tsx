@@ -6,6 +6,7 @@ export interface TextProps
   extends Omit<React.HTMLAttributes<HTMLElement>, 'color'>, TextVariantsType {
   /** Allows you to change the underlying HTML element (e.g., 'span', 'h1', 'label') */
   as?: React.ElementType
+  required?: boolean
 }
 
 export const Text = forwardRef<HTMLElement, TextProps>((props, ref) => {
@@ -16,6 +17,7 @@ export const Text = forwardRef<HTMLElement, TextProps>((props, ref) => {
     weight,
     align,
     className,
+    required= false,
     children,
     ...rest
   } = props
@@ -27,6 +29,7 @@ export const Text = forwardRef<HTMLElement, TextProps>((props, ref) => {
       {...rest}
     >
       {children}
+      {required && <span className="text-status-danger ml-xs">*</span>}
     </Component>
   )
 })

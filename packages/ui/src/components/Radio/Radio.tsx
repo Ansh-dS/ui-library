@@ -16,7 +16,7 @@ export function Radio(props: RadioProps): React.ReactElement {
     <label className="flex items-center gap-s cursor-pointer">
       <input
         type="radio"
-        className={cn(radioVariants({ color }), className)}
+        className={cn(radioVariants({ color, size }), className)}
         {...rest}
       />
       {label && <span className="text-body text-fg-primary">{label}</span>}

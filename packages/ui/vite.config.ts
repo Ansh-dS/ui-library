@@ -22,7 +22,7 @@ export default defineConfig({
       include: ['src'],
       exclude: ['src/**/*.stories.*'],
       outDir: 'dist',
-      rollupTypes: true, // Flattens all types into dist/index.ts as typescirpt expects all files at the root.
+      rollupTypes: true, // Flattens all types( input/output ) into dist/index.ts as typescirpt expects all files at the root.   only whatever it compiles
       insertTypesEntry: true,
       // Clean up the dist folder before regenerating
       cleanVueFileName: true,

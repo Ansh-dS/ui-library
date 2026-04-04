@@ -1,3 +1,6 @@
+/*
+1. Use: to arrange elements horzontally or vertically in a line with eaqual gap. 
+*/
 import React, { forwardRef } from 'react'
 import { stackVariants, type StackVariantsType } from './styles.js'
 import { cn } from '../../common.js'

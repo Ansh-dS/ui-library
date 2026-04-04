@@ -18,7 +18,7 @@ export function Checkbox(props: CheckboxProps): React.ReactElement {
     <label className="flex items-center gap-s cursor-pointer">
       <input
         type="checkbox"
-        className={cn(checkboxVariants({ color }), className)}
+        className={cn(checkboxVariants({ color, size  }), className)}
         {...rest}
       />
       {label && <span className="text-body text-fg-primary">{label}</span>}

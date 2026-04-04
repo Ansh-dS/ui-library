@@ -6,11 +6,11 @@ import { Text } from '../Text/Text.js'
 export interface BadgeProps
   extends
     Omit<React.HTMLAttributes<HTMLSpanElement>, 'color'>,
-    BadgeVariantsType {}
+    BadgeVariantsType {startIcon?: React.ReactNode}
 
 export function Badge(props: BadgeProps): React.ReactElement {
   // FIX : Added default values here so the JS logic doesn't break if props are omitted
-  const { color = 'default', className, size = 'sm', children, ...rest } = props
+  const { color = 'default', className, size = 'sm',startIcon, children, ...rest } = props
 
   // Map Badge size to Text variant
   const textVariant = size === 'sm' ? 'caption' : 'label'
@@ -28,12 +28,13 @@ export function Badge(props: BadgeProps): React.ReactElement {
 
   return (
     <span className={cn(badgeVariants({ color, size }), className)} {...rest}>
+      {startIcon &&  <span className="inline-flex shrink-0">{startIcon}</span>}
       <Text
         as="span"
         variant={textVariant}
         weight="medium"
         color={color ? textColorMap[color] : 'secondary'}
-        className="truncate" // Ensures long badge text doesn't break layout
+        className="truncate " // Ensures long badge text doesn't break layout
       >
         {children}
       </Text>

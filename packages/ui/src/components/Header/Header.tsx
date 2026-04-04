@@ -4,12 +4,15 @@ import { cn } from '../../common.js'
 // STAFF UPDATE: Importing your Text component to enforce typography standards
 import { Text } from '../Text/Text.js' // Adjust this import path to match your folder structure
 
-// HTMLElement: it is a class in the Web/DOM API. which contains 'div', 'span'.
-// HTMLAttributes: using this we fetch the in-general attributes and their 'type'.
-export interface HeaderProps
-  extends React.HTMLAttributes<HTMLElement>, HeaderVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & {}
+
+
+type HeaderCustomProps = {
   logo?: React.ReactNode
-  title?: string // STAFF UPDATE: Added a title prop specifically for the Text element
+  /** STAFF UPDATE: Added a title prop specifically for the Text element */
+  title?: string 
   actions?: React.ReactNode
   /** * 'left' = Tally Mode (Nav follows Logo)
    * 'center' = Riverside Mode (Nav is mathematically centered)
@@ -17,6 +20,13 @@ export interface HeaderProps
   navPosition?: 'left' | 'center'
 }
 
+
+type CleanProps = Prettify<HeaderCustomProps & HeaderVariantsType>;
+
+
+// HTMLElement: it is a class in the Web/DOM API. which contains 'div', 'span'.
+// HTMLAttributes: using this we fetch the in-general attributes and their 'type'.
+export type HeaderProps = CleanProps & React.HTMLAttributes<HTMLElement>
 // uses of ref:
 // 1. so these are pointer to a DOM element which helps you do 'focus', 'scroling' and 'measuring'
 // 2. they contians '.current' elemnet which can read or write but updating '.current' doesn't cause re-renders.

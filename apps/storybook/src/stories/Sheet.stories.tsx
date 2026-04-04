@@ -14,34 +14,37 @@ const meta: Meta<typeof Sheet> = {
 export default meta
 type Story = StoryObj<typeof Sheet>
 
-export const Default: Story = {
-  render: (args) => {
-    const [isOpen, setIsOpen] = useState(false)
-    return (
-      <div>
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          className="px-l py-m bg-action-primary text-fg-inverted rounded-medium font-weight-medium cursor-pointer"
-        >
-          Open Sheet
-        </button>
-        <Sheet
-          {...args}
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          title="Block Settings"
-          description="Configure properties for this specific input block."
-        >
-          <div className="flex flex-col gap-l mt-m">
-            <div className="h-24 bg-surface-sunken rounded-base border border-border-default flex items-center justify-center text-fg-secondary">
-              Settings Field 1
-            </div>
+function SheetPreview(args: Story['args']) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        className="px-l py-m bg-action-primary text-fg-inverted rounded-medium font-weight-medium cursor-pointer"
+      >
+        Open Sheet
+      </button>
+      <Sheet
+        {...args}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Block Settings"
+        description="Configure properties for this specific input block."
+      >
+        <div className="flex flex-col gap-l mt-m">
+          <div className="h-24 bg-surface-sunken rounded-base border border-border-default flex items-center justify-center text-fg-secondary">
+            Settings Field 1
           </div>
-        </Sheet>
-      </div>
-    )
-  },
+        </div>
+      </Sheet>
+    </div>
+  )
+}
+
+export const Default: Story = {
+  render: (args) => <SheetPreview {...args} />,
   args: {
     side: 'right',
   },

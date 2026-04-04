@@ -20,7 +20,7 @@ const meta: Meta<typeof Card> = {
     CardTitle,
     CardDescription,
     CardLabel,
-  } as any,
+  },
   tags: ['autodocs'],
   argTypes: {
     variant: {

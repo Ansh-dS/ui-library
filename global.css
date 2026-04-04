@@ -13,13 +13,13 @@
      ============================================== */
 
   /* SURFACES: 'bg' prefix  */
-  --color-surface-base: var(--colors-background-primary);
-  --color-surface-sunken: var(--colors-background-secondary);
-  --color-surface-raised: var(--colors-background-tertiary);
-  --color-surface-overlay: var(--colors-background-muted);
+  --color-surface-base: var(--colors-background-primary); /* main canvas */
+  --color-surface-sunken: var(--colors-background-secondary); /*creates a "step down" effect as compared to primary: example header footer.*/
+  --color-surface-raised: var(--colors-background-tertiary); /*elements surface(big area not small background) that need grab attention wrt base surface or signify interactivity*/
+  --color-surface-overlay: var(--colors-background-muted); /* components that temporarily placed on top of all other content: popover etc etc. */
 
-  /* ACTION: 'bg', 'text'*/
-  --color-action-primary: var(--colors-primary-500);
+  /* ACTION: 'bg'*/
+  --color-action-primary: var(--colors-primary-500);     /*default state of interactive elements*/
   --color-action-primary-hover: var(--colors-primary-600);
   --color-action-primary-pressed: var(--colors-primary-700);
 
@@ -28,7 +28,7 @@
   --color-action-secondary-pressed: var(
     --colors-neutral-200
   ); /* Updated to neutral */
-  --color-action-accent: var(--colors-accent-500); /* Newly added accent */
+  --color-action-accent: var(--colors-accent-500); /* highest attention to draw: in interactive elements */
 
   /*  STATUS: 'text', 'bg' ) */
   --color-status-success: var(--colors-state-success);
@@ -43,11 +43,11 @@
   /* Updated to use new focus token */
 
   /* Text (Foregrounds) */
-  --color-fg-primary: var(--colors-text-primary);
-  --color-fg-secondary: var(--colors-text-secondary);
-  --color-fg-brand: var(--colors-primary-500);
-  --color-fg-accent: var(--colors-accent-500); /* Newly added accent text */
-  --color-fg-inverted: var(--colors-text-inverted);
+  --color-fg-primary: var(--colors-text-primary);     /**/
+  --color-fg-secondary: var(--colors-text-secondary); /*Creates a visual "step down" from primary text or the that the user doesn't need to read first: for "Meta-data" or supporting information*/
+  --color-fg-brand: var(--colors-primary-500);  /* Anything which is depicts our brands identity. */
+  --color-fg-accent: var(--colors-accent-500); /*immediate notice: an active tab could also be a part. */
+  --color-fg-inverted: var(--colors-text-inverted);/* choose when other colors for text aren't that readable*/
   --color-fg-disabled: var(--colors-text-muted);
 
   /* Raw Palettes (Updated to Neutral) */

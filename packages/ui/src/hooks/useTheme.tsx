@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { fi } from 'vuetify/locale'
 
 // state variable made using useState have the same names.
 interface ThemeContextType {

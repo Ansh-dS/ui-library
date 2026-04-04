@@ -15,7 +15,6 @@ export const footerVariants = cva(
     /* 2. Spacing: 0 gap on desktop, gap ONLY on mobile */
     'sm:gap-0 max-sm:gap-m',
 
-    ,
     /* 3. Geometry */
     'px-xl py-l transition-all duration-normal',
   ],

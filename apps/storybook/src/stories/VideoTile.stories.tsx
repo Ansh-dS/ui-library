@@ -22,6 +22,19 @@ const meta: Meta<typeof VideoTile> = {
 export default meta
 type Story = StoryObj<typeof VideoTile>
 
+function LocalMirroredPreview(args: Story['args']) {
+  const [mockStream, setMockStream] = useState<MediaStream | null>(null)
+
+  useEffect(() => {
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then(setMockStream)
+      .catch(() => console.warn('Camera access denied for Storybook'))
+  }, [])
+
+  return <VideoTile {...args} stream={mockStream} />
+}
+
 export const LocalMirrored: Story = {
   args: {
     mirrored: true,
@@ -29,17 +42,5 @@ export const LocalMirrored: Story = {
     participantName: 'You (Host)',
     isSpeaking: false,
   },
-  render: (args) => {
-    // Approach: Simulate a hardware stream for Storybook visualization
-    const [mockStream, setMockStream] = useState<MediaStream | null>(null)
-
-    useEffect(() => {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then(setMockStream)
-        .catch(() => console.warn('Camera access denied for Storybook'))
-    }, [])
-
-    return <VideoTile {...args} stream={mockStream} />
-  },
+  render: (args) => <LocalMirroredPreview {...args} />,
 }
