@@ -50,13 +50,6 @@ const RiversideTheme: DesignSystem = {
         widest: '0.05em',
       },
     },
-    breakpoints: {
-      sm: '640px',
-      md: '768px',
-      lg: '1024px',
-      xl: '1280px',
-      '2xl': '1536px',
-    },
     zIndices: {
       base: 0,
       nav: 10,
@@ -111,10 +104,14 @@ const RiversideTheme: DesignSystem = {
           secondary: '#57534E',
           tertiary: '#78716C',
           muted: '#A8A29E',
+          // In Light Mode: Moti (Pearl) text on top of Deep Emerald
+          inverted: '#FDFBF7',
         },
         border: {
-          default: 'rgba(44, 36, 27, 0.1)',
-          focus: '#C5A059',
+          default: '#D6D3D1', // Maps to neutral-300
+          focus: '#C5A059', // Zari Gold (Kept as is - excellent for focus)
+          // Added a stronger border for input fields and video container boundaries.
+          strong: '#A8A29E', // Maps to neutral-400
         },
         state: {
           success: '#164A38',
@@ -134,12 +131,13 @@ const RiversideTheme: DesignSystem = {
         },
         fontSmoothing: false,
       },
+      // High-Definition Umber: Increased pigment density and tighter blur to ensure depth visibility on warm sand backgrounds.
       shadows: {
-        sm: '0 1px 2px rgba(44, 36, 27, 0.05)',
-        md: '0 4px 6px rgba(44, 36, 27, 0.07), 0 2px 4px rgba(44, 36, 27, 0.04)',
-        lg: '0 10px 15px rgba(44, 36, 27, 0.1), 0 4px 6px rgba(44, 36, 27, 0.05)',
-        xl: '0 20px 25px rgba(44, 36, 27, 0.12)',
-        inner: 'inset 0 2px 4px rgba(44, 36, 27, 0.04)',
+        sm: '0 1px 2px 0 rgba(45, 35, 25, 0.12), 0 1px 1px 0 rgba(45, 35, 25, 0.08)',
+        md: '0 4px 6px -1px rgba(45, 35, 25, 0.15), 0 2px 4px -2px rgba(45, 35, 25, 0.1)',
+        lg: '0 12px 20px -3px rgba(45, 35, 25, 0.18), 0 4px 8px -4px rgba(45, 35, 25, 0.12)',
+        xl: '0 25px 35px -5px rgba(45, 35, 25, 0.22), 0 10px 15px -6px rgba(45, 35, 25, 0.15)',
+        inner: 'inset 0 2px 4px 0 rgba(45, 35, 25, 0.1)',
       },
     },
 
@@ -149,9 +147,9 @@ const RiversideTheme: DesignSystem = {
         primary: {
           50: '#E6F0EB',
           100: '#CDE1D7',
-          500: '#2A7A5C', // Brighter emerald for dark-mode pop
-          600: '#1B5E44',
-          700: '#164A38',
+          500: '#10B981',
+          600: '#34D399' /* Hover "Glow" (Lighter) */,
+          700: '#6EE7B7' /* Pressed "Intense Glow" */,
         },
         accent: {
           500: '#D4B475', // Brighter Zari
@@ -178,10 +176,15 @@ const RiversideTheme: DesignSystem = {
           secondary: '#D6D3D1',
           tertiary: '#A8A29E',
           muted: '#78716C',
+          // In Dark Mode: Deep Kohl (#1C1814) text on top of Bright Emerald/Gold.
+          // This gives it a "Stamped Metal" feel rather than a "Glow" feel.
+          inverted: '#1C1814',
         },
         border: {
-          default: 'rgba(253, 251, 247, 0.08)',
-          focus: '#D4B475',
+          default: '#44403C', // Maps to neutral-300
+          focus: '#D4B475', // Brighter Zari (Kept as is)
+          // Added for high-contrast boundaries, like the edges of a main speaker's video feed.
+          strong: '#57534E', // Maps to neutral-400
         },
         state: {
           success: '#2A7A5C',
@@ -201,12 +204,13 @@ const RiversideTheme: DesignSystem = {
         },
         fontSmoothing: true, // Antialiased
       },
+      // Heavy Anchor: Uses high Y-axis offset and tight radius to pull the shadow down, simulating physical weight.
       shadows: {
-        sm: '0 1px 2px rgba(0, 0, 0, 0.4)',
-        md: '0 4px 6px rgba(0, 0, 0, 0.5)',
-        lg: '0 10px 20px rgba(0, 0, 0, 0.6)',
-        xl: '0 25px 50px rgba(0, 0, 0, 0.7)',
-        inner: 'inset 0 2px 4px rgba(0, 0, 0, 0.4)',
+        sm: '0 2px 3px -1px rgba(12, 10, 8, 0.6), 0 1px 2px -1px rgba(12, 10, 8, 0.5)',
+        md: '0 6px 8px -2px rgba(12, 10, 8, 0.7), 0 3px 6px -3px rgba(12, 10, 8, 0.6)',
+        lg: '0 12px 16px -4px rgba(12, 10, 8, 0.8), 0 6px 8px -5px rgba(12, 10, 8, 0.7)',
+        xl: '0 24px 32px -6px rgba(12, 10, 8, 0.9), 0 12px 14px -8px rgba(12, 10, 8, 0.8)',
+        inner: 'inset 0 2px 4px 0 rgba(12, 10, 8, 0.8)',
       },
     },
   },
