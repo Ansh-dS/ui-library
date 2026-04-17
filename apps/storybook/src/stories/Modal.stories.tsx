@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Modal } from '@components'
 
 const meta: Meta<typeof Modal> = {
-  title: 'Components/Modal',
+  title: 'Overlays/Modal',
   component: Modal,
   argTypes: {
     isOpen: { control: 'boolean' },

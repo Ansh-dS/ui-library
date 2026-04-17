@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite' // Standard React Storybook type
-import { Stack } from '@components'
-import { Box } from '@components' // Importing Box to use as items inside the Stack
+import { Stack, Box } from '@components' // Importing Box to use as items inside the Stack
 
 const meta: Meta<typeof Stack> = {
-  title: 'Components/Stack',
+  title: 'Foundation/Stack',
   component: Stack,
   argTypes: {
     as: {
@@ -49,23 +48,22 @@ const meta: Meta<typeof Stack> = {
 
 export default meta
 
-type Story = StoryObj<typeof Stack>
-
-export const Default: Story = {
+export const Default: StoryObj<typeof Stack> = {
   args: {
     direction: 'horizontal',
     gap: 'md',
     align: 'center',
     justify: 'center',
     children: (
+      // 'border-border-defalut' is just a color but to actually see a border you need 'border'.
       <>
-        <Box className="p-4 bg-surface-raised border border-border-default rounded-medium">
+        <Box className="p-4 border border-border-default bg-surface-raised rounded-medium">
           Item 1
         </Box>
-        <Box className="p-4 bg-surface-raised border border-border-default rounded-medium">
+        <Box className="p-4 border border-border-default bg-surface-raised rounded-medium">
           Item 2
         </Box>
-        <Box className="p-4 bg-surface-raised border border-border-default rounded-medium">
+        <Box className="p-4 border border-border-default bg-surface-raised rounded-medium">
           Item 3
         </Box>
       </>

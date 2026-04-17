@@ -46,6 +46,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      '@devCss': path.resolve(__dirname, '../../dev.css'),
+      // if i remove globalCss then storybook stop working.
+      // even devCss includes globalCSS
       '@globalCss': path.resolve(__dirname, '../../global.css'),
       '@tokenCss': path.resolve(__dirname, '../../token.css'),
       '@components': path.resolve(__dirname, '../../packages/ui/src/index.ts'),

@@ -72,8 +72,9 @@ export const initCommand = program
       // Final success message.
       console.log('\n All set! Start using components:\n')
       console.log('\n import { Button } from "@anshdeep/ui";\n')
-    } catch (err: any) {
-      if (err.isTtyError) {
+      // if we use err:unknown: then while using 'if' statement use 'instanceof' otherwise it will give error
+    } catch (err: unknown) {
+      if (err instanceof Error && 'isTtyError' in err && err.isTtyError) {
         console.error("Prompt couldn't be rendered in the current environment.")
       } else {
         console.error('Something went wrong:', err)
