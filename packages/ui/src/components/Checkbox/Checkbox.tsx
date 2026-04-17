@@ -2,15 +2,18 @@ import React from 'react'
 import { checkboxVariants, CheckboxVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface CheckboxProps
-  extends
-    Omit<
-      React.InputHTMLAttributes<HTMLInputElement>,
-      'type' | 'color' | 'size'
-    >,
-    CheckboxVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type CheckboxCustomProps = {
   label?: string
 }
+
+type CleanProps = Prettify<CheckboxCustomProps & CheckboxVariantsType>
+
+export type CheckboxProps = CleanProps &
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'color' | 'size'>
 
 export function Checkbox(props: CheckboxProps): React.ReactElement {
   const { color, size, className, label, ...rest } = props
@@ -18,7 +21,7 @@ export function Checkbox(props: CheckboxProps): React.ReactElement {
     <label className="flex items-center gap-s cursor-pointer">
       <input
         type="checkbox"
-        className={cn(checkboxVariants({ color }), className)}
+        className={cn(checkboxVariants({ color, size }), className)}
         {...rest}
       />
       {label && <span className="text-body text-fg-primary">{label}</span>}

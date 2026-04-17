@@ -1,13 +1,20 @@
 import React from 'react'
 import { switchVariants, SwitchVariantsType } from './styles.js'
 import { cn } from '../../common.js'
-export interface SwitchProps
-  extends
-    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'color'>,
-    SwitchVariantsType {
+
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type SwitchCustomProps = {
   checked?: boolean
   label?: string
 }
+
+type CleanProps = Prettify<SwitchCustomProps & SwitchVariantsType>
+
+export type SwitchProps = CleanProps &
+  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'color'>
 export function Switch(props: SwitchProps): React.ReactElement {
   const { size, className, checked, label, ...rest } = props
   return (

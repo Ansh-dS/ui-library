@@ -2,12 +2,18 @@ import React from 'react'
 import { textareaVariants, TextAreaVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface TextAreaProps
-  extends
-    Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'>,
-    TextAreaVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type TextAreaCustomProps = {
   error?: string | boolean
 }
+
+type CleanProps = Prettify<TextAreaCustomProps & TextAreaVariantsType>
+
+export type TextAreaProps = CleanProps &
+  Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'>
 
 export function TextArea(props: TextAreaProps): React.ReactElement {
   const { variant, size, className, error, ...rest } = props

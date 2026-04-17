@@ -2,15 +2,21 @@ import React from 'react'
 import { inputVariants, InputVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
 // We omit 'size' from the native HTML attributes so our CVA 'size' variant can take over.
-export interface InputProps
-  extends
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
-    InputVariantsType {
+type InputCustomProps = {
   error?: string | boolean
   startIcon?: React.ReactNode
   endIcon?: React.ReactNode
 }
+
+type CleanProps = Prettify<InputCustomProps & InputVariantsType>
+
+export type InputProps = CleanProps &
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>
 
 export function Input(props: InputProps): React.ReactElement {
   const { variant, size, className, error, startIcon, endIcon, ...rest } = props
