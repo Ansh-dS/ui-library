@@ -2,6 +2,10 @@ import React, { useState, forwardRef } from 'react'
 import { tabsVariants, TabsVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
 export interface TabItem {
   id: string
   title: React.ReactNode
@@ -15,18 +19,17 @@ export interface TabItem {
  * If you use these names for ReactNodes in your design system, TypeScript will
  * throw a conflict error because ReactNode (objects/arrays) cannot be assigned to strings.
  */
-export interface TabsProps
-  extends
-    Omit<
-      React.HTMLAttributes<HTMLDivElement>,
-      'onChange' | 'title' | 'content'
-    >,
-    TabsVariantsType {
+type TabsCustomProps = {
   items?: TabItem[]
   activeId?: string
   defaultActiveId?: string
   onChange?: (id: string) => void
 }
+
+type CleanProps = Prettify<TabsCustomProps & TabsVariantsType>
+
+export type TabsProps = CleanProps &
+  Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'title' | 'content'>
 
 /**
  * CHANGE: Wrapped the component in 'forwardRef'.
