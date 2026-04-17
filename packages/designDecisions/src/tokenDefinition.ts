@@ -19,7 +19,6 @@ export type GlobalTokens = {
     >
   }
 
-  breakpoints: Record<'sm' | 'md' | 'lg' | 'xl' | '2xl', string>
   zIndices: Record<
     'base' | 'nav' | 'overlay' | 'modal' | 'toast' | 'popover',
     number
@@ -45,10 +44,12 @@ export type ThemeTokens = {
       secondary: string
       tertiary: string
       muted: string
+      inverted: string
     }
     border: {
       default: string
       focus: string
+      strong: string
     }
     state: {
       success: string
@@ -58,7 +59,7 @@ export type ThemeTokens = {
     }
   }
 
-  // ✅ ADDED: Theme-specific typography overrides to handle dark mode optical adjustments
+  // Theme-specific typography overrides to handle dark mode optical adjustments
   typography: {
     lineHeight: { relaxed: number | string }
     letterSpacing: { normal: string } // Allows slightly wider tracking in dark mode
