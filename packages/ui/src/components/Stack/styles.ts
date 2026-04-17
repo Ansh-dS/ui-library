@@ -1,9 +1,22 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 export const stackVariants = cva('flex', {
   variants: {
-    direction: { vertical: 'flex-col', horizontal: 'flex-row' },
-    gap: { none: 'gap-0', sm: 'gap-s', md: 'gap-m', lg: 'gap-l' }, // Mapped to actual tokens
-    align: { start: 'items-start', center: 'items-center', end: 'items-end' },
+    direction: {
+      vertical: 'flex-col',
+      horizontal: 'flex-row',
+    },
+    gap: {
+      none: 'gap-0',
+      sm: 'gap-s',
+      md: 'gap-m',
+      lg: 'gap-l',
+    },
+    // Mapped to actual tokens
+    align: {
+      start: 'items-start',
+      center: 'items-center',
+      end: 'items-end',
+    },
     justify: {
       start: 'justify-start',
       center: 'justify-center',

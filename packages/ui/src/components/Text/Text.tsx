@@ -1,29 +1,44 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { textVariants, TextVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-export interface TextProps
-  extends
-    Omit<React.HTMLAttributes<HTMLSpanElement>, 'color'>,
-    TextVariantsType {
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
+type TextCustomProps = {
+  /** Allows you to change the underlying HTML element (e.g., 'span', 'h1', 'label') */
   as?: React.ElementType
+  required?: boolean
 }
 
-export function Text(props: TextProps): React.ReactElement {
+type CleanProps = Prettify<TextCustomProps & TextVariantsType>
+
+export type TextProps = CleanProps &
+  Omit<React.HTMLAttributes<HTMLElement>, 'color'>
+
+export const Text = forwardRef<HTMLElement, TextProps>((props, ref) => {
   const {
-    size,
+    as: Component = 'p', // Defaults to a paragraph tag
+    variant,
     color,
-    as: Component = 'span',
+    weight,
+    align,
     className,
+    required = false,
     children,
     ...rest
   } = props
+
   return (
     <Component
-      className={cn(textVariants({ size, color }), className)}
+      ref={ref}
+      className={cn(textVariants({ variant, color, weight, align }), className)}
       {...rest}
     >
       {children}
+      {required && <span className="text-status-danger ml-xs">*</span>}
     </Component>
   )
-}
+})
+Text.displayName = 'Text'
