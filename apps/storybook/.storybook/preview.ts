@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/react-vite'
 import decorator from './themeDecorator'
 
-import '@globalCss'
+import '@devCss'
 import './storybook.css'
 
 export const globalTypes = {

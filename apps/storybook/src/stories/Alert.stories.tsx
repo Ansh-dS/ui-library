@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Alert } from '@components'
 
 const meta: Meta<typeof Alert> = {
-  title: 'Components/Alert',
+  title: 'Feedback/Alert',
   component: Alert,
   argTypes: {
     severity: {

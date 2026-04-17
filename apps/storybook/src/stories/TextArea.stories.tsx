@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { TextArea } from '@components'
 const meta: Meta<typeof TextArea> = {
   component: TextArea,
-  title: 'Components/TextArea',
+  title: 'Inputs/TextArea',
   tags: ['autodocs'],
 }
 export default meta

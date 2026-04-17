@@ -12,6 +12,7 @@ import { DesignSystem } from '../tokenDefinition.js'
 
       parent key: 
           we are updating it each time as the value of tokenName becomes new parent key.
+          we are updating it using parameters of recurrsion. 
        */
 function flattenTokens(
   obj: object,
