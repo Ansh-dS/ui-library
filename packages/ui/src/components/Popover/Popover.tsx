@@ -18,13 +18,15 @@ type PopoverCustomProps = {
 
 type CleanProps = Prettify<PopoverCustomProps & PopoverVariantsType>
 
-export type PopoverProps = CleanProps & Omit<React.HTMLAttributes<HTMLDivElement>, 'content'>
+export type PopoverProps = CleanProps &
+  Omit<React.HTMLAttributes<HTMLDivElement>, 'content'>
 
 export function Popover(props: PopoverProps): React.ReactElement {
   const {
     content,
     children,
     align,
+    variant,
     open: controlledState,
     initialState = false,
     onOpenChange,
@@ -110,7 +112,11 @@ export function Popover(props: PopoverProps): React.ReactElement {
       {/* Floating Panel */}
       {isVisible && (
         <div
-          className={cn(popoverVariants({ align }), 'mt-2 top-full', className)}
+          className={cn(
+            popoverVariants({ align, variant }),
+            'mt-2 top-full',
+            className
+          )}
           {...rest}
         >
           {content}

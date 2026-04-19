@@ -147,6 +147,16 @@ const TallyTheme: DesignSystem = {
           error: '#DC2626', // Chinar Red
           warning: '#EA580C', // Saffron
           info: '#0284C7', // Alpine Blue
+          successSubtle: 'rgba(5, 150, 105, 0.08)',
+          errorSubtle: 'rgba(220, 38, 38, 0.08)',
+          warningSubtle: 'rgba(234, 88, 12, 0.08)',
+          infoSubtle: 'rgba(2, 132, 199, 0.08)',
+        },
+        action: {
+          primarySubtle: 'rgba(3, 105, 161, 0.08)', // 8% of Primary 500 (#0369A1)
+          primaryHover: 'rgba(3, 105, 161, 0.12)', // Slightly stronger for hover
+          secondarySubtle: 'rgba(71, 85, 105, 0.06)', // 6% of Neutral 600 (#475569)
+          ghostHover: 'rgba(15, 23, 42, 0.04)', // 4% of Neutral 900 for transparent buttons
         },
       },
 
@@ -223,6 +233,16 @@ const TallyTheme: DesignSystem = {
           error: '#F87171',
           warning: '#FBBF24',
           info: '#38BDF8',
+          successSubtle: 'rgba(52, 211, 153, 0.12)', // Increased to 12% for dark mode contrast
+          errorSubtle: 'rgba(248, 113, 113, 0.12)',
+          warningSubtle: 'rgba(251, 191, 36, 0.12)',
+          infoSubtle: 'rgba(56, 189, 248, 0.12)',
+        },
+        action: {
+          primarySubtle: 'rgba(56, 189, 248, 0.12)', // 12% of Primary 500 (#38BDF8) - needs more alpha on dark
+          primaryHover: 'rgba(56, 189, 248, 0.16)',
+          secondarySubtle: 'rgba(148, 163, 184, 0.10)', // 10% of Neutral 400 (#94A3B8)
+          ghostHover: 'rgba(248, 250, 252, 0.06)', // 6% of Snow (#F8FAFC)
         },
       },
 

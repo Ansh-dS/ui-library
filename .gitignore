@@ -133,3 +133,6 @@ temp/
 #storybook
 *storybook.log
 apps/**/storybook-static
+
+#styels
+token.css 

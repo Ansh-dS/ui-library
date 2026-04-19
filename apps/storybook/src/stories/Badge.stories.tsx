@@ -14,7 +14,7 @@ const meta: Meta<typeof Badge> = {
   argTypes: {
     color: {
       control: 'radio',
-      options: ['default', 'success', 'warning', 'error'],
+      options: ['default', 'success', 'warning', 'error', 'brand'],
       description: 'Sets the background and text color theme.',
     },
     size: {
@@ -50,6 +50,13 @@ export const Error: Story = {
   args: {
     children: 'Failed',
     color: 'error',
+  },
+}
+
+export const Brand: Story = {
+  args: {
+    children: 'Brand',
+    color: 'brand',
   },
 }
 

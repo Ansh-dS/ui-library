@@ -1,5 +1,5 @@
 {
-  "name": "my-ui-lib",
+  "name": "ui-lib",
   "version": "1.0.0",
   "type": "module",
   "packageManager": "pnpm@10.20.0",
@@ -7,7 +7,8 @@
     "dev": "turbo dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "check-errors": " pnpm lint && pnpm build && pnpm format"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -21,7 +22,6 @@
     "eslint": "^9.39.2",
     "postcss": "^8.5.6",
     "prettier": "^3.8.1",
-    "storybook": "^10.2.8",
     "tailwindcss": "^4.1.18",
     "turbo": "^2.7.6",
     "vite": "^7.3.1",
@@ -31,9 +31,9 @@
     "@types/node": "^24.10.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "lucide-react": "^1.7.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "tailwind-merge": "^3.4.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.53.1",
     "vite-plugin-dts": "^4.5.4",

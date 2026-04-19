@@ -1,0 +1,35 @@
+@import './global.css';
+@config "./tailwind.config.ts";
+
+@source "./packages/ui/src/components";
+
+/* =================================================================
+    global.css: we are defining the variables
+        1. but in below we are using them and adding '!important'
+        2. so it overrides the storybook.css and displays the correct colors.
+
+    why didn't add '!imp' directly in global.css:
+        1. if we: then user can't overRide the colors using 'className'.
+   ================================================================= */
+@layer utilities {
+  .text-fg-primary {
+    color: var(--color-fg-primary) !important;
+  }
+  .text-fg-secondary {
+    color: var(--color-fg-secondary) !important;
+  }
+  .text-fg-brand {
+    color: var(--color-fg-brand) !important;
+  }
+  .text-fg-accent {
+    color: var(--color-fg-accent) !important;
+  }
+
+  /* Also protect your backgrounds and borders if Storybook clashes with them */
+  .bg-surface-base {
+    background-color: var(--color-surface-base) !important;
+  }
+  .border-border-default {
+    border-color: var(--color-border-default) !important;
+  }
+}

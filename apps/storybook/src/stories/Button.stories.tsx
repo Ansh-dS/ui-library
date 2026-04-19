@@ -14,7 +14,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'outline', 'destructive'],
+      options: ['primary', 'secondary', 'outline', 'destructive', 'glass'],
       description: 'Button style variant',
     },
     size: {
@@ -82,5 +82,13 @@ export const Loading: Story = {
     size: 'md',
     isLoading: true,
     children: 'Loading...',
+  },
+}
+
+export const Glass: Story = {
+  args: {
+    variant: 'glass',
+    size: 'md',
+    children: 'Glass Button',
   },
 }
