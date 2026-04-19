@@ -56,6 +56,16 @@ export type ThemeTokens = {
       error: string
       warning: string
       info: string
+      successSubtle: string // Background for Success Alert/Badge
+      errorSubtle: string
+      warningSubtle: string
+      infoSubtle: string
+    }
+    action: {
+      primarySubtle: string // Your Sidebar active state
+      primaryHover: string
+      secondarySubtle: string // For secondary active states
+      ghostHover: string // For transparent buttons
     }
   }
 

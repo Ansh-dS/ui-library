@@ -118,6 +118,17 @@ const RiversideTheme: DesignSystem = {
           error: '#9B2226', // Lal Qila Red
           warning: '#C5A059',
           info: '#2B4162',
+          successSubtle: 'rgba(22, 74, 56, 0.06)', // Deep Emerald bleed (6% for elegance)
+          errorSubtle: 'rgba(155, 34, 38, 0.06)',
+          warningSubtle: 'rgba(197, 160, 89, 0.06)',
+          infoSubtle: 'rgba(43, 65, 98, 0.06)',
+        },
+        // STAFF ADDITION: Interactive state backgrounds
+        action: {
+          primarySubtle: 'rgba(27, 94, 68, 0.06)', // 6% of Emerald 500 (#1B5E44)
+          primaryHover: 'rgba(27, 94, 68, 0.10)',
+          secondarySubtle: 'rgba(87, 83, 78, 0.06)', // 6% of Neutral 600 (#57534E)
+          ghostHover: 'rgba(44, 36, 27, 0.05)', // 5% of Surma Ink (#2C241B)
         },
       },
       typography: {
@@ -191,6 +202,17 @@ const RiversideTheme: DesignSystem = {
           error: '#EF4444',
           warning: '#D4B475',
           info: '#60A5FA',
+          successSubtle: 'rgba(42, 122, 92, 0.10)', // 10% for legibility on Deep Kohl
+          errorSubtle: 'rgba(239, 68, 68, 0.10)',
+          warningSubtle: 'rgba(212, 180, 117, 0.10)',
+          infoSubtle: 'rgba(96, 165, 250, 0.10)',
+        },
+
+        action: {
+          primarySubtle: 'rgba(16, 185, 129, 0.10)', // 10% of Emerald 500 (#10B981)
+          primaryHover: 'rgba(16, 185, 129, 0.14)',
+          secondarySubtle: 'rgba(168, 162, 158, 0.10)', // 10% of Neutral 600 (#A8A29E)
+          ghostHover: 'rgba(253, 251, 247, 0.05)', // 5% of Pearl (#FDFBF7)
         },
       },
       typography: {

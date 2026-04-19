@@ -35,7 +35,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     // path allies
-    "baseUrl": ".",
     "paths": {
       /*
       if we want to use file of one subfolder in other,

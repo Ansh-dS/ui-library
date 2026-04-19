@@ -178,21 +178,25 @@
         transition: transform 0.1s;
         border: 1px solid var(--colors-border-default);
       }
+
       .swatch:active {
         transform: scale(0.96);
       }
+
       .swatch .color {
         width: 100%;
         height: 48px;
         border-radius: var(--borderRadius-sm);
         box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
       }
+
       .token-label {
         font-size: var(--typography-fontSize-xs);
         color: var(--colors-text-secondary);
         text-align: center;
         font-family: var(--typography-fontFamilyMono);
       }
+
       .token-value {
         font-size: 10px;
         margin-top: 4px;
@@ -207,6 +211,7 @@
         margin-bottom: var(--spacing-md);
         cursor: pointer;
       }
+
       .spacing-bar {
         height: 24px;
         background-color: var(--colors-primary-100);
@@ -214,6 +219,7 @@
         border-radius: 2px;
         position: relative;
       }
+
       /* Lines pattern to look like a ruler */
       .spacing-bar::after {
         content: '';
@@ -246,7 +252,8 @@
         background: var(--colors-background-primary);
         border-radius: var(--borderRadius-md);
         margin-bottom: var(--spacing-xs);
-        border: 1px solid var(--colors-border-default); /* To see it against bg */
+        border: 1px solid var(--colors-border-default);
+        /* To see it against bg */
       }
 
       /* --- ANIMATION VISUALIZATION --- */
@@ -256,6 +263,7 @@
         padding: var(--spacing-xs);
         overflow: hidden;
       }
+
       .anim-ball {
         width: 32px;
         height: 32px;
@@ -263,6 +271,7 @@
         border-radius: var(--borderRadius-full);
         /* The transition property is injected by JS */
       }
+
       .anim-trigger:hover .anim-ball {
         transform: translateX(120px);
       }
@@ -272,6 +281,7 @@
         color: var(--colors-state-success) !important;
         font-weight: var(--typography-fontWeight-bold);
       }
+
       code {
         font-family: var(--typography-fontFamilyMono);
         background: var(--colors-gray-100);
@@ -287,11 +297,13 @@
         border-bottom: 1px solid var(--colors-border-default);
         padding-bottom: var(--spacing-lg);
       }
+
       .typography-samples > *:last-child {
         border-bottom: none;
       }
     </style>
   </head>
+
   <body>
     <div class="container">
       <header>
