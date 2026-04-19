@@ -50,10 +50,25 @@ export const buttonVariants = cva(
           'hover:bg-surface-sunken',
           'active:bg-surface-raised',
         ],
+
+        // GLASS VARIANT
+        glass: [
+          // BASE: The "Frosted" Foundation
+          // Uses surface-base with opacity for the glass effect
+          'bg-surface-base/30 backdrop-blur-md border-white/20 text-fg-primary shadow-modal',
+
+          // HOVER: The "Brand Hint"
+          // Instead of just more white, we use your re-added primaryHover token!
+          'hover:bg-action-primary-hover-subtle hover:border-action-primary/30',
+
+          // ACTIVE: The "Brand Selection"
+          // We use your primarySubtle here to give it a solid "Selected" feel
+          'active:bg-action-primary-subtle active:scale-[0.98] active:border-action-primary/40',
+        ],
       },
       /* 4. Geometric Scaling (2:1 Ratio)
-         We removed 'text-*' classes because the <Text> component now 
-         dynamically injects the correct font size based on the button's size prop.
+          We removed 'text-*' classes because the <Text> component now 
+          dynamically injects the correct font size based on the button's size prop.
       */
       size: {
         // SM: py-4px, px-12px (Ratio maintained)
