@@ -2,6 +2,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 export const popoverVariants = cva(
   [
+    // Core Layout & Positioning
     'absolute',
     'bg-surface-base',
     'border',
@@ -23,8 +24,17 @@ export const popoverVariants = cva(
         // -translate-x-1/2: to move the right edge 50% of it's own width.
         end: 'right-0',
       },
+      variant: {
+        default: 'bg-surface-base border border-border-default shadow-overlay', // Your original design
+        glass:
+          'bg-surface-base/70 backdrop-blur-md border border-white/20 shadow-raised', // High-end Riverside media UI
+        dark: 'bg-fg-primary text-fg-inverted shadow-overlay', // High contrast mode
+      },
     },
-    defaultVariants: { align: 'start' },
+    defaultVariants: {
+      align: 'start',
+      variant: 'default',
+    },
   }
 )
 export type PopoverVariantsType = VariantProps<typeof popoverVariants>

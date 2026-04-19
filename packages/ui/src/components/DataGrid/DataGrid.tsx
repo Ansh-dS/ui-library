@@ -12,6 +12,64 @@ const DataGridContext = createContext<{
   size: 'md',
 })
 
+const isNativeTableSection = (type: unknown): boolean => {
+  return (
+    typeof type === 'string' &&
+    (type === 'caption' ||
+      type === 'colgroup' ||
+      type === 'thead' ||
+      type === 'tbody' ||
+      type === 'tfoot')
+  )
+}
+
+const isDataGridSection = (node: React.ReactNode): boolean => {
+  if (!React.isValidElement(node)) {
+    return false
+  }
+
+  const { type } = node
+
+  return (
+    isNativeTableSection(type) ||
+    type === DataGridHeader ||
+    type === DataGridBody ||
+    type === DataGridFooter
+  )
+}
+
+const normalizeTableChildren = (children: React.ReactNode): React.ReactNode => {
+  // .toArray automatically flattens Fragments one level deep!
+  const nodes = React.Children.toArray(children)
+
+  if (nodes.length === 0) return children
+
+  const normalized: React.ReactNode[] = []
+  let pendingBodyNodes: React.ReactNode[] = []
+
+  const flush = (keyIndex: number) => {
+    if (pendingBodyNodes.length > 0) {
+      normalized.push(
+        <DataGridBody key={`auto-tbody-${keyIndex}`}>
+          {pendingBodyNodes}
+        </DataGridBody>
+      )
+      pendingBodyNodes = []
+    }
+  }
+
+  nodes.forEach((node, index) => {
+    if (isDataGridSection(node)) {
+      flush(index)
+      normalized.push(node)
+    } else {
+      pendingBodyNodes.push(node)
+    }
+  })
+
+  flush(nodes.length)
+  return normalized
+}
 
 export const DataGrid = forwardRef<HTMLTableElement, DataGridProps>(
   (props, ref) => {
@@ -35,7 +93,7 @@ export const DataGrid = forwardRef<HTMLTableElement, DataGridProps>(
             )}
             {...rest}
           >
-            {children}
+            {normalizeTableChildren(children)}
           </table>
         </div>
       </DataGridContext.Provider>
@@ -62,6 +120,26 @@ export const DataGridHeader = forwardRef<
 ))
 DataGridHeader.displayName = 'DataGridHeader'
 
+export const DataGridBody = forwardRef<
+  HTMLTableSectionElement,
+  React.HTMLAttributes<HTMLTableSectionElement>
+>(({ className, ...props }, ref) => (
+  <tbody ref={ref} className={cn(className)} {...props} />
+))
+DataGridBody.displayName = 'DataGridBody'
+
+export const DataGridFooter = forwardRef<
+  HTMLTableSectionElement,
+  React.HTMLAttributes<HTMLTableSectionElement>
+>(({ className, ...props }, ref) => (
+  <tfoot
+    ref={ref}
+    className={cn('border-t border-border-default', className)}
+    {...props}
+  />
+))
+DataGridFooter.displayName = 'DataGridFooter'
+
 // data-grid-row: each row of table.
 export const DataGridRow = forwardRef<
   HTMLTableRowElement,
@@ -71,7 +149,9 @@ export const DataGridRow = forwardRef<
   <tr
     ref={ref}
     className={cn(
-      'border-b border-border-default hover:bg-surface-sunken/50 transition-colors data-[state=selected]:bg-surface-sunken',
+      'border-b border-border-default transition-colors',
+      'hover:bg-action-ghost-hover',
+      'data-[state=selected]:bg-action-primary-subtle',
       className
     )}
     {...props}
@@ -112,7 +192,7 @@ export const DataGridHead = forwardRef<
   )
 })
 
-type CleanProps = Prettify<  DataGridVariantsType>
+type CleanProps = Prettify<DataGridVariantsType>
 
 export type DataGridProps = CleanProps &
   React.TableHTMLAttributes<HTMLTableElement>

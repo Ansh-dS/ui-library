@@ -1,150 +1,224 @@
-import React, { useState, forwardRef } from 'react'
-import { tabsVariants, TabsVariantsType } from './styles.js'
+import React, { forwardRef, createContext, useContext, useState } from 'react'
+import {
+  tabsListVariants,
+  tabsTriggerVariants,
+  TabsListVariantsType,
+} from './styles.js'
 import { cn } from '../../common.js'
+// STAFF FIX: Importing your foundation primitives!
+import { Box, Stack, Button } from '@components'
 
-type Prettify<T> = {
-  [K in keyof T]: T[K]
-} & {}
+type Prettify<T> = { [K in keyof T]: T[K] } & {}
 
-export interface TabItem {
-  id: string
-  title: React.ReactNode
-  panel?: React.ReactNode
-  disabled?: boolean
+/* -------------------------------------------------------------------------- */
+/* CONTEXT                                                                    */
+/* -------------------------------------------------------------------------- */
+type TabsContextValue = {
+  activeValue: string
+  onValueChange: (value: string) => void
+  variant?: TabsListVariantsType['variant']
+  orientation?: TabsListVariantsType['orientation']
+  size?: 'sm' | 'md' | 'lg'
 }
 
-/**
- * CHANGE: Added 'title' and 'content' to the Omit list.
- * WHY: Native HTML attributes for <div> include 'title' and 'content' as strings.
- * If you use these names for ReactNodes in your design system, TypeScript will
- * throw a conflict error because ReactNode (objects/arrays) cannot be assigned to strings.
- */
-type TabsCustomProps = {
-  items?: TabItem[]
-  activeId?: string
-  defaultActiveId?: string
-  onChange?: (id: string) => void
+const TabsContext = createContext<TabsContextValue | undefined>(undefined)
+
+const useTabsContext = () => {
+  const context = useContext(TabsContext)
+  if (!context)
+    throw new Error('Tabs components must be used within a <Tabs> provider.')
+  return context
 }
 
-type CleanProps = Prettify<TabsCustomProps & TabsVariantsType>
+/* -------------------------------------------------------------------------- */
+/* ROOT CONTAINER (<Tabs>)                                                    */
+/* -------------------------------------------------------------------------- */
+type TabsVariantProps = {
+  variant?: TabsListVariantsType['variant']
+  orientation?: TabsListVariantsType['orientation']
+  size?: 'sm' | 'md' | 'lg'
+}
 
-export type TabsProps = CleanProps &
-  Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'title' | 'content'>
+export type TabsProps = Prettify<
+  React.HTMLAttributes<HTMLDivElement> & {
+    defaultValue?: string
+    value?: string
+    onValueChange?: (value: string) => void
+  } & TabsVariantProps
+>
 
-/**
- * CHANGE: Wrapped the component in 'forwardRef'.
- * WHY: High-quality UI libraries must allow parent components to access the DOM node
- * for tasks like manual focus management or integration with animation libraries (e.g., Framer Motion).
- */
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>((props, ref) => {
   const {
-    items = [],
-    /**
-     * CHANGE: Defaulting orientation to 'horizontal'.
-     * WHY: Prevents 'null' or 'undefined' from leaking into logic that expects a string.
-     * This ensures your Tailwind 'cn' logic always has a valid value to check against.
-     */
+    defaultValue,
+    value,
+    onValueChange,
+    variant = 'underline',
     orientation = 'horizontal',
-    activeId,
-    defaultActiveId,
-    onChange,
+    size = 'md',
     className,
+    children,
     ...rest
   } = props
 
-  const [internalActive, setInternalActive] = useState(
-    defaultActiveId || items[0]?.id
-  )
+  const [internalValue, setInternalValue] = useState(defaultValue || '')
+  const activeValue = value !== undefined ? value : internalValue
 
-  const currentActive = activeId !== undefined ? activeId : internalActive
-
-  const handleTabClick = (id: string, disabled?: boolean) => {
-    if (disabled) return
-    setInternalActive(id)
-    if (onChange) onChange(id)
+  const handleValueChange = (newValue: string) => {
+    setInternalValue(newValue)
+    if (onValueChange) onValueChange(newValue)
   }
 
-  const activePanel = items.find((item) => item.id === currentActive)?.panel
+  return (
+    <TabsContext.Provider
+      value={{
+        activeValue,
+        onValueChange: handleValueChange,
+        variant,
+        orientation,
+        size,
+      }}
+    >
+      {/* STAFF FIX: Using Box for the root container */}
+      <Box
+        as="div"
+        ref={ref as React.Ref<HTMLElement>}
+        className={cn(
+          orientation === 'vertical' ? 'flex gap-l' : 'block',
+          className
+        )}
+        {...rest}
+      >
+        {children}
+      </Box>
+    </TabsContext.Provider>
+  )
+})
+Tabs.displayName = 'Tabs'
 
-  /**
-   * CHANGE: Created 'ariaOrientation' with a strict type check.
-   * WHY: This solves your specific TS(2322) error.
-   * CVA variants often include 'null' in their types. Native 'aria-orientation'
-   * strictly only accepts "horizontal" | "vertical" | undefined.
-   * This guard clause filters out 'null' to satisfy the DOM's strict type requirements.
-   */
-  const ariaOrientation =
-    orientation === 'horizontal' || orientation === 'vertical'
-      ? orientation
-      : undefined
+/* -------------------------------------------------------------------------- */
+/* TABS LIST (<TabsList>) - The Track                                         */
+/* -------------------------------------------------------------------------- */
+export const TabsList = forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>((props, ref) => {
+  // STAFF FIX: Explicitly destructure 'children' from props
+  const { className, children, ...rest } = props
+  const { variant, orientation } = useTabsContext()
+  const resolvedOrientation = orientation ?? 'horizontal'
 
   return (
-    <div
-      ref={ref} // CHANGE: Attached the forwarded ref here.
+    // We use Stack as the layout engine for the tab triggers
+    <Stack
+      as="div"
+      ref={ref}
+      role="tablist"
+      aria-orientation={resolvedOrientation}
+      direction={resolvedOrientation}
+      /** * Gap Logic:
+       * 'underline' needs 'none' so the active borders create a continuous line.
+       * 'pill' and 'glass' need 'sm' (8px) so the 3D buttons don't touch each other.
+       */
+      gap={variant === 'underline' ? 'none' : 'sm'}
       className={cn(
-        orientation === 'vertical' ? 'flex gap-l' : 'block',
+        tabsListVariants({ variant, orientation: resolvedOrientation }),
         className
       )}
       {...rest}
     >
-      <div
-        className={tabsVariants({ orientation })}
-        role="tablist"
-        aria-orientation={ariaOrientation} // CHANGE: Used the guarded variable here.
-      >
-        {items.map((item) => (
-          <button
-            key={item.id}
-            /**
-             * CHANGE: Added explicit type="button".
-             * WHY: In HTML, the default type for a button is "submit".
-             * If these Tabs are placed inside a <form>, clicking a tab would
-             * trigger a page reload/form submission. This makes the component "safe" for any context.
-             */
-            type="button"
-            role="tab"
-            aria-selected={currentActive === item.id}
-            disabled={item.disabled}
-            onClick={() => handleTabClick(item.id, item.disabled)}
-            className={cn(
-              'px-4 py-2 text-body font-medium transition-colors outline-none',
-              currentActive === item.id
-                ? 'text-action-primary border-action-primary'
-                : 'text-fg-secondary hover:text-fg-primary hover:bg-surface-sunken',
-              orientation === 'vertical'
-                ? 'border-r-2 text-left -mr-px'
-                : 'border-b-2 -mb-px',
-              item.disabled && 'opacity-50 cursor-not-allowed'
-            )}
-          >
-            {item.title}
-          </button>
-        ))}
-      </div>
-
-      {/**
-       * CHANGE: Added a conditional check for activePanel.
-       * WHY: Prevents rendering an empty container if no panel is associated
-       * with the active tab, keeping the DOM clean.
-       */}
-      {activePanel && (
-        <div
-          className={cn(
-            'flex-1 text-body text-fg-primary',
-            orientation === 'vertical' ? 'pt-2' : 'pt-4'
-          )}
-          role="tabpanel"
-        >
-          {activePanel}
-        </div>
-      )}
-    </div>
+      {/* CRITICAL FIX: 
+          This is where your <TabsTrigger /> components will live. 
+      */}
+      {children}
+    </Stack>
   )
 })
+TabsList.displayName = 'TabsList'
 
-/**
- * CHANGE: Added displayName.
- * WHY: When using forwardRef, the component shows up as "Anonymous" in React DevTools.
- * This makes debugging significantly easier for developers using your library.
- */
-Tabs.displayName = 'Tabs'
+/* -------------------------------------------------------------------------- */
+/* TABS TRIGGER (<TabsTrigger>) - The Button                                  */
+/* -------------------------------------------------------------------------- */
+export type TabsTriggerProps = Prettify<
+  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'color'> & {
+    value: string
+    startIcon?: React.ReactNode // We can now pass icons directly because Button supports it!
+  }
+>
+
+export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(
+  (props, ref) => {
+    const { className, value, disabled, children, startIcon, ...rest } = props
+    const { activeValue, onValueChange, variant, orientation, size } =
+      useTabsContext()
+
+    const isActive = activeValue === value
+    const triggerColor: 'primary' | 'secondary' = isActive
+      ? 'primary'
+      : 'secondary'
+
+    return (
+      // STAFF FIX: Using your polymorphic Button!
+      <Button
+        ref={ref}
+        role="tab"
+        aria-selected={isActive}
+        disabled={disabled}
+        onClick={() => onValueChange(value)}
+        // 1. Base variant is ghost so it inherits your standard hover rules
+        variant="ghost"
+        // 2. Inherits the size frongm the parent Tabs context
+        size={size}
+        // 3. Dynamic color mapping! No CSS text colors needed.
+        color={triggerColor}
+        startIcon={startIcon}
+        className={cn(
+          // We override the default ghost button rounded corners if we are using the underline variant
+          variant === 'underline' && 'rounded-none',
+          // Apply the specific tab modifiers (like the 3D Pop)
+          tabsTriggerVariants({ variant, orientation, isActive }),
+          className
+        )}
+        {...rest}
+      >
+        {children}
+      </Button>
+    )
+  }
+)
+TabsTrigger.displayName = 'TabsTrigger'
+
+/* -------------------------------------------------------------------------- */
+/* TABS CONTENT (<TabsContent>) - The Panel                                   */
+/* -------------------------------------------------------------------------- */
+export type TabsContentProps = Prettify<
+  React.HTMLAttributes<HTMLDivElement> & {
+    value: string
+  }
+>
+
+export const TabsContent = forwardRef<HTMLDivElement, TabsContentProps>(
+  (props, ref) => {
+    const { className, value, children, ...rest } = props
+    const { activeValue } = useTabsContext()
+
+    if (activeValue !== value) return null
+
+    return (
+      // STAFF FIX: Using Box for the panel container
+      <Box
+        as="div"
+        ref={ref as React.Ref<HTMLElement>}
+        role="tabpanel"
+        tabIndex={0}
+        className={cn(
+          'mt-l focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focused',
+          className
+        )}
+        {...rest}
+      >
+        {children}
+      </Box>
+    )
+  }
+)
+TabsContent.displayName = 'TabsContent'

@@ -6,14 +6,13 @@ type Prettify<T> = {
   [K in keyof T]: T[K]
 } & {}
 
-
 /* -------------------------------------------------------------------------- */
 /* TYPES                                                                      */
 /* -------------------------------------------------------------------------- */
 
-
-type CleanDataListProps = Prettify<  DataListVariantsType>
-export type DataListProps = CleanDataListProps & React.HTMLAttributes<HTMLDivElement>
+type CleanDataListProps = Prettify<DataListVariantsType>
+export type DataListProps = CleanDataListProps &
+  React.HTMLAttributes<HTMLDivElement>
 
 // DataListItem Types
 type DataListItemCustomProps = {
@@ -21,7 +20,8 @@ type DataListItemCustomProps = {
   interactive?: boolean
 }
 type CleanDataListItemProps = Prettify<DataListItemCustomProps>
-export type DataListItemProps = CleanDataListItemProps & React.HTMLAttributes<HTMLDivElement>
+export type DataListItemProps = CleanDataListItemProps &
+  React.HTMLAttributes<HTMLDivElement>
 
 /* -------------------------------------------------------------------------- */
 /* COMPONENTS                                                                 */

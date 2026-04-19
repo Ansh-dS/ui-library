@@ -1,7 +1,10 @@
 import React, { forwardRef } from 'react'
 import { sidebarVariants, SidebarVariantsType } from './styles.js'
 import { cn } from '../../common.js'
-import { ErrorBoundary, Text } from '@components'
+import { ErrorBoundary, Button, ButtonProps } from '@components'
+import { Text } from '../Text/Text.js'
+// STAFF IMPORT: We need the Text variants to type our new color prop
+import { TextVariantsType } from '../Text/styles.js'
 
 type Prettify<T> = {
   [K in keyof T]: T[K]
@@ -43,6 +46,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>((props, ref) => {
   } = props
 
   return (
+    /*aside means: tag given to suplementary infromation*/
     <aside
       ref={ref}
       // LAW 1 & 4 APPLIED: The variants inject the fixed positioning (Scaffolding)
@@ -89,50 +93,75 @@ Sidebar.displayName = 'Sidebar'
 /* -------------------------------------------------------------------------- */
 /* SIDEBAR ITEM                                */
 /* -------------------------------------------------------------------------- */
-
+// STAFF UPDATE: We now extend ButtonProps to get loading and variant support
 type SidebarItemCustomProps = {
   icon: React.ReactNode
   label: string
   active?: boolean
   collapsed?: boolean
   badge?: string | number
+  color?: TextVariantsType['color']
 }
 
 type CleanPropsItems = Prettify<SidebarItemCustomProps>
 
+// We use ButtonProps so SidebarItem can accept isLoading, onClick, etc.
 export type SidebarItemProps = CleanPropsItems &
-  React.ButtonHTMLAttributes<HTMLButtonElement>
+  Omit<ButtonProps, 'children' | 'text' | 'startIcon'>
 
 export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
   (props, ref) => {
-    const { icon, label, active, collapsed, badge, className, ...rest } = props
+    const {
+      icon,
+      label,
+      active,
+      collapsed,
+      badge,
+      color,
+      className,
+      isLoading = false,
+      ...rest
+    } = props
 
+    // STAFF FIX: Aligning the Sidebar color logic with the Button's engine
+    const resolvedTextColor = color || (active ? 'primary' : 'secondary')
     return (
-      <button
+      <Button
         ref={ref}
-        // LAW 2 & 4 APPLIED: Full-width interactive hitbox with theme-aware active states.
+        variant="ghost" // Base the sidebar item on the ghost variant
+        isLoading={isLoading}
+        color={resolvedTextColor}
+        iconColor={resolvedTextColor} // Passes the color directly to the newly upgraded Button dictionary
+        fullWidth={true}
+        // LAW 2 & 4 APPLIED: We override the standard Button styles to match Sidebar requirements
         className={cn(
-          'group flex items-center w-full gap-m p-s rounded-medium transition-all duration-fast border-none cursor-pointer',
-          'hover:bg-surface-raised active:scale-[0.98]',
+          'p-s gap-m border-none', // border-none prevents a 1px layout shift
+          /*
+          [&>div]: inside our coustomised button we have a div which gets shrinks so we are increasing it's width again to full.
+          then arrange it's inside elements: using justify-start (Expanded) or justify-center (Collapsed)
+          */
+          collapsed
+            ? '[&>div]:justify-center'
+            : '[&>div]:justify-start [&>div]:w-full',
           active
-            ? 'bg-action-primary-transparent text-fg-brand'
-            : 'bg-transparent text-fg-secondary',
-          collapsed ? 'justify-center' : 'justify-start',
+            ? 'bg-action-primary-subtle hover:bg-action-primary-hover-subtle'
+            : 'bg-transparent hover:bg-action-ghost-hover',
           className
         )}
+        // LAW 1 APPLIED: Icon passed as startIcon to maintain the invisible track
+        startIcon={
+          <div
+            className={cn(
+              'transition-transform',
+              active ? 'scale-110' : 'group-hover:scale-110'
+            )}
+          >
+            {icon}
+          </div>
+        }
         {...rest}
       >
-        {/* LAW 1 APPLIED: The Icon acts as the fixed 'Anchor' point. */}
-        <div
-          className={cn(
-            'flex shrink-0 items-center justify-center transition-transform',
-            active ? 'scale-110' : 'group-hover:scale-110'
-          )}
-        >
-          {icon}
-        </div>
-
-        {/* LAW 3 APPLIED: Using our 'Text' component with truncation for the label. */}
+        {/* LAW 3 APPLIED: Using the children slot for the label and badge */}
         {!collapsed && (
           <div className="flex flex-1 items-center justify-between overflow-hidden">
             <Text
@@ -145,13 +174,13 @@ export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
             </Text>
 
             {badge && (
-              <span className="bg-action-primary text-fg-inverted text-[10px] px-xs py-[2px] rounded-pill font-bold">
+              <span className="bg-action-primary text-fg-inverted text-[10px] px-xs py-[2px] rounded-pill font-bold shrink-0 ml-xs">
                 {badge}
               </span>
             )}
           </div>
         )}
-      </button>
+      </Button>
     )
   }
 )
