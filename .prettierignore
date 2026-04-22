@@ -10,4 +10,7 @@ package-lock.json
 .next
 .turbo
 .cache
+global.css 
+token.css
+
 

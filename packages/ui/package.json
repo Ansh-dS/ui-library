@@ -1,31 +1,45 @@
 {
-  "name": "ui",
-  "version": "1.0.0",
-  "description": "",
+  "name": "components",
+  "private": true,
+  "version": "0.0.0",
   "type": "module",
+  "main": "./dist/ui.cjs",
+  "module": "./dist/ui.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/ui.js",
+      "require": "./dist/ui.cjs"
+    },
+    "./global.css": "./dist/global.css",
+    "./token.css": "./dist/token.css"
+  },
   "files": [
     "dist"
   ],
-  "main": "./dist/ui.umd.cjs",
-  "module": "./dist/ui.js",
   "scripts": {
-    "serve": "pnpm vite build && pnpm vite preview ",
-    "build": "vite build"
+    "build": "vite build && pnpm postbuild",
+    "postbuild": "cp ../../global.css dist/global.css && cp ../../token.css dist/token.css",
+    "lint": "eslint ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.20.0",
+  "peerDependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
+    "lucide-react": "^1.7.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "eslint": "^9.39.2",
+    "vitest": "^4.0.18"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1"
+  },
   "devDependencies": {
-    "@types/react": "^19.2.6",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.1",
-    "vite": "^7.2.2"
-  },
-  "exports": {
-    ".": {
-      "import": "./dist/ui.js",
-      "require": "./dist/ui.umd.cjs"
-    }
+    "@vitest/browser-playwright": "^4.0.18",
+    "tailwind-merge": "^3.4.0",
+    "vite-plugin-css-injected-by-js": "^4.0.1"
   }
 }

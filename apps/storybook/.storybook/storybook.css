@@ -1,0 +1,104 @@
+/* =================================================================
+   1. VARIABLE DEFINITIONS (The "Theme Engine")
+   ================================================================= */
+
+/* DARK MODE VARIABLES */
+html[data-mode='dark'] {
+  --sb-bg-main: var(--colors-background-primary);
+  --sb-text-main: var(--colors-text-primary);
+  --sb-border: var(--colors-border-default);
+  --sb-toolbar-bg: var(--colors-background-tertiary);
+  --sb-element-bg: var(--colors-background-secondary);
+
+  /* Polish for Irradiation/Halation */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* LIGHT MODE VARIABLES */
+html[data-mode='light'] {
+  --sb-bg-main: var(--colors-background-primary);
+  --sb-text-main: var(--colors-text-primary);
+  --sb-border: var(--colors-border-default);
+  --sb-toolbar-bg: var(--colors-background-tertiary);
+  --sb-element-bg: var(--colors-background-secondary);
+
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
+/* =================================================================
+   2. SHARED RULES (Applies to BOTH Light & Dark)
+   ================================================================= */
+
+/* --- (The Documentation Page) --- */
+html[data-mode] body,
+html[data-mode] .sbdocs-wrapper,
+html[data-mode] .sbdocs-content {
+  background-color: var(--sb-bg-main) !important;
+  color: var(--sb-text-main) !important;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* --- THE COMPONENT CANVAS  */
+/* This provides the "Stone" background so Pearl/Moti components are visible */
+html[data-mode] .sbdocs-preview > div:last-child,
+html[data-mode] .sb-show-main {
+  background-color: var(--colors-background-secondary) !important;
+}
+
+/* --- TOOLBAR STRIP --- */
+html[data-mode] .sbdocs-preview {
+  background-color: var(--sb-toolbar-bg) !important;
+  border-color: var(--sb-border) !important;
+}
+
+html[data-mode] .sbdocs-preview > div:first-child {
+  background-color: var(--sb-toolbar-bg) !important;
+  border-bottom-color: var(--sb-border) !important;
+}
+
+/* Toolbar Icons */
+html[data-mode] .sbdocs-preview > div:first-child button svg {
+  color: var(--sb-text-main) !important;
+  fill: var(--sb-text-main) !important;
+}
+
+/* --- "SHOW CODE" BUTTON --- */
+html[data-mode] .docblock-code-toggle {
+  background-color: var(--sb-element-bg) !important;
+  color: var(--sb-text-main) !important;
+  border: 1px solid var(--sb-border) !important;
+}
+
+/* --- PROPS TABLE --- */
+html[data-mode] .docblock-argstable,
+html[data-mode] .docblock-argstable tr,
+html[data-mode] .docblock-argstable td,
+html[data-mode] .docblock-argstable th {
+  background-color: transparent !important;
+  color: var(--sb-text-main) !important;
+  border-color: var(--sb-border) !important;
+}
+
+html[data-mode] .docblock-argstable button,
+html[data-mode] .docblock-argstable input,
+html[data-mode] .docblock-argstable select,
+html[data-mode] .docblock-argstable textarea {
+  background-color: var(--sb-element-bg) !important;
+  color: var(--sb-text-main) !important;
+  border: 1px solid var(--sb-border) !important;
+  box-shadow: none !important;
+}
+
+/* --- TITLES & HEADINGS --- */
+html[data-mode] .sbdocs-title,
+html[data-mode] .sbdocs-subtitle,
+html[data-mode] .sbdocs h1,
+html[data-mode] .sbdocs h2,
+html[data-mode] .sbdocs h3 {
+  /* No !important here so component-level text utilities can override them */
+  color: var(--sb-text-main);
+}

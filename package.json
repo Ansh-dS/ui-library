@@ -1,36 +1,42 @@
 {
-  "name": "my-ui-lib",
+  "name": "ui-lib",
   "version": "1.0.0",
-  "description": "use CLI and enjoy pre-built components.",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "tsBuild": "tsc -p tsconfig.json ",
-    "checkFormat": "pnpm prettier . --check",
-    "correctFormat": "pnpm exec prettier . --write",
-    "lint": "pnpm eslint .",
-    "build": "turbo check-types build",
-    "dev": "turbo dev",
-    "checkTypes": "tsc --noEmit"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "packageManager": "pnpm@10.20.0",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "format": "prettier --write .",
+    "check-errors": " pnpm lint && pnpm build && pnpm format"
+  },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
-    "@tailwindcss/postcss": "^4.1.17",
-    "@types/node": "^24.10.1",
-    "autoprefixer": "^10.4.22",
-    "eslint": "^9.39.1",
+    "@eslint/js": "^9.39.2",
+    "@tailwindcss/cli": "^4.1.18",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/react": "^19.2.9",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^9.39.2",
     "postcss": "^8.5.6",
-    "prettier": "3.6.2",
-    "tailwindcss": "^4.1.17",
-    "turbo": "^2.6.1",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.47.0"
+    "prettier": "^3.8.1",
+    "tailwindcss": "^4.1.18",
+    "turbo": "^2.7.6",
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.17"
+    "@types/node": "^24.10.9",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.7.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.53.1",
+    "vite-plugin-dts": "^4.5.4",
+    "vuetify": "^3.11.8"
   }
 }

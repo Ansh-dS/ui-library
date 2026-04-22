@@ -1,0 +1,30 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "allowImportingTsExtensions": true,
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "exactOptionalPropertyTypes": false,
+    /*
+    why do we don't want to produce any file(like .js , .d.ts etc)?
+       this is development tool end user never need the code.
+    */
+    "noEmit": true,
+
+    "types": ["node", "@storybook/types", "vite/client"]
+  },
+  "include": ["src", ".storybook"],
+  /*
+    refrernces: we use this, when one package depends on other. 
+    i want these file builds first and i can use its declaration file here. 
+  */
+  "references": [
+    {
+      "path": "../../packages/designDecisions"
+    },
+    {
+      "path": "../../packages/ui"
+    }
+  ]
+}
