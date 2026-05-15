@@ -8,7 +8,10 @@ import {
   CardDescription,
   CardLabel,
   Button,
+  Stack, // NEW: Added Stack to replace raw divs
+  Box, // NEW: Added Box for inner elements
 } from '@components'
+import { UploadCloud, Settings, ArrowRight } from 'lucide-react'
 
 const meta: Meta<typeof Card> = {
   title: 'Data Display/Card',
@@ -24,18 +27,23 @@ const meta: Meta<typeof Card> = {
   tags: ['autodocs'],
   argTypes: {
     variant: {
-      control: 'radio',
-      options: ['elevated', 'outlined'],
+      /* FIX: Changed from radio to select since we have 5 variants now */
+      control: 'select',
+      options: ['elevated', 'outlined', 'glass', 'sunken', 'interactive'],
     },
     elevation: {
       control: 'select',
       options: ['none', 'sm', 'md', 'lg'],
     },
-    size: {
+    /* FIX: Renamed 'size' to 'padding' to match the updated CardContext architecture */
+    padding: {
       control: 'select',
       options: ['none', 'sm', 'md', 'lg'],
       description: 'Controls internal padding, gaps, AND typography scaling.',
     },
+  },
+  parameters: {
+    layout: 'centered',
   },
 }
 
@@ -50,12 +58,12 @@ export const Default: Story = {
   args: {
     variant: 'elevated',
     elevation: 'sm',
-    size: 'md',
+    padding: 'md', // FIX: Updated prop name
   },
   render: (args) => (
-    <Card {...args}>
+    <Card {...args} className="max-w-md text-center">
       <CardContent>
-        This is a basic elevated card. Try changing the size control now!
+        This is a basic elevated card. Try changing the padding control now!
       </CardContent>
     </Card>
   ),
@@ -69,13 +77,14 @@ export const Complex: Story = {
   args: {
     variant: 'elevated',
     elevation: 'sm',
-    size: 'lg',
+    padding: 'lg', // FIX: Updated prop name
     className: 'max-w-[480px]',
   },
   render: (args) => {
-    // Staff logic: Map Card size to a "comfortable" Button size
-    // We usually want footer buttons to stay a bit smaller than the card's scale
-    const btnSize = args.size === 'lg' ? 'md' : 'sm'
+    /* FIX: Map Card padding to a "comfortable" Button size
+       We usually want footer buttons to stay a bit smaller than the card's scale
+    */
+    const btnSize = args.padding === 'lg' ? 'md' : 'sm'
 
     return (
       <Card {...args}>
@@ -87,16 +96,21 @@ export const Complex: Story = {
         </CardHeader>
 
         <CardContent>
-          <div className="flex flex-col gap-s">
+          {/* NEW: Swapped raw <div flex> for our Stack component to ensure rhythm */}
+          <Stack
+            direction="vertical"
+            gap="sm"
+            className="border-0 bg-transparent"
+          >
             {/* Swapped hardcoded <p> for CardLabel */}
             <CardLabel>Visible to public</CardLabel>
-            <div className="h-10 w-full bg-surface-sunken rounded-medium border border-border-default animate-pulse" />
-          </div>
+            <Box className="h-10 w-full bg-surface-sunken rounded-medium border border-border-default animate-pulse" />
+          </Stack>
         </CardContent>
 
         <CardFooter className="gap-m">
           {/* Swapped raw <button> for your Button component with ghost variant */}
-          <Button variant="destructive" size={btnSize}>
+          <Button variant="ghost" size={btnSize}>
             Cancel
           </Button>
 
@@ -115,13 +129,119 @@ export const Outlined: Story = {
   args: {
     variant: 'outlined',
     elevation: 'none',
-    size: 'md',
+    padding: 'md', // FIX: Updated prop name
+    className: 'max-w-[400px]',
+  },
+  render: (args) => (
+    <Card {...args}>
+      <CardHeader>
+        <Stack
+          direction="horizontal"
+          align="center"
+          gap="sm"
+          className="border-0 bg-transparent"
+        >
+          <Settings className="text-fg-secondary" size={18} />
+          <CardTitle>Advanced Preferences</CardTitle>
+        </Stack>
+      </CardHeader>
+      <CardContent>
+        <CardDescription>
+          This style is perfect for secondary sidebars or settings panels where
+          you don't want shadows competing for attention.
+        </CardDescription>
+      </CardContent>
+    </Card>
+  ),
+}
+
+/* =================================================================
+     NEW STORIES: The "Hot" Engineering Variants
+   ================================================================= */
+
+/**
+ * NEW: The "Interactive" Action Card.
+ * Uses physical translation (-translate-y) and scale on active state.
+ */
+export const Interactive: Story = {
+  args: {
+    variant: 'interactive',
+    padding: 'md',
+    className: 'max-w-[320px]',
   },
   render: (args) => (
     <Card {...args}>
       <CardContent>
-        This style is perfect for secondary sidebars or settings panels.
+        <Stack
+          direction="vertical"
+          gap="md"
+          className="border-0 bg-transparent h-full justify-between"
+        >
+          <Stack
+            direction="vertical"
+            gap="sm"
+            className="border-0 bg-transparent"
+          >
+            <CardTitle>Create Blank Form</CardTitle>
+            <CardDescription>
+              Start from scratch with a new canvas.
+            </CardDescription>
+          </Stack>
+          <ArrowRight className="text-fg-secondary mt-auto" size={16} />
+        </Stack>
       </CardContent>
+    </Card>
+  ),
+}
+
+/**
+ * NEW: The "Sunken" Receptacle Card.
+ * Uses shadow-inner to look like a physical well. Perfect for Dropzones.
+ */
+export const Sunken: Story = {
+  args: {
+    variant: 'sunken',
+    padding: 'lg',
+    className: 'max-w-[400px] border-dashed',
+  },
+  render: (args) => (
+    <Card {...args}>
+      <CardContent className="items-center justify-center text-center">
+        <UploadCloud className="text-fg-secondary mb-m" size={32} />
+        <CardTitle>Drag & Drop</CardTitle>
+        <CardDescription>Drop your logo image here to upload.</CardDescription>
+      </CardContent>
+    </Card>
+  ),
+}
+
+/**
+ * NEW: The "Riverside Glass" Modal Card.
+ * Needs a dark or complex background to show off the backdrop-blur.
+ */
+export const Glass: Story = {
+  args: {
+    variant: 'glass',
+    padding: 'lg',
+    className: 'max-w-[400px]',
+  },
+  parameters: {
+    // Adding a dark background to show off the translucent glass effect
+    backgrounds: { default: 'dark' },
+  },
+  render: (args) => (
+    <Card {...args}>
+      <CardHeader className="bg-transparent border-white/10">
+        <CardTitle className="text-white">Studio Upgrade</CardTitle>
+        <CardDescription className="text-white/70">
+          Unlock 4K recording and AI transcripts.
+        </CardDescription>
+      </CardHeader>
+      <CardFooter className="bg-transparent border-white/10">
+        <Button variant="primary" fullWidth>
+          Upgrade Now
+        </Button>
+      </CardFooter>
     </Card>
   ),
 }

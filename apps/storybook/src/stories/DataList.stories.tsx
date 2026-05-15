@@ -1,5 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { DataList, DataListItem, Text, Button, Stack, Badge } from '@components'
+import {
+  DataList,
+  DataListItem,
+  Text,
+  Button,
+  Stack,
+  Badge,
+  DropdownMenu,
+} from '@components'
+import { MoreVertical, Edit3, Share2, Trash2 } from 'lucide-react'
 
 const meta: Meta<typeof DataList> = {
   title: 'Data Display/DataList',
@@ -10,6 +19,11 @@ const meta: Meta<typeof DataList> = {
       options: ['compact', 'default', 'relaxed'],
       description: 'Controls the vertical density of list items.',
     },
+    variant: {
+      control: 'select',
+      options: ['default', 'ghost', 'glass', 'inset'],
+      description: 'The visual style of the list container.',
+    },
   },
   parameters: {
     layout: 'centered',
@@ -17,7 +31,7 @@ const meta: Meta<typeof DataList> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className="w-[600px] bg-surface-base border border-border-default rounded-medium overflow-hidden shadow-sm">
+      <div className="w-175">
         <Story />
       </div>
     ),
@@ -27,82 +41,121 @@ const meta: Meta<typeof DataList> = {
 export default meta
 type Story = StoryObj<typeof DataList>
 
-/**
- * THE DASHBOARD LIST (Tally/Riverside Style)
- * * Visual Hierarchy Logic:
- * 1. TYPOGRAPHIC WEIGHT: Use 'semibold' for titles to establish an immediate anchor.
- * 2. SECONDARY METADATA: Use 'secondary' color and 'caption' variant to reduce visual noise[cite: 6, 9].
- * 3. PROXIMITY: Group title/metadata on the left and actions on the right to follow the F-pattern.
- */
-export const Default: Story = {
+export const DashboardStyle: Story = {
   args: {
     spacing: 'default',
+    variant: 'default',
     children: (
       <>
-        <DataListItem interactive>
-          {/* Left: Primary Information Group */}
-          <Stack className="flex-col gap-2xs">
-            <Text variant="label" weight="semibold">
-              Customer Feedback Survey
-            </Text>
-            <Text variant="caption" color="secondary">
-              142 Responses • Last edited 2d ago
-            </Text>
-          </Stack>
+        {[
+          {
+            id: 1,
+            title: 'Customer Feedback Survey',
+            views: '1.2k',
+            status: 'success',
+            label: 'Active',
+          },
+          {
+            id: 2,
+            title: 'Event Registration Form',
+            views: '890',
+            status: 'default',
+            label: 'Draft',
+          },
+        ].map((item) => (
+          <DataListItem key={item.id} interactive>
+            {/* Left: Identity Group */}
+            <Stack
+              direction="vertical"
+              gap="sm"
+              className="border-0 bg-transparent"
+            >
+              <Stack
+                direction="horizontal"
+                align="center"
+                gap="sm"
+                className="border-0 bg-transparent"
+              >
+                <Text weight="semibold">{item.title}</Text>
+                <Badge color={item.status as 'default' | 'success'} size="sm">
+                  {item.label}
+                </Badge>
+              </Stack>
+              <Text variant="caption" color="secondary">
+                {item.views} Views • Last edited 2d ago
+              </Text>
+            </Stack>
 
-          {/* Right: Status and Primary Action */}
-          <Stack className="items-center gap-m">
-            <Badge color="success" size="sm">
-              Active
-            </Badge>
-            <Button variant="outline" size="sm" text="View" />
-          </Stack>
-        </DataListItem>
-
-        <DataListItem interactive>
-          <Stack className="flex-col gap-2xs">
-            <Text variant="label" weight="semibold">
-              Event Registration [cite: 8]
-            </Text>
-            <Text variant="caption" color="secondary">
-              89 Responses • Last edited 5d ago
-            </Text>
-          </Stack>
-          <Stack className="items-center gap-m">
-            <Badge color="default" size="sm">
-              Draft
-            </Badge>
-            <Button variant="outline" size="sm" text="Edit" />
-          </Stack>
-        </DataListItem>
+            {/* Right: Actions */}
+            <Stack
+              direction="horizontal"
+              align="center"
+              gap="sm"
+              className="border-0 bg-transparent"
+            >
+              <Button variant="ghost" size="sm" startIcon={<Edit3 />}>
+                Edit
+              </Button>
+              <DropdownMenu
+                align="right"
+                trigger={
+                  <Button variant="ghost" size="icon" color="secondary">
+                    <MoreVertical size={18} />
+                  </Button>
+                }
+              >
+                <Stack
+                  direction="vertical"
+                  gap="none"
+                  className="p-xs min-w-40"
+                >
+                  <Button
+                    variant="ghost"
+                    fullWidth
+                    className="justify-start"
+                    startIcon={<Share2 />}
+                  >
+                    Share
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    fullWidth
+                    className="justify-start text-status-danger"
+                    startIcon={<Trash2 />}
+                  >
+                    Delete
+                  </Button>
+                </Stack>
+              </DropdownMenu>
+            </Stack>
+          </DataListItem>
+        ))}
       </>
     ),
   },
 }
 
-/**
- * STATIC KEY-VALUE LIST
- * Used for system specs or settings where actions are not required.
- * Notice the 'Value' uses secondary color to emphasize the 'Label'.
- */
-export const StaticList: Story = {
+export const GlassEditor: Story = {
   args: {
-    spacing: 'default',
+    variant: 'glass',
+    spacing: 'relaxed',
     children: (
       <>
-        <DataListItem interactive={false}>
-          <Text variant="label">System Version</Text>
-          <Text variant="label" weight="semibold" color="secondary">
-            v2.4.0-stable
-          </Text>
+        <DataListItem>
+          <Text weight="medium">Dark Mode</Text>
+          <Badge size="sm">System Default</Badge>
         </DataListItem>
-        <DataListItem interactive={false}>
-          <Text variant="label">Server Location</Text>
-          <Text variant="label" weight="semibold" color="secondary">
-            Mumbai (ap-south-1)
+        <DataListItem>
+          <Text weight="medium">Auto-save</Text>
+          <Text color="success" variant="caption">
+            Enabled
           </Text>
         </DataListItem>
       </>
     ),
+  },
+  parameters: {
+    // Adding a background color to show off the glass effect
+    backgrounds: { default: 'dark' },
   },
 }

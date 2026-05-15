@@ -1,6 +1,21 @@
+import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Sidebar, SidebarItem, Text } from '@components'
+import {
+  Sidebar,
+  SidebarItem,
+  Text,
+  CollapsibleContent,
+  type SidebarProps,
+  Box,
+  Stack,
+} from '@components'
+import { Trash, Settings, Layers } from 'lucide-react'
 
+/**
+ * STEP 1: STORYBOOK METADATA
+ * Added controls for the new 'position' and 'showToggle' properties so
+ * developers can test the spatial awareness of the sidebar directly in the UI.
+ */
 const meta: Meta<typeof Sidebar> = {
   title: 'Navigation/Sidebar',
   component: Sidebar,
@@ -9,14 +24,22 @@ const meta: Meta<typeof Sidebar> = {
       control: 'select',
       options: ['default', 'sunken', 'inset', 'glass'],
     },
+    collapseMode: {
+      control: 'select',
+      options: ['iconStrip', 'hide'],
+    },
+    position: {
+      control: 'radio',
+      options: ['left', 'right'],
+    },
     collapsed: { control: 'boolean' },
-    layout: { control: 'select', options: ['docked', 'overlay'] },
+    showToggle: { control: 'boolean' },
   },
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      /* Using h-[600px] instead of h-125 for a more standard dashboard height */
-      <div className="h-150 border border-border-default bg-surface-sunken overflow-hidden">
+      /* FIX: Changed 'overflow-hidden' to 'overflow-visible' for toggle visibility. */
+      <div className="h-150 flex w-full border border-border-default bg-surface-sunken overflow-visible">
         <Story />
       </div>
     ),
@@ -26,92 +49,178 @@ const meta: Meta<typeof Sidebar> = {
 export default meta
 type Story = StoryObj<typeof Sidebar>
 
-/**
- * TALLY STYLE: The Modern SaaS Look
- * Uses 'variant="inset"' to give it that floating, premium app feel.
- */
+/* -------------------------------------------------------------------------- */
+/* INTERACTIVE WRAPPERS                                                       */
+/* -------------------------------------------------------------------------- */
+
+const StatefulSidebar = (args: SidebarProps) => {
+  const [isCollapsed, setIsCollapsed] = useState(args.collapsed || false)
+
+  return (
+    <>
+      {args.position === 'right' && <div className="flex-1" />}
+      <Sidebar
+        {...args}
+        collapsed={isCollapsed}
+        onToggle={() => setIsCollapsed(!isCollapsed)}
+      />
+      {args.position !== 'right' && <div className="flex-1" />}
+    </>
+  )
+}
+
+const TallyDashboardSidebar = (args: SidebarProps) => {
+  const [isCollapsed, setIsCollapsed] = useState(args.collapsed || false)
+  return (
+    <>
+      {args.position === 'right' && <div className="flex-1" />}
+      <Sidebar
+        {...args}
+        collapsed={isCollapsed}
+        onToggle={() => setIsCollapsed(!isCollapsed)}
+        header={
+          <Stack
+            direction="horizontal"
+            align="center"
+            gap="md"
+            className="overflow-hidden border-0 bg-transparent"
+          >
+            <div className="shrink-0 text-xl">📊</div>
+            <CollapsibleContent collapsed={isCollapsed}>
+              <Text variant="h3" weight="bold" className="truncate">
+                Tally Clone
+              </Text>
+            </CollapsibleContent>
+          </Stack>
+        }
+      />
+      {args.position !== 'right' && <div className="flex-1" />}
+    </>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/* STORIES                                                                    */
+/* -------------------------------------------------------------------------- */
+
 export const TallyDashboard: Story = {
   args: {
     variant: 'inset',
-    collapsed: false,
-    header: (
-      <div className="flex items-center gap-s">
-        <span className="text-xl">📊</span>
-        <Text variant="h3" weight="bold">
-          Tally Clone
-        </Text>
-      </div>
-    ),
-    footer: (
-      <div className="flex flex-col">
-        <Text variant="caption" weight="medium">
-          Anshdeep Singh
-        </Text>
-        <Text variant="caption" color="secondary">
-          IIT Patna · v1.0.0
-        </Text>
-      </div>
-    ),
+    position: 'left',
+    showToggle: true,
+    footer: <Text variant="caption">Anshdeep Singh</Text>,
     children: (
       <>
         <SidebarItem icon="🏠" label="Dashboard" active />
         <SidebarItem icon="📝" label="My Forms" badge="12" />
-        <SidebarItem icon="🔌" label="Integrations" />
         <SidebarItem icon="⚙️" label="Settings" />
       </>
     ),
   },
+  render: (args) => <TallyDashboardSidebar {...args} />,
 }
 
 /**
- * LEGALSAHYAK: The Focus Mode
- * Uses 'variant="sunken"' to push the sidebar into the background,
- * making the legal documents in the main view pop.
+ * EDITOR SETTINGS (The Figma Style)
+ * Uses collapseMode="hide" to vanish completely when closed.
  */
-export const LegalSahyak: Story = {
+export const EditorSettingsPanel: Story = {
+  render: StatefulSidebar,
   args: {
     variant: 'sunken',
-    collapsed: false,
+    position: 'right',
+    collapseMode: 'hide',
+    showToggle: true,
     header: (
-      <Text variant="h3" weight="bold" color="brand">
-        LegalSahyak
-      </Text>
+      <Stack
+        direction="horizontal"
+        align="center"
+        gap="sm"
+        className="border-0 bg-transparent"
+      >
+        <Settings size={16} />
+        <Text weight="bold">Block Settings</Text>
+      </Stack>
     ),
     children: (
-      <>
-        <SidebarItem icon="📁" label="All Cases" active />
-        <SidebarItem icon="⚖️" label="Legal Research" />
-        <SidebarItem icon="📑" label="Drafts" badge="3" />
-        <SidebarItem icon="👥" label="Clients" />
-      </>
+      <Stack gap="md" className="p-s">
+        <Box className="p-m bg-surface-base border-border-default rounded-base shadow-sm">
+          <Text variant="caption" color="secondary">
+            Color Picker Placeholder
+          </Text>
+        </Box>
+        <Box className="p-m bg-surface-base border-border-default rounded-base shadow-sm">
+          <Text variant="caption" color="secondary">
+            Font Size Slider Placeholder
+          </Text>
+        </Box>
+        <Box className="p-m bg-surface-base border-border-default rounded-base shadow-sm">
+          <Text variant="caption" color="secondary">
+            Padding Controls Placeholder
+          </Text>
+        </Box>
+        <Box className="p-m bg-surface-base border-border-default rounded-base shadow-sm">
+          <Text variant="caption" color="secondary">
+            Border Radius Placeholder
+          </Text>
+        </Box>
+        <Box className="p-m bg-surface-base border-border-default rounded-base shadow-sm">
+          <Text variant="caption" color="secondary">
+            Animation Settings Placeholder
+          </Text>
+        </Box>
+        <Box className="p-m bg-surface-base border-border-default rounded-base shadow-sm">
+          <Text variant="caption" color="secondary">
+            Visibility Rules Placeholder
+          </Text>
+        </Box>
+        {Array.from({ length: 18 }).map((_, index) => (
+          <Box
+            key={`extra-setting-${index + 1}`}
+            className="p-m bg-surface-base border-border-default rounded-base shadow-sm"
+          >
+            <Text variant="caption" color="secondary">
+              Advanced Setting Group {index + 1} Placeholder
+            </Text>
+          </Box>
+        ))}
+      </Stack>
+    ),
+    footer: (
+      <Stack
+        direction="horizontal"
+        align="center"
+        justify="start"
+        className="w-full border-0 bg-transparent"
+      >
+        <Text variant="caption" color="secondary">
+          Unsaved changes
+        </Text>
+        <Text variant="caption" weight="semibold">
+          Auto-save
+        </Text>
+      </Stack>
     ),
   },
 }
 
-/**
- * RIVERSIDE: The Cinematic Studio
- * Uses 'variant="glass"' for that high-fidelity, translucent look
- * suitable for media environments.
- */
-export const RiversideStudio: Story = {
+export const ColorAndIconTest: Story = {
+  render: StatefulSidebar,
   args: {
-    variant: 'glass',
-    collapsed: true, // Riverside often defaults to collapsed for maximum video space
-    header: <span className="text-2xl">🎙️</span>,
+    variant: 'default',
+    position: 'left',
+    collapsed: false,
+    showToggle: true,
+    header: <Layers size={20} />,
     children: (
       <>
-        <SidebarItem icon="🔴" label="Record" active />
-        <SidebarItem icon="🎬" label="Studio" />
-        <SidebarItem icon="📹" label="Recordings" />
-        <SidebarItem icon="🎧" label="Equipment" />
+        <SidebarItem
+          icon={<Trash size={18} />}
+          color="danger"
+          label="Delete Record"
+        />
+        <SidebarItem icon="🎬" label="Studio" active />
       </>
     ),
   },
-  decorators: [
-    (Story) => (
-      <div className="h-150 bg-linear-to-br from-neutral-900 to-neutral-800 p-0 overflow-hidden">
-        <Story />
-      </div>
-    ),
-  ],
 }
