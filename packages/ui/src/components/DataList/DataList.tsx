@@ -1,69 +1,111 @@
-import React, { forwardRef } from 'react'
+'use client'
+
+import React, { forwardRef, createContext, useContext } from 'react'
 import { dataListVariants, DataListVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 
-type Prettify<T> = {
-  [K in keyof T]: T[K]
-} & {}
+/* ------------------------------------------------------------------------- */
+/* CONTEXT (New: Architecture for Internal Rhythm)                           */
+/* ------------------------------------------------------------------------- */
 
-/* -------------------------------------------------------------------------- */
-/* TYPES                                                                      */
-/* -------------------------------------------------------------------------- */
+type DataListContextProps = {
+  spacing: DataListVariantsType['spacing']
+  variant: DataListVariantsType['variant']
+}
+
+const DataListContext = createContext<DataListContextProps>({
+  spacing: 'default',
+  variant: 'default',
+})
+
+/* ------------------------------------------------------------------------- */
+/* COMPONENTS                                                                */
+/* ------------------------------------------------------------------------- */
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {}
 
 type CleanDataListProps = Prettify<DataListVariantsType>
 export type DataListProps = CleanDataListProps &
   React.HTMLAttributes<HTMLDivElement>
 
-// DataListItem Types
-type DataListItemCustomProps = {
-  /** Enables hover states and cursor pointers for list items */
-  interactive?: boolean
-}
-type CleanDataListItemProps = Prettify<DataListItemCustomProps>
-export type DataListItemProps = CleanDataListItemProps &
-  React.HTMLAttributes<HTMLDivElement>
-
-/* -------------------------------------------------------------------------- */
-/* COMPONENTS                                                                 */
-/* -------------------------------------------------------------------------- */
-
-/**
- * DataList: A layout container for list-based data displays in Tally or Riverside.
- */
 export const DataList = forwardRef<HTMLDivElement, DataListProps>(
   (props, ref) => {
-    const { className, spacing, children, ...rest } = props
+    const {
+      className,
+      spacing = 'default',
+      variant = 'default',
+      children,
+      ...rest
+    } = props
 
     return (
-      <div
-        ref={ref}
-        role="list"
-        className={cn(dataListVariants({ spacing }), className)}
-        {...rest}
-      >
-        {children}
-      </div>
+      <DataListContext.Provider value={{ spacing, variant }}>
+        <div
+          ref={ref}
+          role="list"
+          className={cn(dataListVariants({ spacing, variant }), className)}
+          {...rest}
+        >
+          {children}
+        </div>
+      </DataListContext.Provider>
     )
   }
 )
 
 DataList.displayName = 'DataList'
 
-/**
- * DataListItem: An individual row within a DataList.
- * Supports interactive states for dashboard-style navigation.
- */
+/* ------------------------------------------------------------------------- */
+/* ITEM COMPONENT                                                            */
+/* ------------------------------------------------------------------------- */
+
+type DataListItemCustomProps = {
+  interactive?: boolean
+  /** New: Allows highlighting a specific row (e.g., a newly created form) */
+  selected?: boolean
+}
+
+export type DataListItemProps = Prettify<DataListItemCustomProps> &
+  React.HTMLAttributes<HTMLDivElement>
+
 export const DataListItem = forwardRef<HTMLDivElement, DataListItemProps>(
   (props, ref) => {
-    const { className, interactive = false, children, ...rest } = props
+    const {
+      className,
+      interactive = false,
+      selected = false,
+      children,
+      ...rest
+    } = props
+
+    // New: Consume parent styles to adjust internal padding
+    const { spacing, variant } = useContext(DataListContext)
 
     return (
       <div
         ref={ref}
         role="listitem"
         className={cn(
-          'flex items-center justify-between p-l transition-colors',
-          interactive && 'hover:bg-surface-sunken cursor-pointer',
+          // BASE STYLES
+          'flex items-center justify-between transition-all animate-duration-normal outline-none',
+
+          // NEW: SPACING LOGIC (Dynamic Padding based on parent)
+          spacing === 'compact' && 'p-s min-h-12',
+          spacing === 'default' && 'p-m min-h-16',
+          spacing === 'relaxed' && 'p-l min-h-20',
+
+          // NEW: VARIANT ADAPTATION
+          variant === 'inset' && 'rounded-medium border border-transparent',
+          variant === 'inset' &&
+            interactive &&
+            'hover:border-border-default hover:shadow-sm',
+
+          // INTERACTIVE STATES
+          interactive &&
+            'cursor-pointer hover:bg-surface-sunken active:scale-[0.995]',
+          selected &&
+            'bg-action-primary-subtle border-l-4 border-l-action-primary',
+
           className
         )}
         {...rest}
