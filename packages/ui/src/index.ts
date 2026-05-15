@@ -33,6 +33,7 @@ export * from './components/SocialButton/SocialButton.js'
 
 // Form Elements
 export * from './components/Input/Input.js'
+export * from './components/DropDown/DropDown.js'
 export * from './components/TextArea/TextArea.js'
 export * from './components/Select/Select.js'
 export * from './components/Checkbox/Checkbox.js'

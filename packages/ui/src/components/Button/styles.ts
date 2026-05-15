@@ -72,13 +72,17 @@ export const buttonVariants = cva(
       */
       size: {
         // SM: py-4px, px-12px (Ratio maintained)
-        sm: 'py-xs px-m gap-xs',
+        /* New: Removed redundant gap-* from these classes. Spacing is strictly handled by contentGapClass in Button.tsx now */
+        sm: 'py-xs px-m',
 
         // MD: py-8px, px-24px (The standard sweet spot)
-        md: 'py-s px-l gap-s',
+        md: 'py-s px-l',
 
         // LG: py-12px, px-32px (High impact for modals)
-        lg: 'py-m px-2xl gap-m',
+        lg: 'py-m px-2xl',
+
+        // XL: py-24px, px-48px (Maintains 2:1 ratio)
+        xl: 'py-l px-3xl',
 
         // ICON: Maintains square geometry.
         icon: 'h-11 w-11 p-m',
