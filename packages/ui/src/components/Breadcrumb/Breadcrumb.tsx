@@ -89,17 +89,16 @@ type BreadcrumbLinkProps = React.AnchorHTMLAttributes<HTMLElement> & {
 }
 
 /*
-we are providing to ways to enter a link prop:
-    1. herf
-    2. to
-
+we are providing two ways to enter a link prop:
+    1. href (Native HTML / Next.js)
+    2. to (React Router)
 */
 export const BreadcrumbLink = forwardRef<HTMLElement, BreadcrumbLinkProps>(
   (props, ref) => {
     const {
       className,
       isCurrentPage = false,
-      as: Component = 'a',
+      as: Component, // Removed default 'a' to dynamically calculate the correct tag
       to,
       href,
       children,
@@ -109,20 +108,43 @@ export const BreadcrumbLink = forwardRef<HTMLElement, BreadcrumbLinkProps>(
     // Consume the context so we know what size/variant we are
     const { variant, size } = useContext(BreadcrumbContext)
 
-    // Smart tag detection (Span for leaf nodes, Link/A for ancestors)
-    let FinalComponent = to ? Component : href ? 'a' : Component
+    /* 
+      1. changing the component type with whatever we pass in "as".
+          it could be a "anchor" tag, a "Link" commpoenent etc etc. 
+    */
+    let FinalComponent: React.ElementType =
+      Component || (to || href ? 'a' : 'span')
     if (isCurrentPage) FinalComponent = 'span'
+
+    /* 
+      Storing a key value pair of to/herf and path:
+        example
+         to: "./forms"
+         href: "./forms"
+    */
+    const routingProps: Record<string, unknown> = {}
+
+    // 2. the component is anchor then use href.
+    if (FinalComponent === 'a') {
+      routingProps.href = href || to
+    }
+
+    // if component is something else then check "to" first.
+    else if (FinalComponent !== 'span') {
+      // link could be in herf ro to.
+      if (to) routingProps.to = to
+      if (href) routingProps.href = href
+    }
 
     return (
       <FinalComponent
         ref={ref}
-        to={to}
-        href={href}
         aria-current={isCurrentPage ? 'page' : undefined}
         className={cn(
           breadcrumbLinkVariants({ variant, size, isCurrentPage }),
           className
         )}
+        {...routingProps}
         {...rest}
       >
         {children}

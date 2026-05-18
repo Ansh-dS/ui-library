@@ -1,32 +1,59 @@
 import React, { forwardRef } from 'react'
 import { sidebarVariants, SidebarVariantsType } from './styles.js'
 import { cn } from '../../common.js'
-import { ErrorBoundary, Button, ButtonProps } from '@components'
+import { ErrorBoundary, Button, ButtonProps, Box, Stack } from '@components'
 import { Text } from '../Text/Text.js'
-// STAFF IMPORT: We need the Text variants to type our new color prop
 import { TextVariantsType } from '../Text/styles.js'
+import { ChevronLeft, ChevronRight } from 'lucide-react' // Added for default icons
 
 type Prettify<T> = {
   [K in keyof T]: T[K]
 } & {}
 
-/* why aren't we using Text, Header, Footer?
-    1. because sidebar is structural component.
-    2. it just structures the element
-    3. if we use Text etc etc then then we are fixing the element. 
-*/
-
 /**
+
  * THE 4 LAWS OF SIDEBAR ARCHITECTURE:
- * 1. Law 1 (Fixed Scaffolding): The sidebar must act as a fixed structural anchor. It stays planted while the main page content scrolls.
- * 2. Law 2 (Internal Rhythm): The Header (Brand/Logo) and Footer (User Profile) must remain permanently pinned to the top and bottom. Only the middle navigation area is allowed to scroll.
- * 3. Law 3 (Fluid Width): State transitions (collapsed vs. expanded) must be smooth and mathematically predictable to prevent layout thrashing.
- * 4. Law 4 (Surface Depth): The sidebar must visually separate itself from the main dashboard canvas using Layer 2 tokens (e.g., surface-sunken or structural borders).
+
+ * 1. Law 1 (Fixed Scaffolding): The sidebar must act as a fixed structural anchor.
+
+ * 2. Law 2 (Internal Rhythm): The Header and Footer must remain permanently pinned.
+
+ * 3. Law 3 (Fluid Width): State transitions must be smooth and mathematically predictable.
+
+ * 4. Law 4 (Surface Depth): The sidebar must visually separate itself from the main canvas.
+
  */
 
 type SidebarCustomProps = {
   header?: React.ReactNode
+
   footer?: React.ReactNode
+
+  /** * STEP 1: POSITION & TOGGLE API
+
+   * We introduce 'position' to handle left/right border logic, and 'onToggle'
+
+   * to give the developer a built-in way to collapse the sidebar without building custom buttons.
+
+   */
+
+  position?: 'left' | 'right'
+
+  onToggle?: () => void
+
+  showToggle?: boolean
+
+  collapseMode?: 'iconStrip' | 'hide'
+
+  /** * NEW FOOTER LOGIC:
+
+   * By separating footerIcon, we let the developer decide if an anchor
+
+   * stays visible during collapse. If they don't provide it, everything vanishes.
+
+   */
+
+  footerIcon?: React.ReactNode
 }
 
 type CleanProps = Prettify<SidebarCustomProps & SidebarVariantsType>
@@ -37,75 +64,243 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>((props, ref) => {
   const {
     className,
     variant,
+    size,
     collapsed,
+    collapseMode,
     layout,
     header,
     footer,
     children,
+    position = 'left', // Default to left sidebar
+    onToggle,
+    showToggle = false,
+    footerIcon,
     ...rest
   } = props
 
+  /**
+
+   * STEP 2: DYNAMIC ICON DIRECTION
+
+   * The arrow direction depends on two things: is it collapsed, and is it on the left or right?
+
+   * If it's on the left and expanded, arrow points left (to close).
+
+   * If it's on the left and collapsed, arrow points right (to open).
+
+   */
+
+  const ToggleIcon =
+    position === 'left'
+      ? collapsed
+        ? ChevronRight
+        : ChevronLeft
+      : collapsed
+        ? ChevronLeft
+        : ChevronRight
+
+  // NEW: changing the shape of 'arrow' button when collapsed.
+  // We are changing the shape so we can give more visual weight to the collapsed sidebar.
+  // we adjust right, left border and heights accordingly.
+  const isFullyHidden = collapsed && collapseMode === 'hide'
+
   return (
-    /*aside means: tag given to suplementary infromation*/
     <aside
       ref={ref}
-      // LAW 1 & 4 APPLIED: The variants inject the fixed positioning (Scaffolding)
-      // and the surface background/borders (Surface Depth).
-      className={cn(sidebarVariants({ collapsed, variant, layout }), className)}
+      className={cn(
+        /**
+
+         * VISUAL SHUTTER STEP 2: REDUCING WIDTH
+
+         * The CVA variants handle the physical width transition (w-64 -> w-16 or w-0).
+
+         */
+
+        sidebarVariants({
+          collapsed,
+          variant,
+          size,
+          layout,
+          position,
+          collapseMode,
+        }),
+
+        // STEP 3: DYNAMIC BORDERS
+
+        // Depending on the position, we only want a border on the side touching the canvas.
+
+        // FIX: Ensure overflow-visible is always here. This allows the button to stay
+
+        // visible even when the width of this aside hits 0px.
+
+        'relative border-border-default overflow-visible', // Width transition is handled in sidebarVariants.
+
+        className
+      )}
       {...rest}
     >
-      {/* LAW 2 APPLIED: 'shrink-0' ensures the header never gets crushed, pinning it to the top. */}
-      {header && (
-        <div className="w-full p-m border-b border-border-default flex shrink-0">
-          {header}
-        </div>
+      {/* STEP 4: THE FLOATING EDGE GRIP
+
+          If the developer opts-in (showToggle) and provides a function (onToggle),
+
+          we render a modern absolute-positioned button on the border edge.
+
+      */}
+
+      {showToggle && onToggle && (
+        <Button
+          variant="ghost"
+          onClick={onToggle}
+          className={cn(
+            /* FIX: Button is OUTSIDE the content wrapper below, so it never disappears. */
+
+            'absolute top-6 z-toast flex items-center justify-center border border-border-default bg-surface-base p-0 shadow-md hover:bg-surface-elevated hover:text-fg-primary cursor-pointer pointer-events-auto',
+
+            // Position the button perfectly on the dividing line
+            // 1. SHAPE MORPHING: Circle when open, Elongated Tab when fully hidden
+            isFullyHidden ? 'h-10 w-5' : 'h-6 w-6 rounded-full',
+
+            // 2. POSITION: LEFT SIDEBAR
+            position === 'left' &&
+              (isFullyHidden
+                ? '-right-5 rounded-r-md border-l-0' // Fuses flat to the left screen edge
+                : '-right-3'), // Floats on the dividing line
+
+            // 3. POSITION: RIGHT SIDEBAR
+            position === 'right' &&
+              (isFullyHidden
+                ? '-left-5 rounded-l-md border-r-0' // Fuses flat to the right screen edge
+                : '-left-5') // Floats over the scrollbar
+          )}
+        >
+          <ToggleIcon size={14} className="text-fg-secondary" />
+        </Button>
       )}
 
-      {/* LAW 2 APPLIED: 'flex-1 overflow-y-auto' creates the independent internal scroll zone. */}
-      <div className="flex-1 w-full overflow-y-auto p-m flex flex-col gap-s">
-        {/* STAFF INTEGRATION: Wrapping the navigation children in our ErrorBoundary. 
-          If a dynamic "Recent Cases" or "Live Studio" nav widget crashes, the 
-          user doesn't lose the whole sidebar. They just see the 'minimal' fallback!
+      {/* NEW ARCHITECTURE: THE CONTENT SHUTTER */}
+
+      <div
+        className={cn(
+          /**
+
+           * VISUAL SHUTTER STEP 1: MAKING CONTENT INVISIBLE
+
+           * We fade the opacity to 0 so the user doesn't see text squashing.
+
+           * * VISUAL SHUTTER STEP 3: MAKING EVERYTHING HIDDEN
+
+           * 'pointer-events-none' ensures the user can't click invisible buttons.
+
+           *  how to make the sidebar doesn't feel laggy, by :
+
+           *    1. recduing the time to open collapsed sidebar
+
+           *    2. telling "what will change" to the sidebar so it already prepare himself.
+
+           */
+
+          'flex flex-col flex-1 w-full min-h-0 overflow-hidden transition-opacity duration-150 ease-out will-change-[opacity]',
+
+          collapsed && collapseMode === 'hide'
+            ? 'opacity-0 pointer-events-none'
+            : 'opacity-100'
+        )}
+      >
+        {/* LAW 2 APPLIED: Header pinned to top */}
+
+        {header && (
+          <Stack
+            direction="horizontal"
+            align="center"
+            className="w-full p-m border-b border-border-default gap-s shrink-0 overflow-hidden bg-transparent border-0"
+          >
+            {/* The Logo/Icon always stays visible */}
+
+            <Box className="border-0 bg-transparent shrink-0">{header}</Box>
+
+            {/* If you want the text to fade out specifically: */}
+
+            {/* Note: You might want to pass the title separately or wrap the header logic */}
+          </Stack>
+        )}
+
+        {/* LAW 2 APPLIED: Independent internal scroll zone. */}
+
+        {/*
+
+          Keep horizontal clipping only while collapsed so expanded content can be fully seen.
+
         */}
-        <ErrorBoundary variant="minimal">{children}</ErrorBoundary>
-      </div>
 
-      {/* LAW 2 APPLIED: 'shrink-0' pins the settings/logout actions to the bottom. */}
-      {footer && (
-        <div className="w-full p-m border-t border-border-default flex shrink-0">
-          {footer}
-        </div>
-      )}
+        <Stack
+          direction="vertical"
+          className={cn(
+            'flex-1 min-h-0 w-full overflow-y-auto p-m gap-s bg-transparent border-0',
+            collapsed ? 'overflow-x-hidden' : 'overflow-x-auto'
+          )}
+        >
+          <ErrorBoundary variant="minimal">{children}</ErrorBoundary>
+        </Stack>
+
+        {/* LAW 2 UPDATED: THE FLEXIBLE FOOTER
+
+            If footerIcon is provided, it stays centered.
+
+            If not, the CollapsibleContent handles the total disappearance of the footer text.
+
+        */}
+
+        {(footer || footerIcon) && (
+          <Stack
+            direction="horizontal"
+            align="center"
+            justify={collapsed ? 'center' : 'start'}
+            className={cn(
+              'w-full p-m border-t border-border-default shrink-0 overflow-hidden bg-transparent border-0',
+
+              !collapsed && 'gap-m'
+            )}
+          >
+            {/* Only show if the user explicitly provided an icon */}
+
+            {footerIcon && (
+              <Box className="border-0 bg-transparent shrink-0">
+                {footerIcon}
+              </Box>
+            )}
+
+            <CollapsibleContent collapsed={collapsed ?? false}>
+              {footer}
+            </CollapsibleContent>
+          </Stack>
+        )}
+      </div>
     </aside>
   )
 })
 
-Sidebar.displayName = 'Sidebar'
+/* -------------------------------------------------------------------------- */
 
-/**
- * THE 4 LAWS OF SIDEBAR ITEMS:
- * 1. Law 1 (The Invisible Track): Icons must sit on a perfectly centered vertical axis to maintain stability when the labels disappear in collapsed mode.
- * 2. Law 2 (State Feedback): Hover and Active states must use semantic tokens (e.g., bg-action-primary) to reflect the current theme's "personality."
- * 3. Law 3 (Label Hierarchy): Labels must use 'Text' variants with truncation logic to prevent long names (e.g., "Legal Document - Case #402") from breaking the sidebar width.
- * 4. Law 4 (The Hitbox): The entire width of the item must be interactive, not just the text, to maximize "Fitts's Law" (making it easy to click).
- */
+/* SIDEBAR ITEM                                                               */
 
 /* -------------------------------------------------------------------------- */
-/* SIDEBAR ITEM                                */
-/* -------------------------------------------------------------------------- */
-// STAFF UPDATE: We now extend ButtonProps to get loading and variant support
+
 type SidebarItemCustomProps = {
   icon: React.ReactNode
+
   label: string
+
   active?: boolean
+
   collapsed?: boolean
+
   badge?: string | number
+
   color?: TextVariantsType['color']
 }
 
 type CleanPropsItems = Prettify<SidebarItemCustomProps>
 
-// We use ButtonProps so SidebarItem can accept isLoading, onClick, etc.
 export type SidebarItemProps = CleanPropsItems &
   Omit<ButtonProps, 'children' | 'text' | 'startIcon'>
 
@@ -113,6 +308,7 @@ export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
   (props, ref) => {
     const {
       icon,
+      size,
       label,
       active,
       collapsed,
@@ -123,66 +319,154 @@ export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
       ...rest
     } = props
 
-    // STAFF FIX: Aligning the Sidebar color logic with the Button's engine
-    const resolvedTextColor = color || (active ? 'primary' : 'secondary')
+    const resolvedTextColor = color || (active ? 'brand' : 'secondary')
+    // NEW CODE: size-driven icon and text scaling.
+    const resolvedSize = size ?? 'md'
+    const resolvedIconSize =
+      resolvedSize === 'xl'
+        ? 20
+        : resolvedSize === 'lg'
+          ? 18
+          : resolvedSize === 'sm'
+            ? 14
+            : 16
+
+    const sizedIcon = React.isValidElement(icon)
+      ? React.cloneElement(icon as React.ReactElement<{ size?: number }>, {
+          size: resolvedIconSize,
+        })
+      : icon
+
+    // NEW CODE: keep label typography in sync with the item size.
+    const resolvedTextVariant =
+      resolvedSize === 'xl' || resolvedSize === 'lg'
+        ? 'body'
+        : resolvedSize === 'sm'
+          ? 'caption'
+          : 'label'
+
+    // NEW CODE: larger sizes get stronger label emphasis.
+    const resolvedTextWeight =
+      resolvedSize === 'xl' ? 'semibold' : active ? 'semibold' : 'medium'
+
     return (
       <Button
         ref={ref}
-        variant="ghost" // Base the sidebar item on the ghost variant
+        variant="ghost"
         isLoading={isLoading}
         color={resolvedTextColor}
-        iconColor={resolvedTextColor} // Passes the color directly to the newly upgraded Button dictionary
+        iconColor={resolvedTextColor}
         fullWidth={true}
-        // LAW 2 & 4 APPLIED: We override the standard Button styles to match Sidebar requirements
+        size={size}
         className={cn(
-          'p-s gap-m border-none', // border-none prevents a 1px layout shift
-          /*
-          [&>div]: inside our coustomised button we have a div which gets shrinks so we are increasing it's width again to full.
-          then arrange it's inside elements: using justify-start (Expanded) or justify-center (Collapsed)
-          */
+          'border-none transition-all duration-200 overflow-hidden',
+
           collapsed
             ? '[&>div]:justify-center'
             : '[&>div]:justify-start [&>div]:w-full',
+
           active
             ? 'bg-action-primary-subtle hover:bg-action-primary-hover-subtle'
             : 'bg-transparent hover:bg-action-ghost-hover',
+
           className
         )}
-        // LAW 1 APPLIED: Icon passed as startIcon to maintain the invisible track
         startIcon={
-          <div
+          <Box
             className={cn(
-              'transition-transform',
+              'transition-transform border-0 bg-transparent shrink-0',
+
               active ? 'scale-110' : 'group-hover:scale-110'
             )}
           >
-            {icon}
-          </div>
+            {sizedIcon}
+          </Box>
         }
         {...rest}
       >
-        {/* LAW 3 APPLIED: Using the children slot for the label and badge */}
-        {!collapsed && (
-          <div className="flex flex-1 items-center justify-between overflow-hidden">
+        <CollapsibleContent collapsed={collapsed || false}>
+          <Stack
+            direction="horizontal"
+            align="center"
+            justify="start"
+            className="flex-1 w-full bg-transparent border-0"
+          >
+            {/* NEw code:  old => weight={active ? 'semibold' : 'medium'}
+              color={resolvedTextColor}*/}
             <Text
-              variant="label"
-              weight={active ? 'semibold' : 'medium'}
-              color={active ? 'brand' : 'secondary'}
-              className="truncate whitespace-nowrap"
+              variant={resolvedTextVariant}
+              weight={resolvedTextWeight}
+              color={resolvedTextColor}
+              className="truncate"
             >
               {label}
             </Text>
 
             {badge && (
-              <span className="bg-action-primary text-fg-inverted text-[10px] px-xs py-[2px] rounded-pill font-bold shrink-0 ml-xs">
+              <Box
+                as="span"
+                className="bg-action-primary text-fg-inverted border-0 text-[10px] px-xs py-[2px] rounded-pill font-bold shrink-0 ml-xs"
+              >
                 {badge}
-              </span>
+              </Box>
             )}
-          </div>
-        )}
+          </Stack>
+        </CollapsibleContent>
       </Button>
     )
   }
 )
 
 SidebarItem.displayName = 'SidebarItem'
+
+/**
+
+ * THE "PHANTOM TEXT" FIX: CollapsibleContent Utility
+
+ * * Why this over { !collapsed && children }?
+
+ * 1. Animation: React's conditional rendering deletes the node instantly, making it "jump."
+
+ * 2. Layout: This keeps the text in the DOM but uses CSS to "shutter" it closed.
+
+ */
+
+export const CollapsibleContent = ({
+  children,
+
+  collapsed,
+}: {
+  children: React.ReactNode
+
+  collapsed: boolean
+}) => (
+  <Box
+    className={cn(
+      /* STEP 1: THE ANIMATION ENGINE
+
+         - overflow-hidden: Acts as a "shutter." It clips any text that tries to leak out as the width shrinks.
+
+         - whitespace-nowrap: CRITICAL. Prevents text from wrapping/stacking into a vertical mess during the transition.
+
+      */
+
+      'flex-1 transition-all duration-300 border-0 bg-transparent ease-in-out overflow-hidden whitespace-nowrap',
+
+      collapsed
+        ? /* VISUAL SHUTTER STEP 1, 2, & 3 COMBINED FOR ITEMS
+
+           - opacity-0: Fade content. (Step 1)
+
+           - w-0: Shrink container. (Step 2)
+
+           - invisible: Shutter lock/Clipping. (Step 3)
+
+        */
+
+          'opacity-0 w-0 invisible -translate-x-2'
+        : 'opacity-100 w-auto visible translate-x-0'
+    )}
+  >
+    {children}
+  </Box>
+)

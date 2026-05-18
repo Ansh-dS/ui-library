@@ -1,49 +1,37 @@
-/*
-1. Use: contains boundaries/borders along with shadow
-2. so if want a content to display above the other content, catch eye attention then go for it.
-*/
 import React, { forwardRef, createContext, useContext } from 'react'
 import { cardVariants, CardVariantsType } from './styles.js'
 import { cn } from '../../common.js'
-import { Text } from '../Text/Text.js' // Assuming your Text component is here
+import { Text } from '../Text/Text.js'
+import { Box } from '@components'
 
 type Prettify<T> = {
   [K in keyof T]: T[K]
 } & {}
 
-// To sync padding across sub-components
+// CONTEXT: Syncs padding across all sub-components so they align perfectly
 const CardContext = createContext<{
-  size?: 'none' | 'sm' | 'md' | 'lg' | null
-}>({ size: 'md' })
+  padding?: 'none' | 'sm' | 'md' | 'lg' | null
+}>({ padding: 'md' })
 
 const getSharedPadding = (
   padding: 'none' | 'sm' | 'md' | 'lg' | undefined | null
 ) => {
-  const s = padding ?? 'md'
-  switch (s) {
+  const p = padding ?? 'md'
+  switch (p) {
     case 'sm':
-      return 'px-m py-s gap-xs' // 12px horizontal / 8px vertical (Dense)
-
+      return 'px-m py-s gap-xs' // Dense (e.g., sidebars, tight widgets)
     case 'md':
-      return 'px-xl py-l gap-s' // 24px horizontal / 16px vertical (The Tally Sweet-spot)
-
+      return 'px-xl py-l gap-s' // The Tally Sweet-spot (Dashboard standard)
     case 'lg':
-      return 'px-3xl py-2xl gap-m' // 64px horizontal / 32px vertical (The "Stripe" Premium look)
-
+      return 'px-3xl py-2xl gap-m' // The "Stripe" Premium look (Modals, Hero cards)
     case 'none':
       return 'p-0'
-
     default:
-      return 'px-xl py-l gap-s' // Defaulting to 'md'
+      return 'px-xl py-l gap-s'
   }
 }
 
-// No props we need to define for Card.
-type CardCustomProps = {
-  size?: 'none' | 'sm' | 'md' | 'lg' | null
-}
-
-type CleanProps = Prettify<CardCustomProps & CardVariantsType>
+type CleanProps = Prettify<CardVariantsType>
 
 type CardTextProps<T extends HTMLElement> = Prettify<
   Omit<React.HTMLAttributes<T>, 'color'>
@@ -53,35 +41,34 @@ export type CardProps = CleanProps & React.HTMLAttributes<HTMLDivElement>
 
 /*
  * Main Card Wrapper
- * why we use forwardRef?
- * So the parent can measure the card's height/width for animations or
- * intersection observers (useful for 'Riverside' scroll-fade effects).
+ * Uses forwardRef so the parent can measure the card's height/width
+ * for animations or intersection observers (useful for 'Riverside' scroll-fade effects).
  */
 export const Card = forwardRef<HTMLDivElement, CardProps>((props, ref) => {
   const {
     variant,
     elevation,
-    size = 'md',
+    padding = 'md', // Renamed from 'size' to match styles.ts
     className,
     children,
     ...rest
   } = props
 
   return (
-    <CardContext.Provider value={{ size }}>
-      <div
+    <CardContext.Provider value={{ padding }}>
+      <Box
         ref={ref}
-        // overflow-hidden handles the rounded corner masking
+        // FIX: We force padding='none' on the shell so the inner components
+        // (Header/Footer) can touch the absolute edges with their full-width borders.
         className={cn(
-          cardVariants({ variant, elevation }),
-          getSharedPadding('none'),
-          'overflow-hidden flex flex-col',
+          cardVariants({ variant, elevation, padding: 'none' }),
+          'flex flex-col',
           className
         )}
         {...rest}
       >
         {children}
-      </div>
+      </Box>
     </CardContext.Provider>
   )
 })
@@ -89,23 +76,23 @@ Card.displayName = 'Card'
 
 /* =================================================================
      SUB-COMPONENTS: Ensuring Structural Integrity
-     ================================================================= */
+   ================================================================= */
 
 /* CardHeader: For titles and descriptions.
- * Adds a bottom border in the 'default' variant to create hierarchy.
+ * Adds a bottom border and subtle background to create visual separation.
  */
 export const CardHeader = forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const { size } = useContext(CardContext)
+  const { padding } = useContext(CardContext)
 
   return (
     <div
       ref={ref}
       className={cn(
         'flex flex-col border-b border-border-default bg-surface-sunken/5',
-        getSharedPadding(size),
+        getSharedPadding(padding),
         className
       )}
       {...props}
@@ -116,16 +103,16 @@ CardHeader.displayName = 'CardHeader'
 
 /**
  * CardTitle: Uses the Foundation Text component.
- * Scales variant from 'label' to 'subheader' based on card size.
+ * Dynamically scales the text variant based on the card's padding density.
  */
 export const CardTitle = forwardRef<
   HTMLHeadingElement,
   CardTextProps<HTMLHeadingElement>
 >(({ className, ...props }, ref) => {
-  const { size } = useContext(CardContext)
+  const { padding } = useContext(CardContext)
 
   const titleVariant =
-    size === 'lg' ? 'subheader' : size === 'sm' ? 'label' : 'body'
+    padding === 'lg' ? 'subheader' : padding === 'sm' ? 'label' : 'body'
 
   return (
     <Text
@@ -148,15 +135,16 @@ export const CardDescription = forwardRef<
   HTMLParagraphElement,
   CardTextProps<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
-  const { size } = useContext(CardContext)
+  const { padding } = useContext(CardContext)
 
-  const descVariant = size === 'lg' ? 'body' : 'caption'
+  const descVariant = padding === 'lg' ? 'body' : 'caption'
 
   return (
     <Text
       ref={ref as React.Ref<HTMLElement>}
       variant={descVariant}
-      color="primary"
+      // FIX: Changed from "primary" to "secondary" to match the intended hierarchy
+      color="secondary"
       className={className}
       {...props}
     />
@@ -171,12 +159,16 @@ export const CardContent = forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...rest }, ref) => {
-  const { size } = useContext(CardContext)
+  const { padding } = useContext(CardContext)
 
   return (
     <div
       ref={ref}
-      className={cn('flex-1 flex flex-col', getSharedPadding(size), className)}
+      className={cn(
+        'flex-1 flex flex-col',
+        getSharedPadding(padding),
+        className
+      )}
       {...rest}
     />
   )
@@ -184,15 +176,15 @@ export const CardContent = forwardRef<
 CardContent.displayName = 'CardContent'
 
 /**
- * CardLabel: Perfect for form fields inside CardContent.
+ * CardLabel: Perfect for form fields or static key-value pairs inside CardContent.
  */
 export const CardLabel = forwardRef<
   HTMLParagraphElement,
   CardTextProps<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
-  const { size } = useContext(CardContext)
+  const { padding } = useContext(CardContext)
 
-  const labelVariant = size === 'lg' ? 'body' : 'label'
+  const labelVariant = padding === 'lg' ? 'body' : 'label'
 
   return (
     <Text
@@ -207,20 +199,20 @@ export const CardLabel = forwardRef<
 CardLabel.displayName = 'CardLabel'
 
 /* CardFooter: For buttons and actions.
- * Puts items at the bottom and often uses 'justify-end'.
+ * Puts items at the bottom with a top border to seal the component.
  */
 export const CardFooter = forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...rest }, ref) => {
-  const { size } = useContext(CardContext)
+  const { padding } = useContext(CardContext)
 
   return (
     <div
       ref={ref}
       className={cn(
         'flex items-center justify-end border-t border-border-default bg-surface-sunken/5',
-        getSharedPadding(size),
+        getSharedPadding(padding),
         className
       )}
       {...rest}

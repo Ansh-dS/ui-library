@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Button } from '@components'
 import { fn } from 'storybook/test'
+import { Trash } from 'lucide-react'
 /* don't need this as already loaded/mentioned in preview.ts. 
 import '../../../../global.css'
 */
@@ -14,12 +15,19 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'outline', 'destructive', 'glass'],
+      options: [
+        'primary',
+        'secondary',
+        'outline',
+        'destructive',
+        'glass',
+        'ghost',
+      ], // New: added ghost to options
       description: 'Button style variant',
     },
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg', 'icon'],
+      options: ['sm', 'md', 'lg', 'icon'], // Matches our optimized Editor scale
       description: 'Button size',
     },
     children: {
@@ -33,6 +41,37 @@ const meta: Meta<typeof Button> = {
     disabled: {
       control: 'boolean',
       description: 'Disabled state',
+    },
+    // New: Added color controls to test the Color Dictionary Pattern
+    color: {
+      control: 'select',
+      options: [
+        'primary',
+        'secondary',
+        'brand',
+        'accent',
+        'success',
+        'warning',
+        'danger',
+        'info',
+        'inverted',
+      ],
+      description: 'Explicit text color override',
+    },
+    iconColor: {
+      control: 'select',
+      options: [
+        'primary',
+        'secondary',
+        'brand',
+        'accent',
+        'success',
+        'warning',
+        'danger',
+        'info',
+        'inverted',
+      ],
+      description: 'Explicit icon/spinner color override',
     },
   },
   args: {
@@ -90,5 +129,30 @@ export const Glass: Story = {
     variant: 'glass',
     size: 'md',
     children: 'Glass Button',
+  },
+}
+
+export const DeleteItem: Story = {
+  args: {
+    variant: 'outline',
+    size: 'lg',
+    children: 'Delete item',
+    iconColor: 'danger', // Changed to danger for a more logical "Delete" UI
+    color: 'danger',
+    /* FIX: Removed 'size={16}'! 
+       The Button's renderIcon logic will now automatically inject size={20} 
+       because this story uses size: 'lg'. 
+    */
+    startIcon: <Trash />,
+  },
+}
+
+// New: Added an IconOnly story to test the 'icon' size variant
+export const IconOnly: Story = {
+  args: {
+    variant: 'ghost',
+    size: 'icon',
+    startIcon: <Trash />,
+    'aria-label': 'Delete', // Proper accessibility for icon buttons
   },
 }

@@ -49,6 +49,7 @@ export const spinnerVariants = cva(
         b. but for larger element we mostly use flex. 
       */
       size: {
+        xs: 'w-s h-s border-[1px]',
         sm: 'w-l h-l border-[1.5px]', // 1rem (16px) - Standard button size
         md: 'w-xl h-xl border-2', // 1.5rem (24px) - Standalone inline
         lg: 'w-2xl h-2xl border-3', // 2rem (32px) - Section loading

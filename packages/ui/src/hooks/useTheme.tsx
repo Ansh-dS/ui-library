@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react'
 
 // state variable made using useState have the same names.
 interface ThemeContextType {
@@ -23,8 +29,8 @@ export const ThemeProvider = ({
   defaultTheme?: string
   defaultMode?: string
 }) => {
-  const [theme, setTheme] = useState(defaultTheme)
-  const [mode, setMode] = useState(defaultMode)
+  const [theme, setThemeState] = useState(defaultTheme)
+  const [mode, setModeState] = useState(defaultMode)
 
   // run only at mount
   // when user refreshes the page.
@@ -32,20 +38,44 @@ export const ThemeProvider = ({
     const savedTheme = localStorage.getItem('data-theme-name')
     const savedMode = localStorage.getItem('data-mode')
 
-    if (savedTheme) setTheme(savedTheme)
-    if (savedMode) setMode(savedMode)
+    if (savedTheme) setThemeState(savedTheme)
+    if (savedMode) setModeState(savedMode)
   }, [])
 
-  // this runs whenever theme or mode changes after the DOM gets loaded.
-  useEffect(() => {
-    // we don't use setTheme and setMode because we are using useTheme and fetch setTheme ..
-    // so we make changes in the html variable name not in the state variable values.
-    document.documentElement.setAttribute('data-theme-name', theme)
-    document.documentElement.setAttribute('data-mode', mode)
+  /**
+   * INTERNAL HELPER: applyWithTransition
+   * This handles the buttery-smooth crossfade.
+   * It fulfills the goal of high-performance interactions with zero dependencies.
+   */
+  const applyWithTransition = (cb: () => void) => {
+    if (!document.startViewTransition) {
+      cb()
+      return
+    }
+    document.startViewTransition(cb)
+  }
 
-    localStorage.setItem('data-theme-name', theme)
-    localStorage.setItem('data-mode', mode)
-  }, [theme, mode])
+  // FIX: We replace the second useEffect with specialized setter functions.
+  // This is much safer! It prevents React from accidentally writing the 'default'
+  // values to the DOM before it reads the user's saved preferences on mount.
+
+  const setTheme = useCallback((newTheme: string) => {
+    applyWithTransition(() => {
+      setThemeState(newTheme)
+      // so we make changes in the html variable name not in the state variable values.
+      document.documentElement.setAttribute('data-theme-name', newTheme)
+      localStorage.setItem('data-theme-name', newTheme)
+    })
+  }, [])
+
+  const setMode = useCallback((newMode: string) => {
+    applyWithTransition(() => {
+      setModeState(newMode)
+      // so we make changes in the html variable name not in the state variable values.
+      document.documentElement.setAttribute('data-mode', newMode)
+      localStorage.setItem('data-mode', newMode)
+    })
+  }, [])
 
   // themeContext.Provider broadcast the values to all the other components.
   return (

@@ -12,25 +12,25 @@
       "import": "./dist/ui.js",
       "require": "./dist/ui.cjs"
     },
-    "./global.css": "./dist/global.css",
-    "./token.css": "./dist/token.css"
+    "./token.css": "./styles/token.css",
+    "./global.css": "./styles/global.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "styles"
   ],
   "scripts": {
     "build": "vite build && pnpm postbuild",
-    "postbuild": "cp ../../global.css dist/global.css && cp ../../token.css dist/token.css",
+    "postbuild": "cp ../../global.css styles/global.css && cp ../../token.css styles/token.css",
     "lint": "eslint ."
   },
   "peerDependencies": {
-    "@vitejs/plugin-react": "^5.1.2",
+    "eslint": "^9.39.2",
     "lucide-react": "^1.7.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
-    "eslint": "^9.39.2",
     "vitest": "^4.0.18"
   },
   "dependencies": {
@@ -38,8 +38,8 @@
     "clsx": "^2.1.1"
   },
   "devDependencies": {
+    "@vitejs/plugin-react-swc": "^4.3.0",
     "@vitest/browser-playwright": "^4.0.18",
-    "tailwind-merge": "^3.4.0",
-    "vite-plugin-css-injected-by-js": "^4.0.1"
+    "tailwind-merge": "^3.4.0"
   }
 }

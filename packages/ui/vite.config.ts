@@ -1,4 +1,4 @@
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react-swc'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
@@ -6,7 +6,6 @@ import path from 'node:path'
 // Added PluginOption type to help with the casting fix
 import type { PluginOption } from 'vite'
 // the below helps to inject css into ui.js.
-import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 
 import dts from 'vite-plugin-dts'
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -15,8 +14,9 @@ export default defineConfig({
   plugins: [
     // Fix: Passing {} satisfies the requirement for 1 argument in some plugin versions
     // Fix: 'as PluginOption' bypasses the complex version mismatch error between Vite and Rollup types
-    react({}) as PluginOption,
-    cssInjectedByJsPlugin() as PluginOption,
+    // "...swc" is faster over "barbel".
+    react() as PluginOption, // to build react we use "...swc" package as written with rust as vite uses Babel(written in javascript)
+
     //we are using dts to generate declaration file as vite can't create during the build.
     dts({
       include: ['src'],
@@ -34,12 +34,13 @@ export default defineConfig({
     alias: {
       '@globalCss': path.resolve(__dirname, '../../global.css'),
       '@tokenCss': path.resolve(__dirname, '../../token.css'),
-      '@components': path.resolve(__dirname, './src/index.js'),
+      '@components': path.resolve(__dirname, './src/index.ts'),
     },
   },
   // TypeScript paths only work for type checking.
 
   build: {
+    cssCodeSplit: false, // ensure that all the CSS from all your components gets bundled into one single dist/ui.css file
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'MyLib',

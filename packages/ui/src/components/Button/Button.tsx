@@ -1,4 +1,10 @@
-import React, { ButtonHTMLAttributes, useCallback, forwardRef } from 'react' // STAFF FIX: Added forwardRef
+import React, {
+  ButtonHTMLAttributes,
+  useCallback,
+  forwardRef,
+  isValidElement,
+  cloneElement,
+} from 'react' // STAFF FIX: Added forwardRef
 import { buttonVariants, ButtonVariantsType } from './styles.js'
 import { cn } from '../../common.js'
 import { Spinner } from '../Spinner/Spinner.js'
@@ -89,9 +95,68 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       [isLoading, disabled, onClick]
     )
 
-    // Map button size to the correct Text variant from our Foundation
+    // NEW CODE: let size control text scale for larger button variants.
+    const resolvedSize = size ?? 'md'
+
+    // NEW CODE: map button size to the correct Text variant from our Foundation.
     const textVariant =
-      size === 'lg' ? 'body' : size === 'sm' ? 'caption' : 'label'
+      resolvedSize === 'xl' || resolvedSize === 'lg'
+        ? 'body'
+        : resolvedSize === 'sm'
+          ? 'caption'
+          : 'label'
+
+    // NEW: Map button size to numeric icon size for automatic scaling.
+    const iconSize =
+      resolvedSize === 'xl' || resolvedSize === 'lg'
+        ? 20
+        : resolvedSize === 'sm'
+          ? 14
+          : 18
+
+    // NEW: Helper to inject size and classes into icons automatically.
+    /*
+      1.isValidElement: 
+          a. we want to pass props to already built element.
+          b. we use clone element which  overides or adds new element.
+      2.isValidate: 
+          a. does the element user sent is valid or renderable element
+    */
+    const renderIcon = (icon: React.ReactNode) => {
+      if (isValidElement(icon)) {
+        return cloneElement(
+          icon as React.ReactElement<{
+            size: typeof iconSize
+            className: string
+          }>,
+          {
+            size: iconSize,
+            className: cn((icon.props as { className: string }).className),
+          }
+        )
+      }
+      return icon
+    }
+
+    // NEW CODE: map spinner size to button size so it doesn't look tiny in huge buttons.
+    const spinnerSize =
+      resolvedSize === 'xl'
+        ? 'lg'
+        : resolvedSize === 'lg'
+          ? 'md'
+          : resolvedSize === 'sm'
+            ? 'xs'
+            : 'sm'
+
+    // NEW CODE: refined gap classes using half-steps for tighter, professional rhythm.
+    const contentGapClass =
+      resolvedSize === 'xl'
+        ? 'gap-3'
+        : resolvedSize === 'lg'
+          ? 'gap-2.5'
+          : resolvedSize === 'sm'
+            ? 'gap-1.5'
+            : 'gap-2'
 
     // maping button variants with text color.
     // inital value is primay as it also covers outline and ghost variants.
@@ -119,20 +184,30 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         // any one must be true to disable button
         disabled={disabled || isLoading}
         className={cn(
-          buttonVariants({ variant, size, fullWidth }),
+          buttonVariants({ variant, size: resolvedSize, fullWidth }),
           isLoading && 'cursor-wait opacity-90',
           !isLoading && 'active:scale-[0.98]',
           className
         )}
         {...rest}
       >
-        {/* 3. the main three elements of button */}
-        <div className="flex items-center gap-2 justify-center">
+        {/* 3. the main three elements of button   
+          New code: removed "gap-2" and added contentGapClass. 
+          New: added w-full h-full to ensure inner layout stretches correctly for fullWidth buttons.
+        */}
+        <div
+          className={cn(
+            'flex w-full h-full items-center justify-center',
+            contentGapClass
+          )}
+        >
           {/* 2. Loading Spinner Logic: Swaps out the startIcon for the Spinner so text stays visible */}
           {isLoading ? (
-            <span className="inline-flex shrink-0">
+            /* New: changed inline-flex to flex items-center justify-center for mathematically perfect centering */
+            <span className="flex items-center justify-center shrink-0">
               {/* Reusing textColor ensures the spinner always matches the text! */}
-              <Spinner size={'sm'} color={resolvedIconColor} />
+              {/* New: passed dynamic spinnerSize instead of hardcoded 'sm' */}
+              <Spinner size={spinnerSize} color={resolvedIconColor} />
             </span>
           ) : (
             startIcon && (
@@ -142,11 +217,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             */
               <span
                 className={cn(
-                  'inline-flex shrink-0',
+                  /* New: changed inline-flex to flex items-center justify-center for perfect icon vertical alignment */
+                  'flex items-center justify-center shrink-0',
                   textColorMap[resolvedIconColor]
                 )}
               >
-                {startIcon}
+                {/* New: Wrapped icon in renderIcon for auto-sizing */}
+                {renderIcon(startIcon)}
               </span>
             )
           )}
@@ -159,7 +236,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             variant={textVariant}
             color={textColor}
             weight="medium"
-            className="truncate whitespace-nowrap"
+            /* New: removed whitespace-nowrap here since the buttonVariants parent already handles it, but kept truncate */
+            className="truncate"
           >
             {children || text}
           </Text>
@@ -167,11 +245,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           {!isLoading && endIcon && (
             <span
               className={cn(
-                'inline-flex shrink-0',
+                /* New: changed inline-flex to flex items-center justify-center */
+                'flex items-center justify-center shrink-0',
                 textColorMap[resolvedIconColor]
               )}
             >
-              {endIcon}
+              {/* New: Wrapped icon in renderIcon for auto-sizing */}
+              {renderIcon(endIcon)}
             </span>
           )}
         </div>
