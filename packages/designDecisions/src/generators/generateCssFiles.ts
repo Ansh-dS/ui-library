@@ -41,27 +41,46 @@ async function processTokensFolder(
       (entry) => entry.isFile() && !entry.name.endsWith('.d.ts')
     )
 
-    // Process all files in parallel
+    // Build a map of normalized theme names -> chosen file
+    // Normalization: strip a trailing `Theme` suffix (case-insensitive).
+    // When both `foo.js` and `fooTheme.js` exist, prefer the base `foo.js` file.
+    const fileMap = new Map<
+      string,
+      { fullPath: string; origName: string; isThemeSuffix: boolean }
+    >()
+
+    files.forEach((file) => {
+      const fullPath = path.join(folderPath, file.name)
+      const ext = path.extname(file.name)
+      const base = path.basename(file.name, ext)
+      const normalized = base.replace(/Theme$/i, '')
+      const isTheme = /Theme$/i.test(base)
+
+      const existing = fileMap.get(normalized)
+      
+      // Streamlined Logic: Prefer the non-Theme file over a Theme-suffixed file
+      if (!existing || (existing.isThemeSuffix && !isTheme)) {
+        fileMap.set(normalized, { fullPath, origName: file.name, isThemeSuffix: isTheme })
+      }
+    })
+
+    // Process the selected unique files
     await Promise.all(
-      files.map(async (file) => {
-        const fullPath = path.join(folderPath, file.name)
-        const ext = path.extname(file.name)
+      Array.from(fileMap.values()).map(async (entry) => {
+        const fullPath = entry.fullPath
+        const ext = path.extname(fullPath)
 
-        // extname: figures out extension
-
-        // Accept compiled JS tokens (when running from dist) or JS source tokens.
         if (ext === '.js' || (ext === '.ts' && allowTs)) {
           try {
             const tokenModule = await import(pathToFileURL(fullPath).href)
             const jsonToken = tokenModule?.default ?? tokenModule
-            const themeName = path.basename(file.name, ext)
+            const themeName = path.basename(entry.origName, ext).replace(/Theme$/i, '')
 
             if (jsonToken) {
               await createCssFile(jsonToken, themeName)
             }
           } catch (e) {
-            // Log and skip files that cannot be imported (e.g. .d.ts or other unexpected files)
-            console.warn(`Skipping file due to import error: ${file.name}`, e)
+            console.warn(`Skipping file due to import error: ${entry.origName}`, e)
           }
         }
       })

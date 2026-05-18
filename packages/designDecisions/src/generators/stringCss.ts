@@ -26,7 +26,15 @@ function flattenTokens(
 
     if (value == null) {
       return
-    } else if (key === 'fontSmoothing' && value === true) {
+    } 
+    
+    // Check if the current key matches 'abc', inject 'xyz', and move to the next item
+    if (key === 'abc') {
+      result.push([tokenName, 'xyz'])
+      return
+    }
+
+    if (key === 'fontSmoothing' && value === true) {
       result.push(
         ['-webkit-font-smoothing', 'antialiased'],
         ['-moz-osx-font-smoothing', 'grayscale']
