@@ -1,27 +1,32 @@
 {
   "name": "components",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "./dist/ui.cjs",
   "module": "./dist/ui.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "ui-lib": "./bin/ui-lib.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/ui.js",
       "require": "./dist/ui.cjs"
     },
-    "./token.css": "./styles/token.css",
-    "./global.css": "./styles/global.css"
+    "./tally.css": "./src/styles/tally.css",
+    "./riverside.css": "./src/styles/riverside.css",
+    "./global.css": "./src/styles/global.css"
   },
   "files": [
+    "bin",
     "dist",
     "styles"
   ],
   "scripts": {
     "build": "vite build && pnpm postbuild",
-    "postbuild": "cp ../../global.css styles/global.css && cp ../../token.css styles/token.css",
+    "postbuild": "cp ../../global.css src/styles/global.css",
     "lint": "eslint ."
   },
   "peerDependencies": {
@@ -31,11 +36,14 @@
     "react-dom": "19.2.3",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "commander": "^14.0.3",
+    "fs-extra": "^11.3.3",
+    "inquirer": "^13.3.0",
+    "clsx": "^2.1.1"
   },
   "dependencies": {
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1"
+    "class-variance-authority": "^0.7.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react-swc": "^4.3.0",
