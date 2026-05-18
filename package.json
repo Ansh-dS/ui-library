@@ -9,7 +9,9 @@
     "lint": "turbo run lint",
     "format": "prettier --write .",
     "check-errors": " pnpm lint && pnpm build && pnpm format",
-    "storybook": "pnpm --filter storybook storybook"
+    "storybook": "pnpm --filter storybook storybook",
+    "bundle:pack": "cp -r packages/cli/dist packages/ui/dist/cli",
+    "prepare-release": "pnpm build && pnpm bundle:pack"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -38,6 +40,9 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.53.1",
     "vite-plugin-dts": "^4.5.4",
-    "vuetify": "^3.11.8"
+    "vuetify": "^3.11.8",
+    "commander": "^14.0.3",
+    "fs-extra": "^11.3.3",
+    "inquirer": "^13.3.0"
   }
 }

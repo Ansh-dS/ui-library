@@ -8,6 +8,21 @@
       "cache": false,
       "dependsOn": ["^build"]
     },
+    "cli#build": {
+      "outputs": ["dist/**"]
+    },
+    "components#build": {
+      "outputs": ["dist/**"],
+      "dependsOn": ["cli#build"]
+    },
+    "design-decisions#build": {
+      "outputs": ["dist/**"],
+      "dependsOn": ["components#build"]
+    },
+    "storybook#build": {
+      "outputs": ["storybook-static/**"],
+      "dependsOn": ["components#build"]
+    },
     "dev": {
       "cache": false,
       "persistent": true
