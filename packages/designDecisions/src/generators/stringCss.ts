@@ -24,11 +24,13 @@ function flattenTokens(
   Object.entries(obj).forEach(([key, value]) => {
     const tokenName = parentKey ? `${parentKey}-${key}` : key
 
-    if (value === null || value === undefined) {
+    if (value == null) {
       return
-    } else if (key === 'fontSmoothing' && value == true) {
-      result.push(['-webkit-font-smoothing', 'antialiased'])
-      result.push(['-moz-osx-font-smoothing', 'grayscale'])
+    } else if (key === 'fontSmoothing' && value === true) {
+      result.push(
+        ['-webkit-font-smoothing', 'antialiased'],
+        ['-moz-osx-font-smoothing', 'grayscale']
+      )
       return
     }
     // If value is an object (nested), recurse
@@ -45,38 +47,40 @@ function flattenTokens(
 }
 
 // providing the css in string type for both light and dark modes
-export default function cssGenerator(
+export default function stringCss(
   designToken: DesignSystem,
   themeName: string
 ): string {
-  let lightCss = `:root[data-theme-name="${themeName}"][data-mode="light"] {\n`
-  let darkCss = `:root[data-theme-name="${themeName}"][data-mode="dark"] {\n`
-  let globalCss = `:root[data-theme-name="${themeName}"]{\n`
-  const commonVal = designToken.global
-  // both modes must exists.
-  const lightVal = designToken.modes.light
-  const darkVal = designToken.modes.dark
+  // Normalize token if it's wrapped (e.g. import default)
+  // and guard missing properties to avoid runtime errors
+  const tokenObj =
+    (designToken as unknown as { default?: DesignSystem }).default ??
+    designToken
+  const commonVal = tokenObj?.global ?? {}
+  // both modes may or may not exist.
+  const lightVal = tokenObj?.modes?.light ?? {}
+  const darkVal = tokenObj?.modes?.dark ?? {}
 
-  const lightTokens = flattenTokens(lightVal)
-  const darkTokens = flattenTokens(darkVal)
-  const globalTokens = flattenTokens(commonVal)
+  // Helper function to build formatted CSS rule declarations cleanly
+  const buildSection = (selector: string, tokens: object) => {
+    const rules = flattenTokens(tokens)
+      .map(
+        ([name, val]) => `  ${name.startsWith('-') ? '' : '--'}${name}: ${val};`
+      )
+      .join('\n')
+    return `${selector} {\n${rules}${rules ? '\n' : ''}}\n`
+  }
 
   // reverting the back output into json object.
-  lightTokens.forEach(([tokenName, tokenValue]) => {
-    lightCss += `  --${tokenName}: ${tokenValue};\n`
-  })
-  darkTokens.forEach(([tokenName, tokenValue]) => {
-    const prefix = tokenName.startsWith('-') ? '' : '--'
-    darkCss += `  ${prefix}${tokenName}: ${tokenValue};\n`
-  })
-  globalTokens.forEach(([tokenName, tokenValue]) => {
-    globalCss += `  --${tokenName}: ${tokenValue};\n`
-  })
-
-  lightCss += '}\n'
-  darkCss += '}\n'
-  globalCss += `}\n`
-
-  const stringCss = globalCss + lightCss + darkCss
-  return stringCss
+  return (
+    buildSection(`:root[data-theme-name="${themeName}"]`, commonVal) +
+    buildSection(
+      `:root[data-theme-name="${themeName}"][data-mode="light"]`,
+      lightVal
+    ) +
+    buildSection(
+      `:root[data-theme-name="${themeName}"][data-mode="dark"]`,
+      darkVal
+    )
+  )
 }

@@ -15,7 +15,7 @@
 */
 import { DesignSystem } from '../tokenDefinition'
 
-const TallyTheme: DesignSystem = {
+const TallyTokens: DesignSystem = {
   // ----------------------------------------------------------------------
   // GLOBAL TOKENS (Responsive & Accessible)
   // ----------------------------------------------------------------------
@@ -275,4 +275,4 @@ const TallyTheme: DesignSystem = {
   },
 }
 
-export default TallyTheme
+export default TallyTokens
