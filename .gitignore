@@ -87,6 +87,9 @@ storybook-static/
 # Optional npm cache directory
 .npm
 
+# contains npm access Token
+.npmrc
+
 # Optional eslint cache
 .eslintcache
 

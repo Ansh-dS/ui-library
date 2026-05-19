@@ -1,13 +1,13 @@
 {
-  "name": "components",
-  "private": true,
+  "name": "aura-ui",
+  "private": "false",
   "version": "1.0.0",
   "type": "module",
   "main": "./dist/ui.cjs",
   "module": "./dist/ui.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "ui-lib": "./bin/ui-lib.js"
+    "aura": "./bin/aura-init.js"
   },
   "exports": {
     ".": {
