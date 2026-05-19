@@ -11,18 +11,18 @@
     "cli#build": {
       "outputs": ["dist/**"]
     },
-    "aura-ui#build": {
+    "aurajet#build": {
       "outputs": ["dist/**"],
       "dependsOn": ["cli#build"]
     },
     "design-decisions#build": {
       "outputs": ["dist/**"],
 
-      "dependsOn": ["aura-ui#build"]
+      "dependsOn": ["aurajet#build"]
     },
     "storybook#build": {
       "outputs": ["storybook-static/**"],
-      "dependsOn": ["aura-ui#build"]
+      "dependsOn": ["aurajet#build"]
     },
     "dev": {
       "cache": false,
