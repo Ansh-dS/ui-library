@@ -17,6 +17,7 @@
     },
     "design-decisions#build": {
       "outputs": ["dist/**"],
+
       "dependsOn": ["aura-ui#build"]
     },
     "storybook#build": {
