@@ -11,17 +11,17 @@
     "cli#build": {
       "outputs": ["dist/**"]
     },
-    "components#build": {
+    "aura-ui#build": {
       "outputs": ["dist/**"],
       "dependsOn": ["cli#build"]
     },
     "design-decisions#build": {
       "outputs": ["dist/**"],
-      "dependsOn": ["components#build"]
+      "dependsOn": ["aura-ui#build"]
     },
     "storybook#build": {
       "outputs": ["storybook-static/**"],
-      "dependsOn": ["components#build"]
+      "dependsOn": ["aura-ui#build"]
     },
     "dev": {
       "cache": false,
