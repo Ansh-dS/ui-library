@@ -1,6 +1,6 @@
 {
   "name": "aura-ui",
-  "private": "false",
+  "private": false,
   "version": "1.0.0",
   "type": "module",
   "main": "./dist/ui.cjs",
