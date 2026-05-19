@@ -260,7 +260,7 @@ export const viteInjectionScript = (defaultTheme: string) => `
 export const providersTemplate = (
   isNext: boolean,
   defaultTheme: string
-) => `${isNext ? "'use client'\n\n" : ''}import { ThemeProvider as CustomUITheme, ToastProvider } from 'components'
+) => `${isNext ? "'use client'\n\n" : ''}import { ThemeProvider as CustomUITheme, ToastProvider } from 'aurajet'
 import React from 'react'
 
 export default function Providers({ children }: { children: React.ReactNode }) {

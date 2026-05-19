@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc -b --force && node ./dist/src/generators/generateCssFiles.js",
+    "clean": "rm -rf dist",
     "lint": "eslint ."
   },
   "exports": {

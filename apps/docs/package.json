@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "mkdir -p dist && echo 'docs built' > dist/README.md"
+    "build": "mkdir -p dist && echo 'docs built' > dist/README.md",
+    "clean": "rm -rf dist"
   },
   "keywords": [],
   "author": "",
