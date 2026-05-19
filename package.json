@@ -7,10 +7,11 @@
     "dev": "turbo dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
+    "clean": "turbo run clean",
     "format": "prettier --write .",
     "check-errors": " pnpm lint && pnpm build && pnpm format",
     "storybook": "pnpm --filter storybook storybook",
-    "bundle:pack": "cp -r packages/cli/dist packages/ui/dist/cli",
+    "bundle:pack": "cp -r packages/cli/dist/. packages/ui/dist/cli/",
     "prepare-release": "pnpm build && pnpm bundle:pack"
   },
   "devDependencies": {

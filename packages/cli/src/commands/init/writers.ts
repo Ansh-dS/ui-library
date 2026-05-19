@@ -26,9 +26,9 @@ export async function updateCss(
 
   const requiredImports = [
     "@import 'tailwindcss';",
-    ...selectedThemes.map((t) => `@import 'components/${t}.css';`),
-    "@source '../../node_modules/components/dist/ui.js';",
-    "@import 'components/global.css';",
+    ...selectedThemes.map((t) => `@import 'aurajet/${t}.css';`),
+    "@source '../../node_modules/aurajet/dist/ui.js';",
+    "@import 'aurajet/global.css';",
   ]
 
   if (await fs.pathExists(cssPath)) {

@@ -26,6 +26,7 @@
   ],
   "scripts": {
     "build": "vite build && pnpm postbuild",
+    "clean": "rm -rf dist",
     "postbuild": "cp ../../global.css src/styles/global.css",
     "lint": "eslint ."
   },

@@ -6,6 +6,7 @@
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build": "tsc -b --force && storybook build",
+    "clean": "rm -rf storybook-static",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx"
   },
   "peerDependencies": {

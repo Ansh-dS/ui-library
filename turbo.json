@@ -1,5 +1,8 @@
 {
   "tasks": {
+    "clean": {
+      "cache": false
+    },
     "lint": {
       "cache": true
     },
