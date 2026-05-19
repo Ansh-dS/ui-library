@@ -1,6 +1,6 @@
 import { DesignSystem } from '../tokenDefinition'
 
-const RiversideTheme: DesignSystem = {
+const RiversideTokens: DesignSystem = {
   // ----------------------------------------------------------------------
   // GLOBAL TOKENS: The Physical Architecture (Stability & Heritage)
   // ----------------------------------------------------------------------
@@ -238,4 +238,4 @@ const RiversideTheme: DesignSystem = {
   },
 }
 
-export default RiversideTheme
+export default RiversideTokens

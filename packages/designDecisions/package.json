@@ -4,7 +4,7 @@
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
-    "build": " tsc -b && node ./dist/src/styles/themeToString.js",
+    "build": "tsc -b --force && node ./dist/src/generators/generateCssFiles.js",
     "lint": "eslint ."
   },
   "exports": {

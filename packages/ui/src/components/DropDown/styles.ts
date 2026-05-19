@@ -4,7 +4,7 @@ export const dropdownMenuVariants = cva(
   [
     /* 1. The Floating Context (Law 1) */
     // New: Removed 'w-full'. In a Portal, w-full takes the entire browser width. Changed to 'w-max'.
-    'absolute left-0 mt-2 z-popover flex flex-col w-max min-w-[200px]',
+    'absolute left-0 mt-2 z-popover flex flex-col w-max min-w-50',
     // New: Added shadow-modal and background tokens from our surface foundation.
     'rounded-medium border border-border-default bg-surface-base shadow-modal',
 

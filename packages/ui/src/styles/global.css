@@ -1,11 +1,5 @@
-@import './token.css';
 @import 'tailwindcss';
 
-/* 1. DEFINE PRIMITIVES (Raw Values) */
-/* Unique name to avoid circular loops */
-:root {
-  --color-base-white: #ffffff !important;
-}
 
 @theme {
   /* ==============================================

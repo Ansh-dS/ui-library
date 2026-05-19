@@ -482,7 +482,6 @@
   embed,
   object {
     display: block;
-    vertical-align: middle;
   }
   img,
   video {
@@ -1451,9 +1450,7 @@
     }
   }
 }
-:root {
-  --color-base-white: #ffffff !important;
-}
+
 @property --tw-translate-x {
   syntax: '*';
   inherits: false;
