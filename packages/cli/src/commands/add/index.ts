@@ -4,7 +4,7 @@ import path from 'path'
 import { execSync } from 'child_process'
 import inquirer from 'inquirer' // Added inquirer for prompts
 
-const REGISTRY_URL = 'http://localhost:3000/api/registry'
+const REGISTRY_URL = 'https://aura-server.vercel.app/api/registry'
 
 // 1. Helper to ask the user before destroying their hard work
 async function promptOverwrite(componentName: string): Promise<boolean> {
