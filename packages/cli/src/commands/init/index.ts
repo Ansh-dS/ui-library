@@ -7,7 +7,7 @@ import { askUserQuestions, normalizeSelectedThemes } from './prompts.js'
 import { writeInitFiles, injectNoBlink } from '../utils/writers.js'
 import { providersTemplate } from '../utils/strings.js'
 
-const REGISTRY_URL = 'http://localhost:3000/api/registry'
+const REGISTRY_URL = 'https://aura-server.vercel.app/api/registry'
 
 // Helper function to ask before destroying an existing core file
 async function promptOverwrite(fileName: string): Promise<boolean> {

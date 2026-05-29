@@ -1,5 +1,5 @@
 {
-  "name": "aurajet",
+  "name": "auracli",
   "version": "1.0.6",
   "description": "CLI for initializing and managing the ui-library design system",
   "type": "module",
