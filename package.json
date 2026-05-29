@@ -11,13 +11,13 @@
     "format": "prettier --write .",
     "check-errors": " pnpm lint && pnpm build && pnpm format",
     "storybook": "pnpm --filter storybook storybook",
-    "bundle:pack": "cp -r packages/cli/dist/. packages/ui/dist/cli/",
-    "prepare-release": "pnpm build && pnpm bundle:pack"
+    "bundle:pack": "echo 'Registry server architecture does not use dist packaging.'",
+    "prepare-release": "pnpm build && cp ./global.css apps/registry-server/themes"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@tailwindcss/cli": "^4.1.18",
-    "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/postcss": "^4.3.0",
     "@tailwindcss/vite": "^4.1.18",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
@@ -27,23 +27,17 @@
     "postcss": "^8.5.6",
     "prettier": "^3.8.1",
     "tailwindcss": "^4.1.18",
-    "turbo": "^2.7.6",
-    "vite": "^7.3.1",
-    "vitest": "^4.0.18"
+    "turbo": "^2.7.6"
   },
   "dependencies": {
     "@types/node": "^24.10.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^1.7.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.53.1",
     "vite-plugin-dts": "^4.5.4",
-    "vuetify": "^3.11.8",
-    "commander": "^14.0.3",
-    "fs-extra": "^11.3.3",
-    "inquirer": "^13.3.0"
+    "vuetify": "^3.11.8"
   }
 }

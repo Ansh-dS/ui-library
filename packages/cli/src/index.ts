@@ -2,18 +2,20 @@
 // this file contains questions to ask etc etc.
 
 import { Command } from 'commander'
-import { initCommand as init } from './commands/init.js'
+import { addCommand as add } from './commands/add/index.js'
+import { setupCommand as setup } from './commands/setup.js'
 const program = new Command()
 
 // when user types  'pnpm ui-lib --help:'
 // this name displays.
 program
-  .name('ui-lib')
+  .name('aura')
   .description('CLI for initializing and managing your UI library')
   .version('1.0.0')
 
 // adding new command 'init'
-program.addCommand(init)
+program.addCommand(setup)
+program.addCommand(add)
 
 // process.argv: captures everthing user writes.
 // program.parse: keywords with above registor commmands

@@ -14,17 +14,11 @@
 
     "types": ["node", "@storybook/types", "vite/client"]
   },
-  "include": ["src", ".storybook"],
-  /*
-    refrernces: we use this, when one package depends on other. 
-    i want these file builds first and i can use its declaration file here. 
-  */
-  "references": [
-    {
-      "path": "../../packages/designDecisions"
-    },
-    {
-      "path": "../../packages/ui"
-    }
-  ]
+  "include": [
+    "src",
+    ".storybook",
+    "../registry-server/components/**/*",
+    "../registry-server/hooks/**/*"
+  ],
+
 }

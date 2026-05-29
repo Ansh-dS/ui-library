@@ -11,16 +11,11 @@
       "cache": false,
       "dependsOn": ["^build"]
     },
-    "cli#build": {
-      "outputs": ["dist/**"]
-    },
     "aurajet#build": {
-      "outputs": ["dist/**"],
-      "dependsOn": ["cli#build"]
+      "outputs": ["dist/**"]
     },
     "design-decisions#build": {
       "outputs": ["dist/**"],
-
       "dependsOn": ["aurajet#build"]
     },
     "storybook#build": {

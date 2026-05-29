@@ -1,22 +1,29 @@
 import path from 'path'
-import { readdir, access, constants, writeFile, mkdir } from 'fs/promises'
+import { readdir, access, constants, writeFile } from 'fs/promises'
 import stringCss from './stringCss.js'
 import { DesignSystem } from '../tokenDefinition.js'
 import { pathToFileURL } from 'url'
+import { mkdirSync } from 'fs'
+
+const packageRoot = process.cwd()
+const workspaceRoot = path.resolve(packageRoot, '..', '..') // resolve: takes sequence of path and return absolute path. 
 
 async function createCssFile(
   designToken: DesignSystem,
   themeName: string
 ): Promise<void> {
-  const cwd = process.cwd()
   //  file saves with a .css extension
-  const createCssHere = path.join(cwd, `../ui/src/styles/${themeName}.css`)
+  const createCssHere = path.join(
+    workspaceRoot,
+    'apps/registry-server/themes',
+    `${themeName}.css`
+  )
 
   const token = stringCss(designToken, themeName)
 
   try {
     //  Ensuring the directory exists before trying to write to it
-    await mkdir(path.dirname(createCssHere), { recursive: true })
+    mkdirSync(path.dirname(createCssHere), { recursive: true })
 
     // writeFile is async where as writeFileSync is synchronous.
     await writeFile(createCssHere, token, 'utf-8')
@@ -57,10 +64,14 @@ async function processTokensFolder(
       const isTheme = /Theme$/i.test(base)
 
       const existing = fileMap.get(normalized)
-      
+
       // Streamlined Logic: Prefer the non-Theme file over a Theme-suffixed file
       if (!existing || (existing.isThemeSuffix && !isTheme)) {
-        fileMap.set(normalized, { fullPath, origName: file.name, isThemeSuffix: isTheme })
+        fileMap.set(normalized, {
+          fullPath,
+          origName: file.name,
+          isThemeSuffix: isTheme,
+        })
       }
     })
 
@@ -74,13 +85,18 @@ async function processTokensFolder(
           try {
             const tokenModule = await import(pathToFileURL(fullPath).href)
             const jsonToken = tokenModule?.default ?? tokenModule
-            const themeName = path.basename(entry.origName, ext).replace(/Theme$/i, '')
+            const themeName = path
+              .basename(entry.origName, ext)
+              .replace(/Theme$/i, '')
 
             if (jsonToken) {
               await createCssFile(jsonToken, themeName)
             }
           } catch (e) {
-            console.warn(`Skipping file due to import error: ${entry.origName}`, e)
+            console.warn(
+              `Skipping file due to import error: ${entry.origName}`,
+              e
+            )
           }
         }
       })
@@ -93,10 +109,8 @@ async function processTokensFolder(
 }
 
 async function generateCssFiles() {
-  const cwd = process.cwd()
-
-  const distTokensPath = path.join(cwd, 'dist/src/tokens')
-  const srcTokensPath = path.join(cwd, 'src/tokens')
+  const distTokensPath = path.join(packageRoot, 'dist/src/tokens')
+  const srcTokensPath = path.join(packageRoot, 'src/tokens')
 
   let selectedPath: string | null = null
   let allowTs = false

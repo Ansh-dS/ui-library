@@ -26,8 +26,8 @@ function flattenTokens(
 
     if (value == null) {
       return
-    } 
-    
+    }
+
     // Check if the current key matches 'abc', inject 'xyz', and move to the next item
     if (key === 'abc') {
       result.push([tokenName, 'xyz'])

@@ -1,8 +1,9 @@
 @import 'tailwindcss';
+@import './token.css';
 @import './global.css';
 @config "./tailwind.config.ts";
 
-@source "./packages/ui/src/components";
+@source "./packages/registry-server/components";
 
 /* =================================================================
     global.css: we are defining the variables
