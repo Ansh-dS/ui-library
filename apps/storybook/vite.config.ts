@@ -53,7 +53,7 @@ export default defineConfig({
       '@tokenCss': path.resolve(__dirname, '../../token.css'),
       '@components': path.resolve(
         __dirname,
-        '../../apps/registry-server/components/ui.ts'
+        '../../apps/server/components/ui.ts'
       ),
     },
   },

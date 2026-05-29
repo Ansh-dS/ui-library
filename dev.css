@@ -3,7 +3,7 @@
 @import './global.css';
 @config "./tailwind.config.ts";
 
-@source "./packages/registry-server/components";
+@source "./packages/server/components";
 
 /* =================================================================
     global.css: we are defining the variables
