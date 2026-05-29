@@ -42,7 +42,7 @@
 
       if the files are at root then it's "ok" to define it in vite.config.ts.
       */
-      "@components": ["./packages/ui/src/index.ts"]
+      "@components": ["./apps/registry-server/components/ui"]
     }
   },
   "include": ["packages/**/*", "*.ts", "apps/**/*"],
