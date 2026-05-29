@@ -1,15 +1,65 @@
 import { program } from 'commander'
 import path from 'path'
 import fs from 'fs-extra'
+import { execSync } from 'child_process'
+import inquirer from 'inquirer'
 import { askUserQuestions, normalizeSelectedThemes } from './prompts.js'
-// Removed 'installDependencies' as we rely on the user's existing environment
-import { updateCss, writeProviders, injectNoBlink } from './writers.js'
+import { writeInitFiles, injectNoBlink } from '../utils/writers.js'
+import { providersTemplate } from '../utils/strings.js'
 
-export const initCommand = program
-  .command('init')
+const REGISTRY_URL = 'http://localhost:3000/api/registry'
+
+// Helper function to ask before destroying an existing core file
+async function promptOverwrite(fileName: string): Promise<boolean> {
+  const { overwrite } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'overwrite',
+      message: `File '${fileName}' already exists. Would you like to overwrite it?`,
+      default: false,
+    }
+  ])
+  return overwrite
+}
+
+// Automatically detects whether the user prefers pnpm, yarn, bun, or npm
+function detectPackageManager(cwd: string) {
+  const packageJsonPath = path.join(cwd, 'package.json')
+  if (fs.pathExistsSync(packageJsonPath)) {
+    const packageJson = fs.readJsonSync(packageJsonPath)
+    if (typeof packageJson.packageManager === 'string') {
+      if (packageJson.packageManager.startsWith('pnpm')) return 'pnpm add'
+      if (packageJson.packageManager.startsWith('yarn')) return 'yarn add'
+      if (packageJson.packageManager.startsWith('bun')) return 'bun add'
+    }
+    const dependencies = {
+      ...packageJson.dependencies,
+      ...packageJson.devDependencies,
+      ...packageJson.optionalDependencies,
+    }
+    if (
+      Object.values(dependencies).some(
+        (version) => typeof version === 'string' && version.startsWith('link:')
+      )
+    ) {
+      return 'pnpm add'
+    }
+  }
+  if (fs.pathExistsSync(path.join(cwd, 'pnpm-lock.yaml'))) return 'pnpm add'
+  if (fs.pathExistsSync(path.join(cwd, 'yarn.lock'))) return 'yarn add'
+  if (fs.pathExistsSync(path.join(cwd, 'bun.lockb')) || fs.pathExistsSync(path.join(cwd, 'bun.lock'))) return 'bun add'
+  
+  return 'npm install'
+}
+
+export const setupCommand = program
+  .command('setup')
   .description('Initialize the UI library in your project')
-  .action(async () => {
-    console.log('🚀 Initializing @anshdeep/ui...\n')
+  .option('-y, --yes', 'Skip confirmation prompts and overwrite existing setup files')
+  .action(async (options) => {
+    console.log('🚀 Initializing Aurajet...\n')
+
+    const forceOverwrite = options.yes || false
 
     try {
       // 1. Ask the user for their theme preferences
@@ -44,30 +94,77 @@ export const initCommand = program
       }
 
       await fs.ensureDir(targetDir)
+      
+      // Target directory for the core library components
+      const componentsDir = path.join(cwd, 'src', 'components')
+      await fs.ensureDir(componentsDir)
 
-      // 4. Cleanup old config files
-      // We removed the need for ui-lib.config.json in our cleaner architecture
+      // 4. Fetch the foundational templates from the live registry
+      console.log(`\n⬇️ Fetching core engine and themes...`)
+      const res = await fetch(`${REGISTRY_URL}/setup?themes=${selectedThemes.join(',')}`)
+
+      if (!res.ok) {
+        throw new Error('Failed to fetch setup data.')
+      }
+
+      const apiData = (await res.json()) as {
+        dependencies?: string[]
+        files: Array<{ name: string; content: string }>
+      }
+
+      // Cleanup old config files if they exist from a legacy installation
       const configPath = path.join(cwd, 'ui-lib.config.json')
       if (await fs.pathExists(configPath)) {
         await fs.remove(configPath)
         console.log('ℹ️ Removed outdated ui-lib.config.json')
       }
 
-      // 5. Build or Update the Global CSS file
-      const cssResult = await updateCss(targetDir, cssFileName, selectedThemes)
-      console.log(
-        `✔️ ${cssResult.created ? 'Created' : 'Updated'} CSS: ${cssResult.file}`
-      )
+      // 5. Build or Update the Core Architecture Files (CSS + utils.ts + theme-provider.tsx)
+      const filesToWrite = []
+      
+      // Filter out files that already exist unless the user confirms the overwrite
+      for (const file of apiData.files) {
+        const fullPath = path.join(componentsDir, file.name)
+        if (!forceOverwrite && await fs.pathExists(fullPath)) {
+          const shouldOverwrite = await promptOverwrite(file.name)
+          if (shouldOverwrite) {
+            filesToWrite.push(file)
+          } else {
+            console.log(`  ⏭️  Skipped '${file.name}'`)
+          }
+        } else {
+           // File doesn't exist, or forceOverwrite is true
+           filesToWrite.push(file)
+        }
+      }
+
+      // Pass ONLY the confirmed files to the writer utility
+      if (filesToWrite.length > 0) {
+        const cssResult = await writeInitFiles(componentsDir, targetDir, cssFileName, filesToWrite)
+        console.log(`✔️ ${cssResult.created ? 'Created' : 'Updated'} modular CSS pipeline`)
+      }
 
       // 6. Build the React Context Providers wrapper
       const isNext = framework === 'next'
-      await writeProviders(targetDir, isNext, defaultTheme)
-      console.log('✔️ Providers created: providers.tsx')
+      const providersPath = path.join(componentsDir, 'core', 'providers.tsx')
+      let shouldWriteProviders = true
 
-      // 7. Inject the No-Blink script safely
+      // Overwrite protection for providers.tsx
+      if (!forceOverwrite && await fs.pathExists(providersPath)) {
+        shouldWriteProviders = await promptOverwrite('core/providers.tsx')
+      }
+
+      if (shouldWriteProviders) {
+        await fs.ensureDir(path.dirname(providersPath))
+        await fs.writeFile(providersPath, providersTemplate(isNext, defaultTheme))
+        console.log('✔️ Providers generated: src/components/core/providers.tsx')
+      } else {
+        console.log(`  ⏭️  Skipped 'core/providers.tsx'`)
+      }
+
+      // 7. Inject the No-Blink script safely to prevent FOUC (Flash of unstyled content)
       try {
         const res = await injectNoBlink(targetDir, isNext, defaultTheme)
-        // Cleaned up the messy 'any' casting here
         if (res && res.injected) {
           console.log(`✔️ Injected no-blink script into: ${res.file}`)
         }
@@ -75,16 +172,20 @@ export const initCommand = program
         console.warn('⚠️ Could not inject no-blink script automatically.')
       }
 
-      // 8. Final Setup Instructions
-      // Using cleaner multi-line console logs instead of messy \n character strings
+      // 8. Install required foundational dependencies (like next-themes, clsx, tailwind-merge)
+      if (apiData.dependencies?.length) {
+        console.log(`\n📦 Installing architecture dependencies: ${apiData.dependencies.join(', ')}...`)
+        const installCommand = detectPackageManager(cwd)
+        execSync(`${installCommand} ${apiData.dependencies.join(' ')}`, { stdio: 'inherit' })
+      }
+
+      // 9. Final Setup Instructions
       console.log('\n✨ Almost done! Complete your setup:')
-      console.log(
-        `1. Import the new CSS and Provider in your ${isNext ? 'layout.tsx' : 'main.tsx'}:`
-      )
-      console.log(`   import "./${cssFileName}";`)
-      console.log(`   import Providers from "./providers";\n`)
+      console.log(`1. Ensure Providers are imported in your ${isNext ? 'layout.tsx' : 'main.tsx'}:`)
+      console.log(`   If not present, add: import Providers from '@/components/core/providers';`)
+      console.log(`2. Confirm your ${cssFileName} imports the local styles folder automatically.\n`)
+      
     } catch (err: unknown) {
-      // Graceful error handling for terminal prompts
       if (err instanceof Error && 'isTtyError' in err) {
         console.error("Prompt couldn't be rendered in the current environment.")
       } else {

@@ -35,8 +35,7 @@ export default function themeDecorator(
 
   return (
     <div>
-      {' '}
-      <Component {...context} />{' '}
+      <Component {...context} />
     </div>
   )
 }

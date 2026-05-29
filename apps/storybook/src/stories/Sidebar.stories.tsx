@@ -36,14 +36,15 @@ const meta: Meta<typeof Sidebar> = {
     showToggle: { control: 'boolean' },
   },
   tags: ['autodocs'],
+
   decorators: [
     (Story) => (
-      /* FIX: Changed 'overflow-hidden' to 'overflow-visible' for toggle visibility. */
-      <div className="h-150 flex w-full border border-border-default bg-surface-sunken overflow-visible">
+      <div className="h-screen p-s flex w-full border border-border-default bg-surface-sunken rounded-lg">
         <Story />
       </div>
     ),
   ],
+
 }
 
 export default meta
@@ -111,9 +112,9 @@ export const TallyDashboard: Story = {
     footer: <Text variant="caption">Anshdeep Singh</Text>,
     children: (
       <>
-        <SidebarItem icon="🏠" label="Dashboard" active />
-        <SidebarItem icon="📝" label="My Forms" badge="12" />
-        <SidebarItem icon="⚙️" label="Settings" />
+        <SidebarItem icon="🏠" label="Dashboard" active/>
+        <SidebarItem icon="📝" label="My Forms" badge="12"/>
+        <SidebarItem icon="⚙️" label="Settings"  />
       </>
     ),
   },
@@ -143,33 +144,33 @@ export const EditorSettingsPanel: Story = {
       </Stack>
     ),
     children: (
-      <Stack gap="md" className="p-s">
-        <Box className="p-m bg-surface-base border-border-default rounded-base shadow-sm">
+      <Stack gap="md" >
+        <Box className=" bg-surface-base border-border-default rounded-base shadow-sm">
           <Text variant="caption" color="secondary">
             Color Picker Placeholder
           </Text>
         </Box>
-        <Box className="p-m bg-surface-base border-border-default rounded-base shadow-sm">
+        <Box className="bg-surface-base border-border-default rounded-base shadow-sm">
           <Text variant="caption" color="secondary">
             Font Size Slider Placeholder
           </Text>
         </Box>
-        <Box className="p-m bg-surface-base border-border-default rounded-base shadow-sm">
+        <Box className="bg-surface-base border-border-default rounded-base shadow-sm">
           <Text variant="caption" color="secondary">
             Padding Controls Placeholder
           </Text>
         </Box>
-        <Box className="p-m bg-surface-base border-border-default rounded-base shadow-sm">
+        <Box className=" bg-surface-base border-border-default rounded-base shadow-sm">
           <Text variant="caption" color="secondary">
             Border Radius Placeholder
           </Text>
         </Box>
-        <Box className="p-m bg-surface-base border-border-default rounded-base shadow-sm">
+        <Box className=" bg-surface-base border-border-default rounded-base shadow-sm">
           <Text variant="caption" color="secondary">
             Animation Settings Placeholder
           </Text>
         </Box>
-        <Box className="p-m bg-surface-base border-border-default rounded-base shadow-sm">
+        <Box className=" bg-surface-base border-border-default rounded-base shadow-sm">
           <Text variant="caption" color="secondary">
             Visibility Rules Placeholder
           </Text>
@@ -177,7 +178,7 @@ export const EditorSettingsPanel: Story = {
         {Array.from({ length: 18 }).map((_, index) => (
           <Box
             key={`extra-setting-${index + 1}`}
-            className="p-m bg-surface-base border-border-default rounded-base shadow-sm"
+            className="bg-surface-base border-border-default rounded-base shadow-sm"
           >
             <Text variant="caption" color="secondary">
               Advanced Setting Group {index + 1} Placeholder

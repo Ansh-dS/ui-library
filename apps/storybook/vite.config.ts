@@ -51,7 +51,10 @@ export default defineConfig({
       // even devCss includes globalCSS
       '@globalCss': path.resolve(__dirname, '../../global.css'),
       '@tokenCss': path.resolve(__dirname, '../../token.css'),
-      '@components': path.resolve(__dirname, '../../packages/ui/src/index.ts'),
+      '@components': path.resolve(
+        __dirname,
+        '../../apps/registry-server/components/ui.ts'
+      ),
     },
   },
 })

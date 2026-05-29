@@ -3,12 +3,12 @@ import path from 'path'
 import { configGenerator } from '../../templates/config.generator.js'
 // Importing all strings cleanly to keep this file purely logical
 import {
-  globalCss,
   layoutHtml,
   nextInjectionScript,
   viteInjectionScript,
   providersTemplate,
 } from './strings.js'
+
 
 export async function writeConfig(cwd: string, selectedThemes: string[]) {
   const config = configGenerator(selectedThemes)
@@ -17,50 +17,47 @@ export async function writeConfig(cwd: string, selectedThemes: string[]) {
   })
 }
 
-export async function updateCss(
+export async function writeInitFiles(
+  componentsBaseDir: string, // Now points to src/components/
   targetDir: string,
-  cssFileName: string,
-  selectedThemes: string[]
+  userCssFileName: string,
+  apiFiles: { name: string, content: string }[]
 ) {
-  const cssPath = path.join(targetDir, cssFileName)
+  // 1. Write ALL files dynamically based on what the server requested
+  for (const file of apiFiles) {
+    // This perfectly creates src/components/core/... OR src/components/ui/Utils/...
+    const fullPath = path.join(componentsBaseDir, file.name);
+    await fs.ensureDir(path.dirname(fullPath));
+    await fs.writeFile(fullPath, file.content);
+  }
 
-  const requiredImports = [
-    "@import 'tailwindcss';",
-    ...selectedThemes.map((t) => `@import 'aurajet/${t}.css';`),
-    "@source '../../node_modules/aurajet/dist/ui.js';",
-    "@import 'aurajet/global.css';",
-  ]
+  // 2. Inject CSS safely (Now targeting core/styles/index.css)
+  const userCssPath = path.join(targetDir, userCssFileName);
+  const relativePathToStyles = path.relative(targetDir, path.join(componentsBaseDir, 'core/styles/index.css'));
+  const importStatement = `@import '${relativePathToStyles.split(path.sep).join('/')}';`;
 
-  if (await fs.pathExists(cssPath)) {
-    let existingCss = await fs.readFile(cssPath, 'utf8')
-
-    const missingImports = requiredImports.filter(
-      (imp) => !existingCss.includes(imp)
-    )
-
-    if (missingImports.length > 0) {
-      existingCss = `${missingImports.join('\n')}\n\n${existingCss}`
+  if (await fs.pathExists(userCssPath)) {
+    let existingCss = await fs.readFile(userCssPath, 'utf8');
+    if (!existingCss.includes(importStatement)) {
+      await fs.writeFile(userCssPath, `${importStatement}\n\n${existingCss}`);
     }
-
-    if (!existingCss.includes('::view-transition-old(root)')) {
-      existingCss = `${existingCss}\n\n${globalCss}`
-    }
-
-    await fs.writeFile(cssPath, existingCss)
-    return { created: false, file: cssFileName }
+    return { created: false, file: userCssFileName };
   } else {
-    await fs.writeFile(cssPath, `${requiredImports.join('\n')}\n\n${globalCss}`)
-    return { created: true, file: cssFileName }
+    await fs.writeFile(userCssPath, `${importStatement}\n`);
+    return { created: true, file: userCssFileName };
   }
 }
 
 export async function writeProviders(
-  targetDir: string,
+  componentsDir: string,
   isNext: boolean,
   defaultTheme: string
 ) {
   const providersContent = providersTemplate(isNext, defaultTheme)
-  await fs.writeFile(path.join(targetDir, 'providers.tsx'), providersContent)
+  await fs.writeFile(
+    path.join(componentsDir, 'providers.tsx'),
+    providersContent
+  )
 }
 
 export async function injectNoBlink(

@@ -1,11 +1,11 @@
 {
-  "name": "cli",
-  "version": "1.0.0",
+  "name": "aurajet",
+  "version": "1.0.6",
   "description": "CLI for initializing and managing the ui-library design system",
   "type": "module",
   "main": "./dist/index.js",
   "bin": {
-    "ui-lib": "./bin/ui-lib.js"
+    "aura": "./bin/aura-init.js"
   },
   "scripts": {
     "test": "vitest",
@@ -24,11 +24,5 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4"
-  },
-  "peerDependencies": {
-    "eslint": "^9.39.2",
-    "commander": "^14.0.3",
-    "fs-extra": "^11.3.3",
-    "inquirer": "^13.3.0"
   }
 }
