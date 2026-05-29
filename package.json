@@ -12,7 +12,7 @@
     "check-errors": " pnpm lint && pnpm build && pnpm format",
     "storybook": "pnpm --filter storybook storybook",
     "bundle:pack": "echo 'Registry server architecture does not use dist packaging.'",
-    "prepare-release": "pnpm build && cp ./global.css apps/registry-server/themes"
+    "prepare-release": "pnpm build && cp ./global.css apps/server/themes"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

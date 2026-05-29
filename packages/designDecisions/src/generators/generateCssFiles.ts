@@ -15,7 +15,7 @@ async function createCssFile(
   //  file saves with a .css extension
   const createCssHere = path.join(
     workspaceRoot,
-    'apps/registry-server/themes',
+    'apps/server/themes',
     `${themeName}.css`
   )
 

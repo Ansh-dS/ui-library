@@ -17,8 +17,8 @@
   "include": [
     "src",
     ".storybook",
-    "../registry-server/components/**/*",
-    "../registry-server/hooks/**/*"
+    "../server/components/**/*",
+    "../server/hooks/**/*"
   ],
 
 }
