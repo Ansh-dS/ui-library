@@ -33,6 +33,9 @@ const meta: Meta<typeof Button> = {
     children: {
       control: 'text',
       description: 'Button label',
+      table: {
+        disable: true,
+      },
     },
     isLoading: {
       control: 'boolean',

@@ -24,6 +24,11 @@ const meta: Meta<typeof DataList> = {
       options: ['default', 'ghost', 'glass', 'inset'],
       description: 'The visual style of the list container.',
     },
+    children: {
+      table: {
+        disable: true,
+      },
+    },
   },
   parameters: {
     layout: 'centered',

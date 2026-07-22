@@ -14,6 +14,16 @@ const meta: Meta<typeof Popover> = {
       control: 'boolean',
       description: 'The starting visibility state',
     },
+    children: {
+      table: {
+        disable: true,
+      },
+    },
+    content: {
+      table: {
+        disable: true,
+      },
+    },
   },
   // We need this decorator because the Popover is 'absolute' and 'top-full'.
   // Without padding, it will be invisible in the Storybook preview.

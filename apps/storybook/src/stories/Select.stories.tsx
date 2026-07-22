@@ -4,6 +4,9 @@ const meta: Meta<typeof Select> = {
   title: 'Inputs/Select',
   component: Select,
   tags: ['autodocs'],
+  argTypes: {
+    options: { table: { disable: true } },
+  },
 }
 export default meta
 export const Default: StoryObj<typeof Select> = {

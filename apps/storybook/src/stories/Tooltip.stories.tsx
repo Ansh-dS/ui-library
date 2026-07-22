@@ -19,9 +19,7 @@ const meta: Meta<typeof Tooltip> = {
       control: 'select',
       options: ['sm', 'md', 'lg'],
     },
-    children: {
-      table: { disable: true },
-    },
+    children: { table: { disable: true } },
   },
   parameters: {
     layout: 'centered',

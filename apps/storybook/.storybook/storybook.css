@@ -1,28 +1,14 @@
 /* =================================================================
-   1. VARIABLE DEFINITIONS (The "Theme Engine")
+   1. STORYBOOK THEME OVERRIDES (Mapped to global.css tokens)
    ================================================================= */
 
-/* DARK MODE VARIABLES */
+/* Polish for Irradiation/Halation */
 html[data-mode='dark'] {
-  --sb-bg-main: var(--colors-background-primary);
-  --sb-text-main: var(--colors-text-primary);
-  --sb-border: var(--colors-border-default);
-  --sb-toolbar-bg: var(--colors-background-tertiary);
-  --sb-element-bg: var(--colors-background-secondary);
-
-  /* Polish for Irradiation/Halation */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* LIGHT MODE VARIABLES */
 html[data-mode='light'] {
-  --sb-bg-main: var(--colors-background-primary);
-  --sb-text-main: var(--colors-text-primary);
-  --sb-border: var(--colors-border-default);
-  --sb-toolbar-bg: var(--colors-background-tertiary);
-  --sb-element-bg: var(--colors-background-secondary);
-
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
 }
@@ -35,8 +21,8 @@ html[data-mode='light'] {
 html[data-mode] body,
 html[data-mode] .sbdocs-wrapper,
 html[data-mode] .sbdocs-content {
-  background-color: var(--sb-bg-main) !important;
-  color: var(--sb-text-main) !important;
+  background-color: var(--color-surface-base) !important;
+  color: var(--color-fg-primary) !important;
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
@@ -46,31 +32,31 @@ html[data-mode] .sbdocs-content {
 /* This provides the "Stone" background so Pearl/Moti components are visible */
 html[data-mode] .sbdocs-preview > div:last-child,
 html[data-mode] .sb-show-main {
-  background-color: var(--colors-background-secondary) !important;
+  background-color: var(--color-surface-sunken) !important;
 }
 
 /* --- TOOLBAR STRIP --- */
 html[data-mode] .sbdocs-preview {
-  background-color: var(--sb-toolbar-bg) !important;
-  border-color: var(--sb-border) !important;
+  background-color: var(--color-surface-raised) !important;
+  border-color: var(--color-border-default) !important;
 }
 
 html[data-mode] .sbdocs-preview > div:first-child {
-  background-color: var(--sb-toolbar-bg) !important;
-  border-bottom-color: var(--sb-border) !important;
+  background-color: var(--color-surface-raised) !important;
+  border-bottom-color: var(--color-border-default) !important;
 }
 
 /* Toolbar Icons */
 html[data-mode] .sbdocs-preview > div:first-child button svg {
-  color: var(--sb-text-main) !important;
-  fill: var(--sb-text-main) !important;
+  color: var(--color-fg-primary) !important;
+  fill: var(--color-fg-primary) !important;
 }
 
 /* --- "SHOW CODE" BUTTON --- */
 html[data-mode] .docblock-code-toggle {
-  background-color: var(--sb-element-bg) !important;
-  color: var(--sb-text-main) !important;
-  border: 1px solid var(--sb-border) !important;
+  background-color: var(--color-surface-sunken) !important;
+  color: var(--color-fg-primary) !important;
+  border: 1px solid var(--color-border-default) !important;
 }
 
 /* --- PROPS TABLE --- */
@@ -79,17 +65,21 @@ html[data-mode] .docblock-argstable tr,
 html[data-mode] .docblock-argstable td,
 html[data-mode] .docblock-argstable th {
   background-color: transparent !important;
-  color: var(--sb-text-main) !important;
-  border-color: var(--sb-border) !important;
+  color: var(--color-fg-primary) !important;
+  border-color: var(--color-border-default) !important;
 }
 
-html[data-mode] .docblock-argstable button,
-html[data-mode] .docblock-argstable input,
+html[data-mode]
+  .docblock-argstable
+  button:not([title*='Change']):not([role='switch']),
+html[data-mode]
+  .docblock-argstable
+  input:not([type='checkbox']):not([type='radio']),
 html[data-mode] .docblock-argstable select,
 html[data-mode] .docblock-argstable textarea {
-  background-color: var(--sb-element-bg) !important;
-  color: var(--sb-text-main) !important;
-  border: 1px solid var(--sb-border) !important;
+  background-color: var(--color-surface-sunken) !important;
+  color: var(--color-fg-primary) !important;
+  border: 1px solid var(--color-border-default) !important;
   box-shadow: none !important;
 }
 
@@ -100,5 +90,76 @@ html[data-mode] .sbdocs h1,
 html[data-mode] .sbdocs h2,
 html[data-mode] .sbdocs h3 {
   /* No !important here so component-level text utilities can override them */
-  color: var(--sb-text-main);
+  color: var(--color-fg-primary);
+}
+
+/* --- BOOLEAN CONTROLS (SWITCHES) --- */
+
+/* 1. CONTAINER BASE STATE (OFF) */
+html[data-mode]
+  .docblock-argstable
+  label:has(input[type='checkbox'][role='switch']) {
+  background-color: var(--color-surface-sunken) !important;
+  border: 1px solid var(--color-border-default) !important;
+  box-shadow: none !important; /* Remove any default Storybook shadows */
+  transition: all 0.2s ease-in-out !important;
+}
+
+/* Hide native input focus rings */
+html[data-mode] .docblock-argstable input[type='checkbox'][role='switch'] {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 2. TEXT SIZING & BASE COLOR */
+html[data-mode]
+  .docblock-argstable
+  label:has(input[type='checkbox'][role='switch'])
+  span {
+  color: var(--color-fg-secondary) !important;
+  font-size: var(--text-label) !important;
+  font-family: var(--font-base) !important;
+}
+
+/* Highlight the active label (False when OFF) */
+html[data-mode]
+  .docblock-argstable
+  label:has(input[type='checkbox'][role='switch']:not(:checked))
+  span:nth-of-type(1) {
+  color: var(--color-fg-primary) !important;
+  font-weight: var(--font-weight-medium) !important;
+}
+
+/* 3. CONTAINER ACTIVE STATE (ON) */
+/* Kept the same as base state (sunken) as requested */
+html[data-mode]
+  .docblock-argstable
+  label:has(input[type='checkbox'][role='switch']:checked) {
+  border: 1px solid var(--color-border-default) !important;
+  box-shadow: none !important;
+}
+
+/* Highlight the active label (True when ON) */
+html[data-mode]
+  .docblock-argstable
+  label:has(input[type='checkbox'][role='switch']:checked)
+  span:nth-of-type(2) {
+  color: var(
+    --color-fg-primary
+  ) !important; /* Dark text on sunken background */
+  font-weight: var(--font-weight-medium) !important;
+}
+
+/* 4. FOCUS STATES */
+html[data-mode]
+  .docblock-argstable
+  label:has(input[type='checkbox'][role='switch']:focus),
+html[data-mode] .docblock-argstable label:focus-within {
+  /* Keep the default border color */
+  border-color: var(--color-border-default) !important;
+  /* Apply a clean focus ring OUTSIDE the border */
+  box-shadow:
+    0 0 0 2px var(--color-surface-base),
+    0 0 0 4px var(--color-border-focused) !important;
+  outline: none !important;
 }

@@ -30,6 +30,11 @@ export const globalTypes = {
 const preview: Preview = {
   decorators: [decorator],
   parameters: {
+    options: {
+      storySort: {
+        order: ['Welcome', '*'],
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

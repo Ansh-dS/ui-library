@@ -6,7 +6,7 @@ import { pathToFileURL } from 'url'
 import { mkdirSync } from 'fs'
 
 const packageRoot = process.cwd()
-const workspaceRoot = path.resolve(packageRoot, '..', '..') // resolve: takes sequence of path and return absolute path. 
+const workspaceRoot = path.resolve(packageRoot, '..', '..') // resolve: takes sequence of path and return absolute path.
 
 async function createCssFile(
   designToken: DesignSystem,

@@ -20,8 +20,13 @@ const meta: Meta<typeof ToastProvider> = {
   parameters: {
     layout: 'centered',
   },
-  /* Since ToastProvider just takes children, we don't need complex argTypes, 
-     but we can describe the showToast API here for the docs. */
+  argTypes: {
+    children: {
+      table: {
+        disable: true,
+      },
+    },
+  },
 }
 
 export default meta
