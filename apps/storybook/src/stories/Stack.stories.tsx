@@ -38,6 +38,9 @@ const meta: Meta<typeof Stack> = {
     children: {
       control: false, // Usually better to handle children via Stories
       description: 'The items to be laid out within the flex container.',
+      table: {
+        disable: true,
+      },
     },
   },
   tags: ['autodocs'],

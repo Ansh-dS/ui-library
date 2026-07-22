@@ -17,6 +17,17 @@ const meta: Meta<typeof DropdownMenu> = {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  argTypes: {
+    onClose: {
+      table: { disable: true },
+    },
+    onOpen: {
+      table: { disable: true },
+    },
+    children: {
+      table: { disable: true },
+    },
+  },
 }
 
 export default meta

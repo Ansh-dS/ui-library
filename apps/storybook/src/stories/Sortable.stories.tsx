@@ -13,6 +13,11 @@ const meta: Meta<typeof Sortable> = {
   component: Sortable,
   argTypes: {
     isDraggingOver: { control: 'boolean' },
+    placeholder: {
+      table: {
+        disable: true,
+      },
+    },
   },
   tags: ['autodocs'],
 }

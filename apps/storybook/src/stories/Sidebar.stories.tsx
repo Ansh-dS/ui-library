@@ -34,6 +34,16 @@ const meta: Meta<typeof Sidebar> = {
     },
     collapsed: { control: 'boolean' },
     showToggle: { control: 'boolean' },
+    children: {
+      table: {
+        disable: true,
+      },
+    },
+    footer: {
+      table: {
+        disable: true,
+      },
+    },
   },
   tags: ['autodocs'],
 
@@ -44,7 +54,6 @@ const meta: Meta<typeof Sidebar> = {
       </div>
     ),
   ],
-
 }
 
 export default meta
@@ -112,9 +121,9 @@ export const TallyDashboard: Story = {
     footer: <Text variant="caption">Anshdeep Singh</Text>,
     children: (
       <>
-        <SidebarItem icon="🏠" label="Dashboard" active/>
-        <SidebarItem icon="📝" label="My Forms" badge="12"/>
-        <SidebarItem icon="⚙️" label="Settings"  />
+        <SidebarItem icon="🏠" label="Dashboard" active />
+        <SidebarItem icon="📝" label="My Forms" badge="12" />
+        <SidebarItem icon="⚙️" label="Settings" />
       </>
     ),
   },
@@ -144,7 +153,7 @@ export const EditorSettingsPanel: Story = {
       </Stack>
     ),
     children: (
-      <Stack gap="md" >
+      <Stack gap="md">
         <Box className=" bg-surface-base border-border-default rounded-base shadow-sm">
           <Text variant="caption" color="secondary">
             Color Picker Placeholder

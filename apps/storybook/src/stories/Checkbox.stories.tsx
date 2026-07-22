@@ -4,6 +4,7 @@ const meta: Meta<typeof Checkbox> = {
   title: 'Inputs/Checkbox',
   component: Checkbox,
   tags: ['autodocs'],
+  argTypes: {},
 }
 export default meta
 export const Default: StoryObj<typeof Checkbox> = {

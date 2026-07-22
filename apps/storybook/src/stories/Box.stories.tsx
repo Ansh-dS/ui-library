@@ -36,11 +36,17 @@ const meta: Meta<typeof Box> = {
     children: {
       control: 'text',
       description: 'The content to be rendered inside the box wrapper.',
+      table: {
+        disable: true,
+      },
     },
     className: {
       control: 'text',
       description:
         'Additional Tailwind CSS classes for custom styling overrides.',
+      table: {
+        disable: true,
+      },
     },
   },
   parameters: {

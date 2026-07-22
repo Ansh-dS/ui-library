@@ -12,13 +12,12 @@
     */
     "noEmit": true,
 
-    "types": ["node", "@storybook/types", "vite/client"]
+    "types": ["node", "vite/client"]
   },
   "include": [
     "src",
     ".storybook",
     "../server/components/**/*",
     "../server/hooks/**/*"
-  ],
-
+  ]
 }
