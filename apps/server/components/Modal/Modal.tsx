@@ -1,5 +1,10 @@
-import React, { useEffect } from 'react'
-import { modalVariants, ModalVariantsType } from './styles'
+import React, { useEffect, useRef, useId } from 'react'
+import { createPortal } from 'react-dom'
+import {
+  modalWrapperVariants,
+  modalContentVariants,
+  ModalVariantsType,
+} from './styles'
 import { cn } from '../Utils/utils'
 
 type Prettify<T> = {
@@ -29,38 +34,127 @@ export function Modal(props: ModalProps): React.ReactElement | null {
     title,
     closeOnEsc = true,
     closeOnBackdrop = true,
+    initialFocusRef,
     className,
     children,
   } = props
 
+  const modalRef = useRef<HTMLDivElement>(null)
+  const previousFocusRef = useRef<HTMLElement | null>(null)
+  const titleId = useId()
+
+  // 1. Focus Trapping & Escape Key
   useEffect(() => {
+    if (!isOpen) return
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (closeOnEsc && e.key === 'Escape') onClose()
+      // The Law of Escape
+      if (closeOnEsc && e.key === 'Escape') {
+        onClose()
+        return
+      }
+
+      // The Law of Containment (Focus Trap)
+      if (e.key === 'Tab') {
+        if (!modalRef.current) return
+
+        // Find all focusable elements inside the modal
+        const focusableElements =
+          modalRef.current.querySelectorAll<HTMLElement>(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          )
+
+        if (focusableElements.length === 0) {
+          e.preventDefault()
+          return
+        }
+
+        const firstElement = focusableElements[0]!
+        const lastElement = focusableElements[focusableElements.length - 1]!
+
+        if (e.shiftKey) {
+          // Shift + Tab
+          if (
+            document.activeElement === firstElement ||
+            document.activeElement === modalRef.current
+          ) {
+            e.preventDefault()
+            lastElement.focus()
+          }
+        } else {
+          // Tab
+          if (document.activeElement === lastElement) {
+            e.preventDefault()
+            firstElement.focus()
+          }
+        }
+      }
     }
-    if (isOpen) document.addEventListener('keydown', handleKeyDown)
+
+    document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, closeOnEsc, onClose])
 
-  if (!isOpen) return null
+  // 2. Body Scroll Locking & Focus Entry/Return
+  useEffect(() => {
+    if (isOpen) {
+      // The Law of Return: Capture previous focus
+      previousFocusRef.current = document.activeElement as HTMLElement
 
-  return (
-    <div className={cn(modalVariants({ size: undefined }))}>
+      // The Law of Immobility: Lock body scroll
+      const originalStyle = window.getComputedStyle(document.body).overflow
+      document.body.style.overflow = 'hidden'
+
+      // The Law of Entry: Set initial focus
+      if (initialFocusRef && initialFocusRef.current) {
+        initialFocusRef.current.focus()
+      } else if (modalRef.current) {
+        // Auto-focus first focusable element, or the modal container itself
+        const firstFocusable = modalRef.current.querySelector<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        if (firstFocusable) {
+          firstFocusable.focus()
+        } else {
+          modalRef.current.focus()
+        }
+      }
+
+      return () => {
+        // Restore scroll
+        document.body.style.overflow = originalStyle
+        // Restore focus
+        if (previousFocusRef.current) {
+          previousFocusRef.current.focus()
+        }
+      }
+    }
+  }, [isOpen, initialFocusRef])
+
+  if (!isOpen) return null
+  if (typeof document === 'undefined') return null
+
+  // The Law of Layering: Portaling
+  const modalContent = (
+    <div className={cn(modalWrapperVariants())}>
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
         onClick={closeOnBackdrop ? onClose : undefined}
         aria-hidden="true"
       />
       <div
-        className={cn(
-          'relative bg-surface-base rounded-medium shadow-modal w-full p-6 transition-transform',
-          size === 'sm' ? 'max-w-sm' : size === 'lg' ? 'max-w-lg' : 'max-w-md',
-          className
-        )}
+        ref={modalRef}
+        tabIndex={-1}
+        className={cn(modalContentVariants({ size }), className)}
+        // The Law of Identity
         role="dialog"
         aria-modal="true"
+        aria-labelledby={title ? titleId : undefined}
       >
         {title && (
-          <h2 className="text-h3 font-bold mb-4 text-fg-primary">{title}</h2>
+          <h2 id={titleId} className="text-h3 font-bold mb-4 text-fg-primary">
+            {title}
+          </h2>
         )}
         <div className="text-body text-fg-secondary">{children}</div>
         <button
@@ -73,4 +167,6 @@ export function Modal(props: ModalProps): React.ReactElement | null {
       </div>
     </div>
   )
+
+  return createPortal(modalContent, document.body)
 }

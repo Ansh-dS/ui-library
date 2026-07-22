@@ -1,13 +1,16 @@
-const sharedDeps = ['class-variance-authority', 'clsx', 'tailwind-merge', 'lucide-react']
+const sharedDeps = [
+  'class-variance-authority',
+  'clsx',
+  'tailwind-merge',
+  'lucide-react',
+]
 
-// registryDependencies: In each component we are importing some pre-built components. 
+// registryDependencies: In each component we are importing some pre-built components.
 const registryIndex: Record<
   string,
   { dependencies: string[]; registryDependencies?: string[] }
 > = {
   alert: { dependencies: sharedDeps, registryDependencies: [] },
-  audiovisualizer: { dependencies: sharedDeps, registryDependencies: [] },
-  'audio-visualizer': { dependencies: sharedDeps, registryDependencies: [] },
   avatar: { dependencies: sharedDeps, registryDependencies: [] },
   badge: { dependencies: sharedDeps, registryDependencies: ['text'] },
   box: { dependencies: sharedDeps, registryDependencies: [] },
@@ -17,16 +20,11 @@ const registryIndex: Record<
     registryDependencies: ['spinner', 'text'],
   },
   card: { dependencies: sharedDeps, registryDependencies: ['text', 'box'] },
-  chart: { dependencies: sharedDeps, registryDependencies: [] },
   checkbox: { dependencies: sharedDeps, registryDependencies: [] },
-  controlbar: { dependencies: sharedDeps, registryDependencies: [] },
-  'control-bar': { dependencies: sharedDeps, registryDependencies: [] },
   datagrid: { dependencies: sharedDeps, registryDependencies: [] },
   'data-grid': { dependencies: sharedDeps, registryDependencies: [] },
   datalist: { dependencies: sharedDeps, registryDependencies: [] },
   'data-list': { dependencies: sharedDeps, registryDependencies: [] },
-  deviceselector: { dependencies: sharedDeps, registryDependencies: [] },
-  'device-selector': { dependencies: sharedDeps, registryDependencies: [] },
   dropdown: { dependencies: sharedDeps, registryDependencies: ['box'] },
   'drop-down': { dependencies: sharedDeps, registryDependencies: ['box'] },
   emptystate: { dependencies: sharedDeps, registryDependencies: ['text'] },
@@ -43,7 +41,6 @@ const registryIndex: Record<
   header: { dependencies: sharedDeps, registryDependencies: ['text'] },
   heading: { dependencies: sharedDeps, registryDependencies: [] },
   input: { dependencies: sharedDeps, registryDependencies: [] },
-  inspector: { dependencies: sharedDeps, registryDependencies: [] },
   label: { dependencies: sharedDeps, registryDependencies: [] },
   modal: { dependencies: sharedDeps, registryDependencies: [] },
   networkhealthindicator: {
@@ -55,18 +52,9 @@ const registryIndex: Record<
     registryDependencies: [],
   },
   popover: { dependencies: sharedDeps, registryDependencies: [] },
-  previewwindow: { dependencies: sharedDeps, registryDependencies: [] },
-  'preview-window': { dependencies: sharedDeps, registryDependencies: [] },
   progressbar: { dependencies: sharedDeps, registryDependencies: [] },
   'progress-bar': { dependencies: sharedDeps, registryDependencies: [] },
   radio: { dependencies: sharedDeps, registryDependencies: [] },
-  recordingpulsar: { dependencies: sharedDeps, registryDependencies: [] },
-  'recording-pulsar': { dependencies: sharedDeps, registryDependencies: [] },
-  responsivevideogrid: { dependencies: sharedDeps, registryDependencies: [] },
-  'responsive-video-grid': {
-    dependencies: sharedDeps,
-    registryDependencies: [],
-  },
   select: { dependencies: sharedDeps, registryDependencies: [] },
   sheet: { dependencies: sharedDeps, registryDependencies: [] },
   sidebar: {
@@ -99,8 +87,6 @@ const registryIndex: Record<
     registryDependencies: ['box', 'stack', 'text', 'button'],
   },
   tooltip: { dependencies: sharedDeps, registryDependencies: ['text'] },
-  videotile: { dependencies: sharedDeps, registryDependencies: [] },
-  'video-tile': { dependencies: sharedDeps, registryDependencies: [] },
 }
 
 export default registryIndex

@@ -106,6 +106,7 @@ export const SortableItem = forwardRef<HTMLDivElement, SortableItemProps>(
       className={cn(
         'w-full shrink-0',
         sortableItemVariants({ variant, isSelected, isDragging, isDropTarget }),
+        'p-s',
         className
       )}
       {...rest}

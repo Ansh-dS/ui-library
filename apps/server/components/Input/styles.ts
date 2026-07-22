@@ -19,12 +19,14 @@ export const inputVariants = cva(
           'border-border-default',
           'bg-surface-base',
           'focus:border-border-focused',
+          'text-fg-primary placeholder:text-fg-secondary',
         ],
         filled: [
           'border-transparent',
           'bg-surface-sunken',
           'focus:bg-surface-base',
           'focus:border-border-focused',
+          'text-fg-primary placeholder:text-fg-secondary',
         ],
       },
       size: {
