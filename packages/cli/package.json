@@ -1,12 +1,16 @@
 {
-  "name": "auracli",
-  "version": "1.0.6",
+  "name": "go-aura",
+  "version": "1.0.1",
   "description": "CLI for initializing and managing the ui-library design system",
   "type": "module",
   "main": "./dist/index.js",
   "bin": {
     "aura": "./bin/aura-init.js"
   },
+  "files": [
+    "dist",
+    "bin"
+  ],
   "scripts": {
     "test": "vitest",
     "build": "tsc -b  --force ",
@@ -19,6 +23,7 @@
   "packageManager": "pnpm@10.20.0",
   "dependencies": {
     "commander": "^14.0.3",
+    "execa": "^10.0.0",
     "fs-extra": "^11.3.3",
     "inquirer": "^13.3.0"
   },

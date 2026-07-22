@@ -6,6 +6,7 @@ import inquirer from 'inquirer'
 import { askUserQuestions, normalizeSelectedThemes } from './prompts.js'
 import { writeInitFiles, injectNoBlink } from '../utils/writers.js'
 import { providersTemplate } from '../utils/strings.js'
+import { runPreflightChecks } from '../utils/guards.js'
 
 const REGISTRY_URL = 'https://aura-navy-psi.vercel.app/api/registry'
 
@@ -17,7 +18,7 @@ async function promptOverwrite(fileName: string): Promise<boolean> {
       name: 'overwrite',
       message: `File '${fileName}' already exists. Would you like to overwrite it?`,
       default: false,
-    }
+    },
   ])
   return overwrite
 }
@@ -47,16 +48,24 @@ function detectPackageManager(cwd: string) {
   }
   if (fs.pathExistsSync(path.join(cwd, 'pnpm-lock.yaml'))) return 'pnpm add'
   if (fs.pathExistsSync(path.join(cwd, 'yarn.lock'))) return 'yarn add'
-  if (fs.pathExistsSync(path.join(cwd, 'bun.lockb')) || fs.pathExistsSync(path.join(cwd, 'bun.lock'))) return 'bun add'
-  
+  if (
+    fs.pathExistsSync(path.join(cwd, 'bun.lockb')) ||
+    fs.pathExistsSync(path.join(cwd, 'bun.lock'))
+  )
+    return 'bun add'
+
   return 'npm install'
 }
 
 export const setupCommand = program
   .command('setup')
   .description('Initialize the UI library in your project')
-  .option('-y, --yes', 'Skip confirmation prompts and overwrite existing setup files')
+  .option(
+    '-y, --yes',
+    'Skip confirmation prompts and overwrite existing setup files'
+  )
   .action(async (options) => {
+    await runPreflightChecks(process.cwd())
     console.log('🚀 Initializing Aurajet...\n')
 
     const forceOverwrite = options.yes || false
@@ -94,14 +103,16 @@ export const setupCommand = program
       }
 
       await fs.ensureDir(targetDir)
-      
+
       // Target directory for the core library components
       const componentsDir = path.join(cwd, 'src', 'components')
       await fs.ensureDir(componentsDir)
 
       // 4. Fetch the foundational templates from the live registry
       console.log(`\n⬇️ Fetching core engine and themes...`)
-      const res = await fetch(`${REGISTRY_URL}/setup?themes=${selectedThemes.join(',')}`)
+      const res = await fetch(
+        `${REGISTRY_URL}/setup?themes=${selectedThemes.join(',')}`
+      )
 
       if (!res.ok) {
         throw new Error('Failed to fetch setup data.')
@@ -121,11 +132,11 @@ export const setupCommand = program
 
       // 5. Build or Update the Core Architecture Files (CSS + utils.ts + theme-provider.tsx)
       const filesToWrite = []
-      
+
       // Filter out files that already exist unless the user confirms the overwrite
       for (const file of apiData.files) {
         const fullPath = path.join(componentsDir, file.name)
-        if (!forceOverwrite && await fs.pathExists(fullPath)) {
+        if (!forceOverwrite && (await fs.pathExists(fullPath))) {
           const shouldOverwrite = await promptOverwrite(file.name)
           if (shouldOverwrite) {
             filesToWrite.push(file)
@@ -133,15 +144,22 @@ export const setupCommand = program
             console.log(`  ⏭️  Skipped '${file.name}'`)
           }
         } else {
-           // File doesn't exist, or forceOverwrite is true
-           filesToWrite.push(file)
+          // File doesn't exist, or forceOverwrite is true
+          filesToWrite.push(file)
         }
       }
 
       // Pass ONLY the confirmed files to the writer utility
       if (filesToWrite.length > 0) {
-        const cssResult = await writeInitFiles(componentsDir, targetDir, cssFileName, filesToWrite)
-        console.log(`✔️ ${cssResult.created ? 'Created' : 'Updated'} modular CSS pipeline`)
+        const cssResult = await writeInitFiles(
+          componentsDir,
+          targetDir,
+          cssFileName,
+          filesToWrite
+        )
+        console.log(
+          `✔️ ${cssResult.created ? 'Created' : 'Updated'} modular CSS pipeline`
+        )
       }
 
       // 6. Build the React Context Providers wrapper
@@ -150,13 +168,16 @@ export const setupCommand = program
       let shouldWriteProviders = true
 
       // Overwrite protection for providers.tsx
-      if (!forceOverwrite && await fs.pathExists(providersPath)) {
+      if (!forceOverwrite && (await fs.pathExists(providersPath))) {
         shouldWriteProviders = await promptOverwrite('core/providers.tsx')
       }
 
       if (shouldWriteProviders) {
         await fs.ensureDir(path.dirname(providersPath))
-        await fs.writeFile(providersPath, providersTemplate(isNext, defaultTheme))
+        await fs.writeFile(
+          providersPath,
+          providersTemplate(isNext, defaultTheme)
+        )
         console.log('✔️ Providers generated: src/components/core/providers.tsx')
       } else {
         console.log(`  ⏭️  Skipped 'core/providers.tsx'`)
@@ -174,17 +195,26 @@ export const setupCommand = program
 
       // 8. Install required foundational dependencies (like next-themes, clsx, tailwind-merge)
       if (apiData.dependencies?.length) {
-        console.log(`\n📦 Installing architecture dependencies: ${apiData.dependencies.join(', ')}...`)
+        console.log(
+          `\n📦 Installing architecture dependencies: ${apiData.dependencies.join(', ')}...`
+        )
         const installCommand = detectPackageManager(cwd)
-        execSync(`${installCommand} ${apiData.dependencies.join(' ')}`, { stdio: 'inherit' })
+        execSync(`${installCommand} ${apiData.dependencies.join(' ')}`, {
+          stdio: 'inherit',
+        })
       }
 
       // 9. Final Setup Instructions
       console.log('\n✨ Almost done! Complete your setup:')
-      console.log(`1. Ensure Providers are imported in your ${isNext ? 'layout.tsx' : 'main.tsx'}:`)
-      console.log(`   If not present, add: import Providers from '@/components/core/providers';`)
-      console.log(`2. Confirm your ${cssFileName} imports the local styles folder automatically.\n`)
-      
+      console.log(
+        `1. Ensure Providers are imported in your ${isNext ? 'layout.tsx' : 'main.tsx'}:`
+      )
+      console.log(
+        `   If not present, add: import Providers from '@/src/components/core/providers';`
+      )
+      console.log(
+        `2. Confirm your ${cssFileName} imports the local styles folder automatically.\n`
+      )
     } catch (err: unknown) {
       if (err instanceof Error && 'isTtyError' in err) {
         console.error("Prompt couldn't be rendered in the current environment.")

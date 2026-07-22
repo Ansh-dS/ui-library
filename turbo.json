@@ -11,16 +11,16 @@
       "cache": false,
       "dependsOn": ["^build"]
     },
-    "auracli#build": {
+    "go-aura#build": {
       "outputs": ["dist/**"]
     },
     "aura-design-decisions#build": {
       "outputs": ["dist/**"],
-      "dependsOn": ["auracli#build"]
+      "dependsOn": ["go-aura#build"]
     },
     "aura-storybook#build": {
       "outputs": ["storybook-static/**"],
-      "dependsOn": ["auracli#build"]
+      "dependsOn": ["go-aura#build"]
     },
     "dev": {
       "cache": false,

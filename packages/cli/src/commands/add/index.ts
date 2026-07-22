@@ -3,6 +3,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import { execSync } from 'child_process'
 import inquirer from 'inquirer' // Added inquirer for prompts
+import { runPreflightChecks } from '../utils/guards.js'
 
 const REGISTRY_URL = 'https://aura-navy-psi.vercel.app/api/registry'
 
@@ -14,7 +15,7 @@ async function promptOverwrite(componentName: string): Promise<boolean> {
       name: 'overwrite',
       message: `Component '${componentName}' already exists. Would you like to overwrite it?`,
       default: false,
-    }
+    },
   ])
   return overwrite
 }
@@ -53,7 +54,7 @@ async function downloadComponentTree(
   let shouldWrite = true
 
   // If the folder exists, and the user didn't use the --yes flag, ask them!
-  if (!forceOverwrite && await fs.pathExists(componentDirPath)) {
+  if (!forceOverwrite && (await fs.pathExists(componentDirPath))) {
     shouldWrite = await promptOverwrite(folderName)
   }
 
@@ -91,16 +92,19 @@ async function downloadComponentTree(
 export const addCommand = new Command()
   // Changed from <component> to [components...] to allow an array of inputs!
   .command('add [components...]')
-  .description(
-    'Download and inject components and their internal dependencies'
-  )
+  .description('Download and inject components and their internal dependencies')
   // Added a --yes flag so CI/CD pipelines or confident users can skip prompts
-  .option('-y, --yes', 'Skip confirmation prompts and overwrite existing components')
+  .option(
+    '-y, --yes',
+    'Skip confirmation prompts and overwrite existing components'
+  )
   .action(async (components: string[], options) => {
-    
+    await runPreflightChecks(process.cwd())
     // Fallback if the user types `pnpm aurajet add` without specifying a component
     if (!components || components.length === 0) {
-      console.error('\n❌ Please specify at least one component to add. (e.g., pnpm aurajet add button card)\n')
+      console.error(
+        '\n❌ Please specify at least one component to add. (e.g., pnpm aurajet add button card)\n'
+      )
       return
     }
 
@@ -115,7 +119,7 @@ export const addCommand = new Command()
     // Loop through every component the user requested
     for (const comp of components) {
       console.log(`\n🚀 Processing '${comp}'...`)
-      
+
       try {
         await downloadComponentTree(
           comp,
@@ -125,7 +129,10 @@ export const addCommand = new Command()
           forceOverwrite
         )
       } catch (error) {
-        console.error(`\n❌ Failed to execute component tree injection for ${comp}:`, error)
+        console.error(
+          `\n❌ Failed to execute component tree injection for ${comp}:`,
+          error
+        )
       }
     }
 
@@ -136,7 +143,5 @@ export const addCommand = new Command()
       execSync(`pnpm add ${depList}`, { stdio: 'inherit' })
     }
 
-    console.log(
-      `\n✨ Successfully finished adding components!`
-    )
+    console.log(`\n✨ Successfully finished adding components!`)
   })

@@ -4,7 +4,7 @@
   "type": "module",
   "packageManager": "pnpm@10.20.0",
   "engines": {
-    "node": "20.x"
+    "node": "^20.x"
   },
   "scripts": {
     "dev": "turbo dev",
@@ -13,7 +13,7 @@
     "clean": "turbo run clean",
     "format": "prettier --write .",
     "check-errors": " pnpm lint && pnpm build && pnpm format",
-    "storybook": "pnpm --filter storybook storybook",
+    "storybook": "pnpm --filter aura-storybook storybook",
     "bundle:pack": "echo 'Registry server architecture does not use dist packaging.'",
     "prepare-release": "pnpm build && cp ./global.css apps/server/themes"
   },

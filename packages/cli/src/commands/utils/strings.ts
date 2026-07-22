@@ -1,7 +1,7 @@
 export const layoutHtml = (
   defaultTheme: string
 ) => `import type { ReactNode } from 'react'
-import Providers from '@/components/core/providers'
+import Providers from '@/src/components/core/providers'
 import './globals.css'
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -36,9 +36,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 }
 `
 
-// --- NEW EXPORTS: Isolated Injection Scripts ---
-// This keeps the main CLI file totally clean from HTML/JSX strings.
-
 export const nextInjectionScript = (defaultTheme: string) => `
         {/* FIX: THE NO-BLINK SCRIPT */}
         <script
@@ -54,20 +51,12 @@ export const nextInjectionScript = (defaultTheme: string) => `
           }}
         />`
 
-export const viteInjectionScript = (defaultTheme: string) => `
-    <script>
-      try {
-        var theme = localStorage.getItem('data-theme-name') || '${defaultTheme}';
-        var mode = localStorage.getItem('data-mode') || 'light';
-        document.documentElement.setAttribute('data-theme-name', theme);
-        document.documentElement.setAttribute('data-mode', mode);
-      } catch (e) {}
-    </script>`
-
 export const providersTemplate = (
-  isNext: boolean,
+  isNext: boolean, // Kept to maintain interface contract
   defaultTheme: string
-) => `${isNext ? "'use client'\n\n" : ''}import React from 'react'
+) => `'use client'
+
+import React from 'react'
 import { ThemeProvider } from './theme-provider'
 
 export default function Providers({ children }: { children: React.ReactNode }) {
